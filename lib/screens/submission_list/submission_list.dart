@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
 import 'local_widgets/submission_list_item.dart';
@@ -32,7 +31,6 @@ class SubmissionListState extends State<SubmissionList> {
   @override
   void initState() {
     super.initState();
-    initReddit();
     scrollController.addListener(() {
       if (scrollController.offset ==
           scrollController.position.maxScrollExtent) {
@@ -57,22 +55,9 @@ class SubmissionListState extends State<SubmissionList> {
     load(streamController);
   }
 
-  initReddit() async {
-
-    //TODO: Make a class to hold this data instead of handeling it like this.
-    Map<String, dynamic> data = await parseJsonFromAssets('lib/assets/reddit.json');
-
-    reddit = await Reddit.createScriptInstance(
-      clientId: data["CLIENT_ID"],
-      clientSecret: data["SECRET"],
-      userAgent: 'MyAPI/0.0.1',
-      username: data["username"],
-      password: data["password"],
-    );
-  }
-
   load(StreamController sc) async {
 
+    //TODO: Make a class to hold this data instead of handling it like this.
     Map<String, dynamic> data = await parseJsonFromAssets('lib/assets/reddit.json');
 
     reddit = await Reddit.createScriptInstance(
