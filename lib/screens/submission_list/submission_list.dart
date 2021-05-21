@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
 import 'local_widgets/submission_list_item.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
+import 'package:gwa_app/utils/util_functions.dart';
 
 /*TODO: Implement lazy loading and a "show more" in search so that the user can
    search for more than 1000 (I think that's the limit) submissions. */
@@ -56,28 +58,29 @@ class SubmissionListState extends State<SubmissionList> {
   }
 
   initReddit() async {
-    const CLIENT_ID = '1NHVYBKNrFK0kQ';
-    const SECRET = 'g-nT7cnPUm7jAuHt9ZhzjtkaN04aHQ';
+
+    //TODO: Make a class to hold this data instead of handeling it like this.
+    Map<String, dynamic> data = await parseJsonFromAssets('lib/assets/reddit.json');
 
     reddit = await Reddit.createScriptInstance(
-      clientId: CLIENT_ID,
-      clientSecret: SECRET,
+      clientId: data["CLIENT_ID"],
+      clientSecret: data["SECRET"],
       userAgent: 'MyAPI/0.0.1',
-      username: "pprawtest",
-      password: "QWEASDZXC",
+      username: data["username"],
+      password: data["password"],
     );
   }
 
   load(StreamController sc) async {
-    const CLIENT_ID = '1NHVYBKNrFK0kQ';
-    const SECRET = 'g-nT7cnPUm7jAuHt9ZhzjtkaN04aHQ';
+
+    Map<String, dynamic> data = await parseJsonFromAssets('lib/assets/reddit.json');
 
     reddit = await Reddit.createScriptInstance(
-      clientId: CLIENT_ID,
-      clientSecret: SECRET,
+      clientId: data["CLIENT_ID"],
+      clientSecret: data["SECRET"],
       userAgent: 'MyAPI/0.0.1',
-      username: "pprawtest",
-      password: "QWEASDZXC",
+      username: data["username"],
+      password: data["password"],
     );
 
     //TODO: Make a search feature that loads submissions based on search...

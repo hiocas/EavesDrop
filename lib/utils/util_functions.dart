@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 class UtilFunctions {
   //TODO: Implement per tag icons.
@@ -14,7 +16,14 @@ class UtilFunctions {
     else if (tag.contains(RegExp('fingering', caseSensitive: false)))
       return [Text('\u{1f595}'), 1];
     else if (tag.contains(RegExp('neko', caseSensitive: false)))
-      return [Image.asset('lib/assets/images/headband.png', width: 18, height: 18,), 1];
+      return [
+        Image.asset(
+          'lib/assets/images/headband.png',
+          width: 18,
+          height: 18,
+        ),
+        1
+      ];
     else if (tag.contains(RegExp('kiss', caseSensitive: false)))
       return [Text('\u{1f48b}'), 1];
     else if (tag.contains(RegExp('script', caseSensitive: false)))
@@ -34,7 +43,8 @@ class UtilFunctions {
         ]),
         2
       ];
-    else if (tag.contains(RegExp('(?<=cum)(.*)(in|on)(.*)(?=mouth)', caseSensitive: false)))
+    else if (tag.contains(
+        RegExp('(?<=cum)(.*)(in|on)(.*)(?=mouth)', caseSensitive: false)))
       return [
         Row(children: [
           Text('\u{1f4a6}', style: TextStyle(fontSize: 12)),
@@ -43,7 +53,8 @@ class UtilFunctions {
         2
       ];
     //TODO(Design): Maybe rethink this one.
-    else if (tag.contains(RegExp('(?<=enemies)(.*)(?=lovers)', caseSensitive: false)))
+    else if (tag
+        .contains(RegExp('(?<=enemies)(.*)(?=lovers)', caseSensitive: false)))
       return [
         Row(children: [
           Text('\u{2764}', style: TextStyle(fontSize: 12)),
@@ -62,4 +73,8 @@ class UtilFunctions {
     else
       return [Icon(Icons.info), 1];
   }
+}
+
+Future<Map<String, dynamic>> parseJsonFromAssets(String assetsPath) {
+  return rootBundle.loadString(assetsPath).then((value) => jsonDecode(value));
 }
