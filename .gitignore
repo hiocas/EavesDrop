@@ -48,3 +48,5 @@ app.*.symbols
 app.*.map.json
 
 lib/assets/reddit.json
+
+flutter_01.log
