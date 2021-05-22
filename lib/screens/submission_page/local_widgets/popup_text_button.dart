@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/widgets/navigator_routes/hero_dialog_route.dart';
+import 'package:gwa_app/widgets/rect_tweens/calm_rect_tween.dart';
 
 //TODO(Design): Make an actual animation for this.
 class PopupTextButton extends StatelessWidget {
@@ -30,8 +31,24 @@ class PopupTextButton extends StatelessWidget {
           );
         }));
       },
-      child: this.text,
+      child: Hero(
+        tag: this.heroTag,
+        child: this.text,
+        flightShuttleBuilder: _flightShuttleBuilder,
+      ),
     );
+  }
+
+  Widget _flightShuttleBuilder(
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+  ) {
+    return DefaultTextStyle(
+        style: DefaultTextStyle.of(toHeroContext).style,
+        child: toHeroContext.widget);
   }
 }
 
@@ -54,6 +71,8 @@ class _PopupTextCard extends StatelessWidget {
         padding: const EdgeInsets.all(32.0),
         child: Hero(
           tag: heroTag,
+          createRectTween: (begin, end) =>
+              CalmRectTween(begin: begin, end: end),
           child: Material(
             color: color ?? Theme.of(context).backgroundColor,
             elevation: 2.0,

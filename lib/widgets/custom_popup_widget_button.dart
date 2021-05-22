@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'navigator_routes/hero_dialog_route.dart';
-import 'package:gwa_app/widgets/icon_text_button.dart';
+import 'icon_text_button.dart';
+import 'rect_tweens/calm_rect_tween.dart';
 
 class CustomPopupWidgetButton extends StatelessWidget {
   final String label;
@@ -13,10 +14,10 @@ class CustomPopupWidgetButton extends StatelessWidget {
   final Color backgroundColor;
   final String heroTag;
   final Widget widget;
+
   ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
-
 
   const CustomPopupWidgetButton({
     Key key,
@@ -47,6 +48,8 @@ class CustomPopupWidgetButton extends StatelessWidget {
           },
           child: Hero(
             tag: this.heroTag,
+            createRectTween: (begin, end) =>
+                CalmRectTween(begin: begin, end: end),
             child: IconTextButtonElement(
               label: this.label,
               icon: this.icon,
@@ -68,7 +71,8 @@ class CustomPopupWidgetButton extends StatelessWidget {
                           color: Colors.black.withOpacity(0.3),
                           elevation: 15.0,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(22.0))),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(22.0))),
                         ),
                       ),
                     ),
@@ -77,7 +81,10 @@ class CustomPopupWidgetButton extends StatelessWidget {
                 print('hey');
                 return this.placeholder;
               }
-              return SizedBox(width: size.width, height: size.height,);
+              return SizedBox(
+                width: size.width,
+                height: size.height,
+              );
             },
           ),
         ),
@@ -111,6 +118,8 @@ class _PopupWidget extends StatelessWidget {
         padding: const EdgeInsets.all(32.0),
         child: Hero(
           tag: this.heroTag,
+          createRectTween: (begin, end) =>
+              CalmRectTween(begin: begin, end: end),
           child: this.widget,
         ),
       ),

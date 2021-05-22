@@ -1,9 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/widgets/navigator_routes/hero_dialog_route.dart';
+import 'package:gwa_app/widgets/rect_tweens/calm_rect_tween.dart';
 
 //FIXME: Fix the return animation of the image.
 class PopupImageGradientButton extends StatelessWidget {
@@ -29,6 +29,8 @@ class PopupImageGradientButton extends StatelessWidget {
       },
       child: Hero(
         tag: this.heroTag,
+        createRectTween: (begin, end) =>
+            CalmRectTween(begin: begin, end: end),
         child: ShaderMask(
           shaderCallback: (bounds) {
             return LinearGradient(
@@ -59,6 +61,8 @@ class _PopupImageGradientPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: heroTag,
+      createRectTween: (begin, end) =>
+          CalmRectTween(begin: begin, end: end),
       child: GestureDetector(
         onDoubleTap: () {
           Navigator.of(context).pop(HeroDialogRoute(builder: (context) {
