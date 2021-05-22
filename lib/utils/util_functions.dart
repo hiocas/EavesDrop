@@ -28,7 +28,7 @@ class UtilFunctions {
       return [Text('\u{1f48b}'), 1];
     else if (tag.contains(RegExp('script', caseSensitive: false)))
       return [Text('\u{1f4c3}'), 1];
-    else if (tag.contains(RegExp('ft', caseSensitive: false)))
+    else if (tag.contains(RegExp('(ft)([^a-z])', caseSensitive: false)))
       return [Text('\u{1f31f}'), 1];
     else if (tag.contains(
         RegExp('hypnosis|((mind)(.*)(control))', caseSensitive: false)))

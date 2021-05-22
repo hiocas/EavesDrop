@@ -149,7 +149,6 @@ class SubmissionListState extends State<SubmissionList> {
                           (BuildContext context, int index) {
                             return SubmissionListItem(
                               submission: list[index],
-                              reddit: reddit,
                             );
                           },
                           childCount: list.length,

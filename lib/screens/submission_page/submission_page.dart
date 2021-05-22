@@ -15,8 +15,7 @@ import 'package:gwa_app/states/global_state.dart';
 class SubmissionPage extends StatefulWidget {
   final String submissionFullname;
 
-  const SubmissionPage({Key key, this.submissionFullname})
-      : super(key: key);
+  const SubmissionPage({Key key, this.submissionFullname}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => SubmissionPageState();
@@ -42,7 +41,8 @@ class SubmissionPageState extends State<SubmissionPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
+      future:
+      Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         print('building...');
         if (!snapshot.hasData) {
@@ -54,7 +54,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                    scuffed. */
           if (_selectedTags.length == 0) {
             _selectedTags =
-                List<bool>.generate(_submission.tags.length, (index) => false);
+            List<bool>.generate(_submission.tags.length, (index) => false);
             if (!_isOneSelected) {
               for (bool tag in _selectedTags) {
                 if (tag) {
@@ -71,7 +71,9 @@ class SubmissionPageState extends State<SubmissionPage> {
               return Future.value();
             },
             child: Scaffold(
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme
+                  .of(context)
+                  .backgroundColor,
               body: SafeArea(
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(
@@ -82,6 +84,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                       /*TODO(Design): Decide whether the app bar should be
                          pinned or not. */
                       pinned: true,
+                      elevation: 15.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(25.0),
@@ -101,6 +104,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                         builder:
                             (BuildContext context, BoxConstraints constraints) {
                           top = constraints.biggest.height;
+                          print(top);
                           return ClipRRect(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(25.0),
@@ -114,41 +118,63 @@ class SubmissionPageState extends State<SubmissionPage> {
                               /*TODO: Some titles (like futa gf is pent up)
                                  don't align to the left of the sliver app bar,
                                  fix this. */
-                              title: Padding(
-                                padding: top >= maxTitleAlignTop
-                                    ? EdgeInsets.only(left: 10.0)
-                                    : EdgeInsets.all(0.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: top >= maxTitleAlignTop
-                                      ? CrossAxisAlignment.start
-                                      : CrossAxisAlignment.center,
-                                  children: [
-                                    ConstrainedBox(
-                                      constraints: BoxConstraints(
+                              title: Align(
+                                alignment: top >= maxTitleAlignTop ? Alignment
+                                    .bottomLeft : Alignment.center,
+                                child: Padding(
+                                  padding: top >= maxTitleAlignTop
+                                      ? EdgeInsets.only(left: 10.0)
+                                      : EdgeInsets.all(0.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: top >= maxTitleAlignTop
+                                        ? CrossAxisAlignment.start
+                                        : CrossAxisAlignment.center,
+                                    children: [
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints(
                                           maxWidth:
-                                              top >= maxTitleTop ? 2000 : 330),
-                                      child: PopupTextButton(
-                                        heroTag: 'popup-fulltitle-card',
-                                        fullText: _submission.fullTitle,
-                                        text: Text(
-                                          _submission.title,
-                                          overflow: top >= maxTitleTop
-                                              ? TextOverflow.visible
-                                              : TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 20),
+                                          top >= maxTitleAlignTop ? 2000 : 330),
+                                        child: PopupTextButton(
+                                          heroTag: 'popup-fulltitle-card',
+                                          fullText: _submission.fullTitle,
+                                          text: Text(
+                                            _submission.title,
+                                            overflow: top >= maxTitleTop
+                                                ? TextOverflow.visible
+                                                : TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 20),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Visibility(
-                                      visible: top >= maxTitleTop,
-                                      child: Text(
-                                        _submission.author,
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 14),
+                                      Visibility(
+                                        visible: top >= maxTitleTop,
+                                        child: Text(
+                                          _submission.author,
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Visibility(
+                                        visible: top >= maxTitleAlignTop,
+                                        child: Text(
+                                          '\n' + _submission.fromNow +
+                                              ', \u{2b06}' +
+                                              _submission.upvotes.toString(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            height: 0.8,
+                                            color: Colors.grey,
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               background: PopupImageGradientButton(
@@ -177,7 +203,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.add,
                               label: 'Save',
                               subtext: 'Save this post to your library',
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               heroTag: 'save-submission-popup',
                               child: Container(
                                 height: 200.0,
@@ -189,7 +217,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.favorite_border,
                               label: 'Open',
                               subtext: 'Upvote this and show your support!',
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               onPressed: () =>
                                   launch(_submission.shortlink.toString()),
                             ),
@@ -200,7 +230,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.expand,
                               label: 'Title',
                               subtext: 'Show the full title of the post',
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               heroTag: 'submission-fullTitle-popup',
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -218,7 +250,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.search,
                               label: 'Tags',
                               subtext: "View and query all of the post's tags",
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               heroTag: 'submission-tags-popup',
                               gwaSubmission: _submission,
                               selectedTags: _selectedTags,
@@ -245,7 +279,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                           itemBuilder: (BuildContext context, int index) {
                             var tagList = _submission.tags;
                             var avatarCreator =
-                                UtilFunctions.tagChipAvatar(tagList[index]);
+                            UtilFunctions.tagChipAvatar(tagList[index]);
                             Widget avatar = avatarCreator[0];
                             int chars = avatarCreator[1];
                             //If there are 2 chars as an avatar.
@@ -260,8 +294,12 @@ class SubmissionPageState extends State<SubmissionPage> {
                                   selected: _selectedTags[index],
                                   label: Text(tagList[index]),
                                   backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  selectedColor: Theme.of(context).accentColor,
+                                  Theme
+                                      .of(context)
+                                      .primaryColor,
+                                  selectedColor: Theme
+                                      .of(context)
+                                      .accentColor,
                                   side: BorderSide(width: 0.0),
                                   avatar: avatar,
                                   onSelected: (bool value) {
@@ -284,8 +322,12 @@ class SubmissionPageState extends State<SubmissionPage> {
                                   selected: _selectedTags[index],
                                   label: Text(tagList[index]),
                                   backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  selectedColor: Theme.of(context).accentColor,
+                                  Theme
+                                      .of(context)
+                                      .primaryColor,
+                                  selectedColor: Theme
+                                      .of(context)
+                                      .accentColor,
                                   side: BorderSide(width: 0.0),
                                   avatar: avatar,
                                   onSelected: (bool value) {
@@ -308,14 +350,28 @@ class SubmissionPageState extends State<SubmissionPage> {
                     SliverPadding(
                       padding: const EdgeInsets.all(10.0),
                       sliver: SliverToBoxAdapter(
-                          child: MarkdownViewer(
-                        text: _submission.selftext,
-                      )),
+                          child: Material(
+                            color: Theme
+                                .of(context)
+                                .backgroundColor,
+                            elevation: 15.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(32.0))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: MarkdownViewer(
+                                text: _submission.selftext,
+                                bodyTextFontSize: 14.0,
+                              ),
+                            ),
+                          )),
                     ),
-                    /*FIXME(Design): This makes sure the SelfTextViewer can be fully read
-                        without the floating action button blocking the text at
-                        the end of the CustomScrollView. Find a better solution or
-                        redesign the ui. */
+                    /*FIXME(Design): This makes sure the SelfTextViewer (now the
+                        MarkdownViewer) can be fully read without the floating
+                        action button blocking the text at the end of the
+                        CustomScrollView. Find a better solution or redesign
+                        the ui. */
                     SliverToBoxAdapter(
                       child: Container(
                         height: 70,
@@ -331,8 +387,12 @@ class SubmissionPageState extends State<SubmissionPage> {
                   gradient: RadialGradient(
                     radius: 4.0,
                     colors: [
-                      Theme.of(context).primaryColor,
-                      Theme.of(context).cardColor,
+                      Theme
+                          .of(context)
+                          .primaryColor,
+                      Theme
+                          .of(context)
+                          .cardColor,
                     ],
                   ),
                 ),
@@ -354,7 +414,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                 ),
               ),
               floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
+              FloatingActionButtonLocation.centerFloat,
             ),
           );
         }

@@ -76,6 +76,7 @@ class SubmissionListState extends State<SubmissionList> {
       appBar: AppBar(
         title: Text("Search Results"),
         backgroundColor: Colors.transparent,
+        elevation: 15.0,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(

@@ -1,8 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:async/async.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class GwaSubmission {
   String fullTitle;
@@ -18,6 +16,8 @@ class GwaSubmission {
   Image img;
   String thumbnailUrl;
   bool hasAudioUrl = false;
+  String fromNow;
+  int upvotes;
 
   GwaSubmission(Submission submission) {
     this.fullTitle = submission.title;
@@ -37,6 +37,8 @@ class GwaSubmission {
     this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
     this.img = getImg();
     this.hasAudioUrl = checkHasAudioUrl();
+    this.fromNow = getTimeSinceCreated(submission.createdUtc);
+    this.upvotes = submission.upvotes;
   }
 
   /// Returns a string of the name of the submission.
@@ -157,5 +159,29 @@ class GwaSubmission {
         );
       },
     );
+  }
+
+  String getTimeSinceCreated(DateTime created) {
+    var diff = DateTime.now().difference(created);
+    var years = (diff.inDays / 365).truncate();
+    var months = (diff.inDays / 30).truncate();
+    var weeks = (diff.inDays / 7).truncate();
+    var days = diff.inDays;
+    var hours = diff.inHours;
+    var minutes = diff.inMinutes;
+    var seconds = diff.inSeconds;
+    if (years >= 1)
+      return years.toString() + 'y';
+    else if (months >= 1)
+      return months.toString() + 'mo';
+    else if (weeks >= 1)
+      return weeks.toString() + 'w';
+    else if (days >= 1)
+      return days.toString() + 'd';
+    else if (hours >= 1)
+      return hours.toString() + 'h';
+    else if (minutes >= 1) return minutes.toString() + 'm';
+    else if (seconds >= 1) return seconds.toString() + 's';
+    return 'now';
   }
 }
