@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'navigator_routes/hero_dialog_route.dart';
@@ -14,7 +15,6 @@ class CustomPopupWidgetButton extends StatelessWidget {
   final Color backgroundColor;
   final String heroTag;
   final Widget widget;
-
   ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
@@ -72,13 +72,12 @@ class CustomPopupWidgetButton extends StatelessWidget {
                           elevation: 15.0,
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(22.0))),
+                              BorderRadius.all(Radius.circular(22.0))),
                         ),
                       ),
                     ),
                   );
                 }
-                print('hey');
                 return this.placeholder;
               }
               return SizedBox(

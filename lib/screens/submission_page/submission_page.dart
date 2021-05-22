@@ -336,10 +336,13 @@ class SubmissionPageState extends State<SubmissionPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                   //TODO(Design): Need to consider making the gradient radial.
-                  gradient: LinearGradient(colors: [
-                    Theme.of(context).primaryColor,
-                    Theme.of(context).cardColor,
-                  ], begin: Alignment.bottomLeft, end: Alignment.bottomRight),
+                  gradient: RadialGradient(
+                    radius: 4.0,
+                    colors: [
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).cardColor,
+                    ],
+                  ),
                 ),
                 width: 220.0,
                 child: RawMaterialButton(
