@@ -6,6 +6,9 @@ import 'local_widgets/submission_list_item.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
 
+/*FIXME: This implements GlobalState but it seems to be slower than the old
+   implementation. */
+
 /*TODO: Implement lazy loading and a "show more" in search so that the user can
    search for more than 1000 (I think that's the limit) submissions. */
 class SubmissionList extends StatefulWidget {
@@ -20,9 +23,7 @@ class SubmissionList extends StatefulWidget {
     There's no DoOnce mechanism there so it can get called more than once. */
 
 class SubmissionListState extends State<SubmissionList> {
-  String lastSeenSubmission = 'None';
-
-  var scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -32,9 +33,13 @@ class SubmissionListState extends State<SubmissionList> {
           scrollController.position.maxScrollExtent) {
         /*FIXME: This is what's responsible for loading more submissions when
            the user reaches the end of the list but it's scuffed... */
+        Provider.of<GlobalState>(context, listen: false).updateLastSeenSubmission();
       }
     });
-    Provider.of<GlobalState>(context, listen: false).loadSearch('', TimeFilter.all);
+
+    Provider.of<GlobalState>(context, listen: false)
+        .loadSearch('', TimeFilter.all);
+
   }
 
   @override
@@ -75,53 +80,47 @@ class SubmissionListState extends State<SubmissionList> {
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
-        child: Consumer<GlobalState>(
-          builder: (context, state, child) {
-            return StreamBuilder(
-              stream: state.searchResultsStream,
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
-                  return RefreshIndicator(
-                    //TODO: Implement pull to refresh.
-                    onRefresh: () {
-                      print('User requested a refresh');
-                      return Future.value();
-                    },
-                    child: CustomScrollView(
-                      physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      controller: scrollController,
-                      slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          sliver: SliverGrid(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 5,
-                            ),
-                            delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                // if (index >= list.length) {
-                                //   return null;
-                                // }
-                                return SubmissionListItem(
-                                  submission: state.searchResults[index],
-                                  reddit: state.reddit,
-                                );
-                              },
-                              childCount: state.searchResults.length,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-              },
-            );
+        child: StreamBuilder(
+          stream: Provider.of<GlobalState>(context).searchResultsStream,
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              var globalState = Provider.of<GlobalState>(context);
+              return RefreshIndicator(
+                //TODO: Implement pull to refresh.
+                onRefresh: () {
+                  print('User requested a refresh');
+                  return Future.value();
+                },
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  controller: scrollController,
+                  slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.all(8.0),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 5,
+                          crossAxisSpacing: 5,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return SubmissionListItem(
+                              submission: globalState.searchResults[index],
+                              reddit: globalState.reddit,
+                            );
+                          },
+                          childCount: globalState.searchResults.length,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),

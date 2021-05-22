@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'local_widgets/submission_list_item.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/states/global_state.dart';
 
 /*TODO: Implement lazy loading and a "show more" in search so that the user can
    search for more than 1000 (I think that's the limit) submissions. */
@@ -85,7 +84,6 @@ class SubmissionListState extends State<SubmissionList> {
   void dispose() {
     super.dispose();
     streamController?.close();
-    scrollController.dispose();
     streamController = null;
     scrollController.dispose();
     scrollController = null;
@@ -149,9 +147,6 @@ class SubmissionListState extends State<SubmissionList> {
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            // if (index >= list.length) {
-                            //   return null;
-                            // }
                             return SubmissionListItem(
                               submission: list[index],
                               reddit: reddit,

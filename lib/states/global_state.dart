@@ -9,6 +9,7 @@ class GlobalState with ChangeNotifier {
   SubredditRef _gwaSubreddit;
   Stream<UserContent> _searchResultsStream;
   List<GwaSubmissionPreview> _searchResults = [];
+  String _lastSeenSubmission = 'None';
 
   SubredditRef get gwaSubreddit => _gwaSubreddit;
 
@@ -39,12 +40,18 @@ class GlobalState with ChangeNotifier {
     _searchResultsStream = _gwaSubreddit.top(
       timeFilter: TimeFilter.all,
       limit: 200,
+      params: {'after': _lastSeenSubmission},
     ).asBroadcastStream();
+
     _searchResultsStream.listen((submission) {
       GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
       _searchResults.add(gwaSubmission);
-      print(_searchResults.last.title);
     });
-    print('hello');
   }
+
+  /// Automatically set lastSeenSubmission as the last loaded submission in the searchResults list.
+  updateLastSeenSubmission() {
+    _lastSeenSubmission = _searchResults.last.fullname;
+  }
+
 }

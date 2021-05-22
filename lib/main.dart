@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
-import 'package:gwa_app/screens/submission_list/submission_list.dart';
+import 'screens/submission_list/submission_list.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
