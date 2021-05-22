@@ -17,8 +17,6 @@ class GlobalState with ChangeNotifier {
 
   List<GwaSubmissionPreview> get searchResults => _searchResults;
 
-  Reddit get reddit => _reddit;
-
   Future<void> initApp() async {
     Map<String, dynamic> _data =
         await parseJsonFromAssets('lib/assets/reddit.json');
@@ -93,6 +91,12 @@ class GlobalState with ChangeNotifier {
       GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
       _searchResults.add(gwaSubmission);
     });
+  }
+
+  /// Returns a Future<Submission> belonging to the submission ID given.
+  /// ID needs to be without the ID prefix (i.e. t3_).
+  Future<Submission> populateSubmission({@required String id}) {
+    return _reddit.submission(id: id).populate();
   }
 
   /// Automatically set lastSeenSubmission as the last loaded submission in the searchResults list.

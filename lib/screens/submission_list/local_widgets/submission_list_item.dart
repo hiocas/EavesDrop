@@ -1,4 +1,3 @@
-import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
@@ -6,11 +5,8 @@ import '../../submission_page/submission_page.dart';
 
 class SubmissionListItem extends StatelessWidget {
   final GwaSubmissionPreview submission;
-  /*FIXME:Fix the fact that it takes a reddit instance as a parameter.
-     Maybe use some sort of state which will have it. */
-  final Reddit reddit;
 
-  const SubmissionListItem({Key key, this.submission, this.reddit}) : super(key: key);
+  const SubmissionListItem({Key key, this.submission}) : super(key: key);
 
   /*FIXME: This is a very weird item design. It happened by mistake and
      should be better thought of. Try to redesign it or if you're going with
@@ -65,7 +61,7 @@ class SubmissionListItem extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => SubmissionPage(
-              reddit: reddit, submissionFullname: submission.fullname,
+                  submissionFullname: submission.fullname,
                 ),
               ),
             );

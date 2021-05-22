@@ -1,5 +1,3 @@
-import 'package:draw/draw.dart'
-    as Draw; //Both draw and flutter have a class named Visibility, this solves the confusion.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,15 +9,13 @@ import '../../widgets/website_viewer.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'local_widgets/all_page_local.dart';
 import 'package:gwa_app/widgets/icon_text_button.dart';
+import 'package:provider/provider.dart';
+import 'package:gwa_app/states/global_state.dart';
 
 class SubmissionPage extends StatefulWidget {
   final String submissionFullname;
 
-  /*TODO:Fix the fact that it takes a reddit instance as a parameter.
-     Maybe use some sort of state which will have it (or using bloc pattern).*/
-  final Draw.Reddit reddit;
-
-  const SubmissionPage({Key key, this.submissionFullname, this.reddit})
+  const SubmissionPage({Key key, this.submissionFullname})
       : super(key: key);
 
   @override
@@ -28,7 +24,6 @@ class SubmissionPage extends StatefulWidget {
 
 class SubmissionPageState extends State<SubmissionPage> {
   String _fullname;
-  Future<Draw.Submission> _futureSubmission;
   GwaSubmission _submission;
   List<bool> _selectedTags = [];
   bool _isOneSelected = false;
@@ -42,14 +37,14 @@ class SubmissionPageState extends State<SubmissionPage> {
   void initState() {
     super.initState();
     _fullname = widget.submissionFullname.substring(3);
-    _futureSubmission = widget.reddit.submission(id: _fullname).populate();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _futureSubmission,
+      future: Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        print('building...');
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         } else {
@@ -72,9 +67,6 @@ class SubmissionPageState extends State<SubmissionPage> {
           return RefreshIndicator(
             //TODO: Implement pull to refresh.
             onRefresh: () {
-              setState(() {
-                _futureSubmission = null;
-              });
               print('User requested a refresh');
               return Future.value();
             },

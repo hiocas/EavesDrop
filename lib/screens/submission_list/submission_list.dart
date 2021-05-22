@@ -51,7 +51,10 @@ class SubmissionListState extends State<SubmissionList> {
     });
 
     if (widget.initialQuery.isEmpty || widget.initialQuery == null) {
-      Provider.of<GlobalState>(context, listen: false).loadNewest();
+      /*FIXME: For testing purposes I'm putting this as top but it should be
+         newest (commented). */
+      Provider.of<GlobalState>(context, listen: false).loadTop(TimeFilter.all);
+      // Provider.of<GlobalState>(context, listen: false).loadNewest();
     } else {
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           widget.initialQuery, widget.initialSort, widget.initialTimeFilter);
@@ -131,7 +134,6 @@ class SubmissionListState extends State<SubmissionList> {
                           (BuildContext context, int index) {
                             return SubmissionListItem(
                               submission: globalState.searchResults[index],
-                              reddit: globalState.reddit,
                             );
                           },
                           childCount: globalState.searchResults.length,
