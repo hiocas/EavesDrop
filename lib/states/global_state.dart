@@ -36,9 +36,55 @@ class GlobalState with ChangeNotifier {
     notifyListeners();
   }
 
-  loadSearch(String query, TimeFilter timeFilter) {
+  loadSearch(String query, Sort sort, TimeFilter timeFilter) {
+    _searchResults = [];
+
+    _searchResultsStream = _gwaSubreddit.search(
+      query,
+      timeFilter: TimeFilter.all,
+      sort: sort,
+      params: {'after': _lastSeenSubmission},
+    ).asBroadcastStream();
+
+    _searchResultsStream.listen((submission) {
+      GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
+      _searchResults.add(gwaSubmission);
+    });
+  }
+
+  loadTop(TimeFilter timeFilter) {
+    _searchResults = [];
+
     _searchResultsStream = _gwaSubreddit.top(
       timeFilter: TimeFilter.all,
+      limit: 200,
+      params: {'after': _lastSeenSubmission},
+    ).asBroadcastStream();
+
+    _searchResultsStream.listen((submission) {
+      GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
+      _searchResults.add(gwaSubmission);
+    });
+  }
+
+  loadHot() {
+    _searchResults = [];
+
+    _searchResultsStream = _gwaSubreddit.hot(
+      limit: 200,
+      params: {'after': _lastSeenSubmission},
+    ).asBroadcastStream();
+
+    _searchResultsStream.listen((submission) {
+      GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
+      _searchResults.add(gwaSubmission);
+    });
+  }
+
+  loadNewest() {
+    _searchResults = [];
+
+    _searchResultsStream = _gwaSubreddit.newest(
       limit: 200,
       params: {'after': _lastSeenSubmission},
     ).asBroadcastStream();
@@ -53,5 +99,4 @@ class GlobalState with ChangeNotifier {
   updateLastSeenSubmission() {
     _lastSeenSubmission = _searchResults.last.fullname;
   }
-
 }

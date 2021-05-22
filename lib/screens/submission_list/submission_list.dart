@@ -12,6 +12,17 @@ import 'package:provider/provider.dart';
 /*TODO: Implement lazy loading and a "show more" in search so that the user can
    search for more than 1000 (I think that's the limit) submissions. */
 class SubmissionList extends StatefulWidget {
+  final String initialQuery;
+  final TimeFilter initialTimeFilter;
+  final Sort initialSort;
+
+  const SubmissionList({
+    Key key,
+    this.initialQuery = '',
+    this.initialTimeFilter = TimeFilter.all,
+    this.initialSort = Sort.relevance,
+  }) : super(key: key);
+
   @override
   SubmissionListState createState() => SubmissionListState();
 }
@@ -24,6 +35,7 @@ class SubmissionList extends StatefulWidget {
 
 class SubmissionListState extends State<SubmissionList> {
   ScrollController scrollController = ScrollController();
+  GlobalState globalState;
 
   @override
   void initState() {
@@ -33,13 +45,17 @@ class SubmissionListState extends State<SubmissionList> {
           scrollController.position.maxScrollExtent) {
         /*FIXME: This is what's responsible for loading more submissions when
            the user reaches the end of the list but it's scuffed... */
-        Provider.of<GlobalState>(context, listen: false).updateLastSeenSubmission();
+        Provider.of<GlobalState>(context, listen: false)
+            .updateLastSeenSubmission();
       }
     });
 
-    Provider.of<GlobalState>(context, listen: false)
-        .loadSearch('', TimeFilter.all);
-
+    if (widget.initialQuery.isEmpty || widget.initialQuery == null) {
+      Provider.of<GlobalState>(context, listen: false).loadNewest();
+    } else {
+      Provider.of<GlobalState>(context, listen: false).loadSearch(
+          widget.initialQuery, widget.initialSort, widget.initialTimeFilter);
+    }
   }
 
   @override
@@ -47,6 +63,8 @@ class SubmissionListState extends State<SubmissionList> {
     super.dispose();
     scrollController.dispose();
     scrollController = null;
+    globalState.dispose();
+    globalState = null;
   }
 
   @override
@@ -86,11 +104,14 @@ class SubmissionListState extends State<SubmissionList> {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             } else {
-              var globalState = Provider.of<GlobalState>(context);
+              this.globalState = Provider.of<GlobalState>(context);
               return RefreshIndicator(
                 //TODO: Implement pull to refresh.
                 onRefresh: () {
                   print('User requested a refresh');
+                  setState(() {
+                    globalState.loadTop(TimeFilter.all);
+                  });
                   return Future.value();
                 },
                 child: CustomScrollView(
