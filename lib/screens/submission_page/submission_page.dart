@@ -44,7 +44,6 @@ class SubmissionPageState extends State<SubmissionPage> {
       future:
       Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        print('building...');
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         } else {
@@ -104,7 +103,6 @@ class SubmissionPageState extends State<SubmissionPage> {
                         builder:
                             (BuildContext context, BoxConstraints constraints) {
                           top = constraints.biggest.height;
-                          print(top);
                           return ClipRRect(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(25.0),
@@ -223,9 +221,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               onPressed: () =>
                                   launch(_submission.shortlink.toString()),
                             ),
-                            /*TODO(Design): Decide whether to keep this button
-                                or leave only the "tapping on title" popup
-                                text button. */
+                            //TODO: Replace the Title button with a details button.
                             PopupCardButton(
                               icon: Icons.expand,
                               label: 'Title',

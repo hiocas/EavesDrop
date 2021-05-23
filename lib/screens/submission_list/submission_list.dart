@@ -5,12 +5,16 @@ import 'package:flutter/rendering.dart';
 import 'local_widgets/submission_list_item.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
+import 'local_widgets/submission_list_appbar.dart';
 
 /*FIXME: This implements GlobalState but it seems to be slower than the old
    implementation. */
 
 /*TODO: Implement lazy loading and a "show more" in search so that the user can
    search for more than 1000 (I think that's the limit) submissions. */
+
+/*TODO: I think there are too many separate calls for Provider.of... I dunno
+    how this impacts performance but you should look into it. */
 class SubmissionList extends StatefulWidget {
   final String initialQuery;
   final TimeFilter initialTimeFilter;
@@ -36,6 +40,9 @@ class SubmissionList extends StatefulWidget {
 class SubmissionListState extends State<SubmissionList> {
   ScrollController scrollController = ScrollController();
   GlobalState globalState;
+  Sort searchSort = Sort.relevance;
+  String submittedSearchQuery = '';
+  String currentSearchQuery = '';
 
   @override
   void initState() {
@@ -45,8 +52,8 @@ class SubmissionListState extends State<SubmissionList> {
           scrollController.position.maxScrollExtent) {
         /*FIXME: This is what's responsible for loading more submissions when
            the user reaches the end of the list but it's scuffed... */
-        Provider.of<GlobalState>(context, listen: false)
-            .updateLastSeenSubmission();
+        // Provider.of<GlobalState>(context, listen: false)
+        //     .updateLastSeenSubmission();
       }
     });
 
@@ -70,52 +77,52 @@ class SubmissionListState extends State<SubmissionList> {
     globalState = null;
   }
 
+  _updateSearch() {
+    if (this.submittedSearchQuery.isNotEmpty) {
+      Provider.of<GlobalState>(context, listen: false).loadSearch(
+          this.submittedSearchQuery, this.searchSort, TimeFilter.all);
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Search Results"),
-        backgroundColor: Colors.transparent,
-        elevation: 15.0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15.0),
-                bottomRight: Radius.circular(15.0)),
-            gradient: LinearGradient(colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).cardColor,
-            ], begin: Alignment.bottomLeft, end: Alignment.bottomRight),
-          ),
-        ),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              print('The app bar leading button has been pressed.');
-            }),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => print('User requested to search'),
-          )
-        ],
+      appBar: SubmissionListAppBar(
+        onSelectedItem: (Sort result) {
+          this.searchSort = result;
+          //This way the search only gets updated after every submission.
+          if (this.submittedSearchQuery == this.currentSearchQuery)
+            _updateSearch();
+        },
+        /*FIXME: Disable query submission when GlobalState search is busy. */
+        onSubmitted: (query) {
+          this.submittedSearchQuery = query;
+          _updateSearch();
+        },
+        /*FIXME: There's probably a more efficient way to check if the user
+            changed their query, maybe using onEditingComplete. Fix this. */
+        onChanged: (query) {
+          this.currentSearchQuery = query;
+        },
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
         child: StreamBuilder(
           stream: Provider.of<GlobalState>(context).searchResultsStream,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (!snapshot.hasData) {
+            if (Provider.of<GlobalState>(context).searchEmpty) {
+              return Center(child: Text('No Submissions Found.'));
+            } else if (!snapshot.hasData ||
+                (Provider.of<GlobalState>(context).searchResults.isEmpty)) {
               return Center(child: CircularProgressIndicator());
             } else {
               this.globalState = Provider.of<GlobalState>(context);
+              print(globalState.searchResults.length);
               return RefreshIndicator(
                 //TODO: Implement pull to refresh.
                 onRefresh: () {
                   print('User requested a refresh');
-                  setState(() {
-                    globalState.loadTop(TimeFilter.all);
-                  });
                   return Future.value();
                 },
                 child: CustomScrollView(

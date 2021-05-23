@@ -8,8 +8,11 @@ class GlobalState with ChangeNotifier {
   Reddit _reddit;
   SubredditRef _gwaSubreddit;
   Stream<UserContent> _searchResultsStream;
+  StreamSubscription<UserContent> _subscription;
   List<GwaSubmissionPreview> _searchResults = [];
   String _lastSeenSubmission = 'None';
+  bool _isBusy = false;
+  bool _searchEmpty = false;
 
   SubredditRef get gwaSubreddit => _gwaSubreddit;
 
@@ -17,9 +20,13 @@ class GlobalState with ChangeNotifier {
 
   List<GwaSubmissionPreview> get searchResults => _searchResults;
 
+  bool get isBusy => _isBusy;
+
+  bool get searchEmpty => _searchEmpty;
+
   Future<void> initApp() async {
     Map<String, dynamic> _data =
-        await parseJsonFromAssets('lib/assets/reddit.json');
+    await parseJsonFromAssets('lib/assets/reddit.json');
 
     _reddit = await Reddit.createScriptInstance(
       clientId: _data["CLIENT_ID"],
@@ -34,20 +41,22 @@ class GlobalState with ChangeNotifier {
     notifyListeners();
   }
 
-  loadSearch(String query, Sort sort, TimeFilter timeFilter) {
+  loadSearch(String query, Sort sort, TimeFilter timeFilter,
+      [int limit = 100]) {
     _searchResults = [];
 
     _searchResultsStream = _gwaSubreddit.search(
       query,
       timeFilter: TimeFilter.all,
       sort: sort,
-      params: {'after': _lastSeenSubmission},
+      params: {'after': _lastSeenSubmission, 'limit': limit.toString()},
     ).asBroadcastStream();
 
-    _searchResultsStream.listen((submission) {
-      GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
-      _searchResults.add(gwaSubmission);
-    });
+    _isBusy = true;
+    _subscription = _searchResultsStream.listen((value) {});
+    _handleSubscription();
+
+    if (_searchResults.isNotEmpty) notifyListeners();
   }
 
   loadTop(TimeFilter timeFilter) {
@@ -59,10 +68,11 @@ class GlobalState with ChangeNotifier {
       params: {'after': _lastSeenSubmission},
     ).asBroadcastStream();
 
-    _searchResultsStream.listen((submission) {
-      GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
-      _searchResults.add(gwaSubmission);
-    });
+    _isBusy = true;
+    _subscription = _searchResultsStream.listen((value) {});
+    _handleSubscription();
+
+    if (_searchResults.isNotEmpty) notifyListeners();
   }
 
   loadHot() {
@@ -73,10 +83,11 @@ class GlobalState with ChangeNotifier {
       params: {'after': _lastSeenSubmission},
     ).asBroadcastStream();
 
-    _searchResultsStream.listen((submission) {
-      GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
-      _searchResults.add(gwaSubmission);
-    });
+    _isBusy = true;
+    _subscription = _searchResultsStream.listen((value) {});
+    _handleSubscription();
+
+    if (_searchResults.isNotEmpty) notifyListeners();
   }
 
   loadNewest() {
@@ -87,10 +98,11 @@ class GlobalState with ChangeNotifier {
       params: {'after': _lastSeenSubmission},
     ).asBroadcastStream();
 
-    _searchResultsStream.listen((submission) {
-      GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
-      _searchResults.add(gwaSubmission);
-    });
+    _isBusy = true;
+    _subscription = _searchResultsStream.listen((value) {});
+    _handleSubscription();
+
+    if (_searchResults.isNotEmpty) notifyListeners();
   }
 
   /// Returns a Future<Submission> belonging to the submission ID given.
@@ -103,4 +115,23 @@ class GlobalState with ChangeNotifier {
   updateLastSeenSubmission() {
     _lastSeenSubmission = _searchResults.last.fullname;
   }
+
+  _handleSubscription() {
+    this._searchEmpty = false;
+
+    if (this._subscription != null) {
+      this._subscription.onData((submission) {
+        GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
+        _searchResults.add(gwaSubmission);
+      });
+
+      this._subscription.onDone(() {
+        this._isBusy = false;
+        this._searchEmpty = this._searchResults.isEmpty;
+        _subscription.cancel();
+        notifyListeners();
+      });
+    }
+  }
+
 }
