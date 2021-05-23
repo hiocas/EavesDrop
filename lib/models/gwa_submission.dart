@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -41,25 +42,6 @@ class GwaSubmission {
     this.upvotes = submission.upvotes;
   }
 
-  /// Returns a string of the name of the submission.
-  String findSubmissionTitle(String fullTitle) {
-    var exp = RegExp(r'(?<=\])(.*?)(?=\[)');
-    var matches = exp.allMatches(fullTitle);
-    var results = List<String>.generate(
-        matches.length, (int index) => matches.elementAt(index).group(0));
-    for (var title in results) {
-      if (RegExp(r'[a-zA-Z]').hasMatch(title)) {
-        if (title.contains('&amp;')) {
-          return title.substring(0, title.indexOf('&amp;')) +
-              '&' +
-              title.substring(title.indexOf('&amp;') + 5);
-        }
-        return title.trim();
-      }
-    }
-    return fullTitle;
-  }
-
   List<String> findSubmissionTags(Submission submission) {
     var exp = RegExp(r'(?<=\[)(.*?)(?=\])');
     var matches = exp.allMatches(submission.title);
@@ -86,10 +68,6 @@ class GwaSubmission {
     }
     return urls;
   }
-
-//   bool _launchUrl(String url)  {
-//     return await canLaunch(url);
-// }
 
   /// Returns a string of the first image or gif url found in a submission's self text.
   String findFirstImageOrGifURL(Submission submission) {
