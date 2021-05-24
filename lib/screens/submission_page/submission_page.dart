@@ -375,7 +375,10 @@ class SubmissionPageState extends State<SubmissionPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => WebsiteViewer(),
+                        builder: (context) => WebsiteViewer(
+                          title: _submission.title,
+                          url: _submission.audioUrls[0],
+                        ),
                       ),
                     );
                   },

@@ -33,6 +33,7 @@ dependencies:
   flutter_markdown: ^0.6.2
   provider: ^5.0.0
   confetti: ^0.5.5
+  webview_flutter: ^2.0.7
 
 dev_dependencies:
   flutter_test:

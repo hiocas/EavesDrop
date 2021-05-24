@@ -13,6 +13,7 @@ class GwaSubmission {
   String fullname = '';
   List<String> tags = [];
   List<String> urls = [];
+  List<String> audioUrls = [];
   String firstImageOrGifUrl = '';
   Image img;
   String thumbnailUrl;
@@ -37,6 +38,7 @@ class GwaSubmission {
     this.fullname = submission.fullname;
     this.tags = findSubmissionTags(submission);
     this.urls = findSubmissionURLS(submission);
+    _populateAudioUrls(submission);
     var urlStr = this.url.toString();
     //Only add the url to urls if it has soundgasm in it -> when posting a link submission to reddit this is where the link is.
     if (urlStr.contains('soundgasm')) this.urls.add(urlStr);
@@ -94,6 +96,17 @@ class GwaSubmission {
       return this.thumbnailUrl;
     }
     return 'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9';
+  }
+
+  _populateAudioUrls(Submission submission){
+    for (String url in this.urls) {
+      if (url.contains('soundgasm')) {
+        this.audioUrls.add(url);
+      }
+      else if (url.contains('soundcloud')){
+        this.audioUrls.add(url);
+      }
+    }
   }
 
   bool checkHasAudioUrl() {
