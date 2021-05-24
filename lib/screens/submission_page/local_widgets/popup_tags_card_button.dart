@@ -107,12 +107,11 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
           break;
         case 2:
           chips.add(
+            /*FIXME: Some tags are too long to display on this widget and can't
+                be seen fully. */
             FilterChip(
               selected: widget.selectedTags[i],
-              label: widget.gwaSubmission.tags[i].length > 40
-                  ? SingleChildScrollView(
-                      child: Text(widget.gwaSubmission.tags[i]))
-                  : Text(widget.gwaSubmission.tags[i]),
+              label: Text(widget.gwaSubmission.tags[i]),
               backgroundColor: Theme.of(context).primaryColor,
               labelPadding: const EdgeInsets.only(left: 3.0, right: 6.0),
               padding: const EdgeInsets.only(left: 4.0),

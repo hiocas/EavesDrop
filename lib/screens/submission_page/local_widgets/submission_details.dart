@@ -22,9 +22,9 @@ class SubmissionDetails extends StatelessWidget {
         '\n\n'
         '>Upvotes: ${gwaSubmission.upvotes}.'
         '\n\n'
-        '>Gold: ${gwaSubmission.gold}. '
-        'Silver: ${gwaSubmission.silver}. '
-        'Platinum: ${gwaSubmission.platinum}.'
+        '>Platinum: ${gwaSubmission.platinum}. '
+        'Gold: ${gwaSubmission.gold}. '
+        'Silver: ${gwaSubmission.silver}.'
         '\n\n'
         '>Number of Comments: ${gwaSubmission.numComments}.';
   }
@@ -40,8 +40,7 @@ class SubmissionDetails extends StatelessWidget {
       ),
       bodyTextFontSize: 12.0,
       horizontalRuleDecoration: BoxDecoration(
-          border: Border(
-              top: BorderSide(width: 3.0, color: Colors.black))),
+          border: Border(top: BorderSide(width: 3.0, color: Colors.black))),
     );
   }
 }

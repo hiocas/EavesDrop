@@ -3,6 +3,7 @@ import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+//TODO: Add support for tags in a submission's selftext.
 class GwaSubmission {
   String fullTitle;
   String title = '';
@@ -62,7 +63,9 @@ class GwaSubmission {
     var exp = RegExp(r'(?<=\[)(.*?)(?=\])');
     var matches = exp.allMatches(submission.title);
     return List<String>.generate(
-        matches.length, (int index) => matches.elementAt(index).group(0));
+        matches.length,
+        (int index) =>
+            matches.elementAt(index).group(0).replaceAll('&amp;', '&'));
   }
 
   // Returns a list strings of all urls found in a submission's self text.
@@ -98,12 +101,11 @@ class GwaSubmission {
     return 'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9';
   }
 
-  _populateAudioUrls(Submission submission){
+  _populateAudioUrls(Submission submission) {
     for (String url in this.urls) {
       if (url.contains('soundgasm')) {
         this.audioUrls.add(url);
-      }
-      else if (url.contains('soundcloud')){
+      } else if (url.contains('soundcloud')) {
         this.audioUrls.add(url);
       }
     }
@@ -139,7 +141,8 @@ class GwaSubmission {
       errorBuilder:
           (BuildContext context, Object exception, StackTrace stackTrace) {
         return Image.network(
-          this.thumbnailUrl ?? 'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9',
+          this.thumbnailUrl ??
+              'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9',
           fit: BoxFit.cover,
           loadingBuilder: (BuildContext context, Widget child,
               ImageChunkEvent loadingProgress) {
@@ -185,7 +188,8 @@ class GwaSubmission {
       return days.toString() + 'd';
     else if (hours >= 1)
       return hours.toString() + 'h';
-    else if (minutes >= 1) return minutes.toString() + 'm';
+    else if (minutes >= 1)
+      return minutes.toString() + 'm';
     else if (seconds >= 1) return seconds.toString() + 's';
     return 'now';
   }
