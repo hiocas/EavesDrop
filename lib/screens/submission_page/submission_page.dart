@@ -7,9 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
 import '../../widgets/popup_card_button.dart';
 import '../../widgets/website_viewer.dart';
+import 'package:gwa_app/widgets/particles_icon_text_button.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'local_widgets/all_page_local.dart';
-import 'package:gwa_app/widgets/icon_text_button.dart';
 import 'package:provider/provider.dart';
 import 'package:gwa_app/states/global_state.dart';
 
@@ -43,7 +43,7 @@ class SubmissionPageState extends State<SubmissionPage> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future:
-      Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
+          Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -54,7 +54,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                    scuffed. */
           if (_selectedTags.length == 0) {
             _selectedTags =
-            List<bool>.generate(_submission.tags.length, (index) => false);
+                List<bool>.generate(_submission.tags.length, (index) => false);
             if (!_isOneSelected) {
               for (bool tag in _selectedTags) {
                 if (tag) {
@@ -71,9 +71,7 @@ class SubmissionPageState extends State<SubmissionPage> {
               return Future.value();
             },
             child: Scaffold(
-              backgroundColor: Theme
-                  .of(context)
-                  .backgroundColor,
+              backgroundColor: Theme.of(context).backgroundColor,
               body: SafeArea(
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(
@@ -118,8 +116,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                                  don't align to the left of the sliver app bar,
                                  fix this. */
                               title: Align(
-                                alignment: top >= maxTitleAlignTop ? Alignment
-                                    .bottomLeft : Alignment.center,
+                                alignment: top >= maxTitleAlignTop
+                                    ? Alignment.bottomLeft
+                                    : Alignment.center,
                                 child: Padding(
                                   padding: top >= maxTitleAlignTop
                                       ? EdgeInsets.only(left: 10.0)
@@ -132,8 +131,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                                     children: [
                                       ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          maxWidth:
-                                          top >= maxTitleAlignTop ? 2000 : 330),
+                                            maxWidth: top >= maxTitleAlignTop
+                                                ? 2000
+                                                : 330),
                                         child: PopupTextButton(
                                           heroTag: 'popup-fulltitle-card',
                                           fullText: _submission.fullTitle,
@@ -160,7 +160,8 @@ class SubmissionPageState extends State<SubmissionPage> {
                                       Visibility(
                                         visible: top >= maxTitleAlignTop,
                                         child: Text(
-                                          '\n' + _submission.fromNow +
+                                          '\n' +
+                                              _submission.fromNow +
                                               ', \u{2b06}' +
                                               _submission.upvotes.toString(),
                                           textAlign: TextAlign.center,
@@ -202,9 +203,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.add,
                               label: 'Save',
                               subtext: 'Save this post to your library',
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               heroTag: 'save-submission-popup',
                               child: Container(
                                 height: 200.0,
@@ -212,27 +211,26 @@ class SubmissionPageState extends State<SubmissionPage> {
                               ),
                               usePlaceholder: true,
                             ),
-                            IconTextButton(
+                            ParticlesIconTextButton(
                               icon: Icons.favorite_border,
                               label: 'Open',
                               subtext: 'Upvote this and show your support!',
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               onPressed: () =>
                                   launch(_submission.shortlink.toString()),
+                              confettiDuration: Duration(milliseconds: 300),
                             ),
                             PopupCardButton(
                               icon: Icons.expand,
                               label: 'Details',
                               subtext: 'Show the full title of the post',
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               heroTag: 'submission-details-popup',
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: SubmissionDetails(gwaSubmission: _submission),
+                                child: SubmissionDetails(
+                                  gwaSubmission: _submission,
+                                ),
                               ),
                               usePlaceholder: true,
                             ),
@@ -240,9 +238,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.search,
                               label: 'Tags',
                               subtext: "View and query all of the post's tags",
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               heroTag: 'submission-tags-popup',
                               gwaSubmission: _submission,
                               selectedTags: _selectedTags,
@@ -269,7 +265,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                           itemBuilder: (BuildContext context, int index) {
                             var tagList = _submission.tags;
                             var avatarCreator =
-                            UtilFunctions.tagChipAvatar(tagList[index]);
+                                UtilFunctions.tagChipAvatar(tagList[index]);
                             Widget avatar = avatarCreator[0];
                             int chars = avatarCreator[1];
                             //If there are 2 chars as an avatar.
@@ -284,12 +280,8 @@ class SubmissionPageState extends State<SubmissionPage> {
                                   selected: _selectedTags[index],
                                   label: Text(tagList[index]),
                                   backgroundColor:
-                                  Theme
-                                      .of(context)
-                                      .primaryColor,
-                                  selectedColor: Theme
-                                      .of(context)
-                                      .accentColor,
+                                      Theme.of(context).primaryColor,
+                                  selectedColor: Theme.of(context).accentColor,
                                   side: BorderSide(width: 0.0),
                                   avatar: avatar,
                                   onSelected: (bool value) {
@@ -312,12 +304,8 @@ class SubmissionPageState extends State<SubmissionPage> {
                                   selected: _selectedTags[index],
                                   label: Text(tagList[index]),
                                   backgroundColor:
-                                  Theme
-                                      .of(context)
-                                      .primaryColor,
-                                  selectedColor: Theme
-                                      .of(context)
-                                      .accentColor,
+                                      Theme.of(context).primaryColor,
+                                  selectedColor: Theme.of(context).accentColor,
                                   side: BorderSide(width: 0.0),
                                   avatar: avatar,
                                   onSelected: (bool value) {
@@ -341,21 +329,19 @@ class SubmissionPageState extends State<SubmissionPage> {
                       padding: const EdgeInsets.all(10.0),
                       sliver: SliverToBoxAdapter(
                           child: Material(
-                            color: Theme
-                                .of(context)
-                                .backgroundColor,
-                            elevation: 15.0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
+                        color: Theme.of(context).backgroundColor,
+                        elevation: 15.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
                                 BorderRadius.all(Radius.circular(32.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(14.0),
-                              child: MarkdownViewer(
-                                text: _submission.selftext,
-                                bodyTextFontSize: 14.0,
-                              ),
-                            ),
-                          )),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: MarkdownViewer(
+                            text: _submission.selftext,
+                            bodyTextFontSize: 14.0,
+                          ),
+                        ),
+                      )),
                     ),
                     /*FIXME(Design): This makes sure the SelfTextViewer (now the
                         MarkdownViewer) can be fully read without the floating
@@ -377,12 +363,8 @@ class SubmissionPageState extends State<SubmissionPage> {
                   gradient: RadialGradient(
                     radius: 4.0,
                     colors: [
-                      Theme
-                          .of(context)
-                          .primaryColor,
-                      Theme
-                          .of(context)
-                          .cardColor,
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).cardColor,
                     ],
                   ),
                 ),
@@ -404,7 +386,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                 ),
               ),
               floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+                  FloatingActionButtonLocation.centerFloat,
             ),
           );
         }

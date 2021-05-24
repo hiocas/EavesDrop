@@ -15,7 +15,7 @@ class UtilFunctions {
       return [Text('\u{1f9d1}'), 1];
     else if (tag.contains(RegExp('fingering', caseSensitive: false)))
       return [Text('\u{1f595}'), 1];
-    else if (tag.contains(RegExp('neko', caseSensitive: false)))
+    else if (tag.contains(RegExp('neko|catgirl|cat girl|purr|nyaa', caseSensitive: false)))
       return [
         Image.asset(
           'lib/assets/images/headband.png',
@@ -35,6 +35,8 @@ class UtilFunctions {
       return [Text('\u{1f441}\u{fe0f}\u{200d}\u{1f5e8}\u{fe0f}'), 1];
     else if (tag.contains(RegExp('asmr', caseSensitive: false)))
       return [Text('\u{1f399}'), 1];
+    else if (tag.contains(RegExp('((l)(-| )(bombs))', caseSensitive: false)))
+      return [Text('\u{1f496}'), 1];
     else if (tag.contains(RegExp('blowjob', caseSensitive: false)))
       return [
         Row(children: [
