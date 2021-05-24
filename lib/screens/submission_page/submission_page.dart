@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/submission_details.dart';
 import 'package:gwa_app/widgets/markdown_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
 import '../../widgets/popup_card_button.dart';
-import '../../widgets/website_viewer.dart';
 import 'package:gwa_app/widgets/particles_icon_text_button.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'local_widgets/all_page_local.dart';
@@ -356,37 +354,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                   ],
                 ),
               ),
-              floatingActionButton: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  //TODO(Design): Need to consider making the gradient radial.
-                  gradient: RadialGradient(
-                    radius: 4.0,
-                    colors: [
-                      Theme.of(context).primaryColor,
-                      Theme.of(context).cardColor,
-                    ],
-                  ),
-                ),
-                width: 220.0,
-                child: RawMaterialButton(
-                  shape: new CircleBorder(),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WebsiteViewer(
-                          title: _submission.title,
-                          url: _submission.audioUrls[0],
-                        ),
-                      ),
-                    );
-                  },
-                  child: Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                  ),
-                ),
+              floatingActionButton: FloatingPlayButton(
+                heroTag: 'floating-play-button-popup',
+                submission: _submission,
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,

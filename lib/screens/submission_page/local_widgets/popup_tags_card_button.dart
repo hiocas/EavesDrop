@@ -15,6 +15,7 @@ class PopupTagsCardButton extends StatelessWidget {
   final void Function(bool value, int index) onSelected;
   final GwaSubmission gwaSubmission;
   final List<bool> selectedTags;
+
   ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
@@ -108,7 +109,10 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
           chips.add(
             FilterChip(
               selected: widget.selectedTags[i],
-              label: Text(widget.gwaSubmission.tags[i]),
+              label: widget.gwaSubmission.tags[i].length > 40
+                  ? SingleChildScrollView(
+                      child: Text(widget.gwaSubmission.tags[i]))
+                  : Text(widget.gwaSubmission.tags[i]),
               backgroundColor: Theme.of(context).primaryColor,
               labelPadding: const EdgeInsets.only(left: 3.0, right: 6.0),
               padding: const EdgeInsets.only(left: 4.0),
@@ -138,8 +142,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     return Material(
       color: Theme.of(context).backgroundColor,
       elevation: 2.0,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

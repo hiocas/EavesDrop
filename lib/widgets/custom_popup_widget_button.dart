@@ -99,15 +99,11 @@ class CustomPopupWidgetButton extends StatelessWidget {
 class _PopupWidget extends StatelessWidget {
   final String heroTag;
   final Widget widget;
-  final Color color;
-  final Axis scrollDirection;
 
   const _PopupWidget({
     Key key,
     @required this.widget,
     @required this.heroTag,
-    this.color,
-    this.scrollDirection,
   }) : super(key: key);
 
   @override

@@ -80,3 +80,10 @@ class UtilFunctions {
 Future<Map<String, dynamic>> parseJsonFromAssets(String assetsPath) {
   return rootBundle.loadString(assetsPath).then((value) => jsonDecode(value));
 }
+
+String getUrlTitle(String url) {
+  if (url.contains('soundgasm')) {
+    return url.substring(url.lastIndexOf('/') + 1);
+  }
+  return url;
+}

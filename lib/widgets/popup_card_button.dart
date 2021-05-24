@@ -14,7 +14,9 @@ class PopupCardButton extends StatelessWidget {
   final Widget child;
   final Color cardColor;
   final Axis cardScrollDirection;
-  ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
+  ///If this is true, the placeholder will be the default one I made
+  ///unless the [placeholder] parameter is specified.
+  ///If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
 

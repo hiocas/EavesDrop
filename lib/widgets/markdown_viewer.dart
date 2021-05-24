@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'website_viewer.dart';
 
 //TODO: This doesn't handle spoilers ('>!...<' I think). Try to extend it.
 class MarkdownViewer extends StatelessWidget {
@@ -37,7 +37,14 @@ class MarkdownViewer extends StatelessWidget {
       child: MarkdownBody(
         data: markdown,
         onTapLink: (text, url, title) {
-          launch(url);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WebsiteViewer(
+                url: url,
+              ),
+            ),
+          );
         },
         styleSheet: MarkdownStyleSheet.fromTheme(ThemeData(
             dividerColor: this.tableBorderColor ?? Colors.grey[600],
