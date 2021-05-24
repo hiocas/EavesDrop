@@ -28,25 +28,49 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   bool _isSearching = false;
   Sort sort = Sort.relevance;
 
+  String _sortToString(Sort sort) {
+    switch (sort) {
+      case Sort.relevance:
+        return 'Relevance';
+      case Sort.hot:
+        return 'Hot';
+      case Sort.top:
+        return 'Top';
+      case Sort.newest:
+        return 'Newest';
+      case Sort.comments:
+        return 'Comments';
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: _isSearching
-          ? TextField(
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).accentColor)),
-              ),
-              onSubmitted: (value) {
-                if (value != null && value.isNotEmpty)
-                  widget.onSubmitted(value);
-              },
-              onChanged: (value) {
-                if (value != null) widget.onChanged(value);
-              },
-            )
+          ? Consumer<GlobalState>(builder: (context, state, child) {
+              return TextField(
+                enabled: !state.isBusy,
+                decoration: InputDecoration(
+                  isDense: true,
+                  hintText: 'Search...',
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).accentColor)),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
+                ),
+                onSubmitted: (value) {
+                  if (value != null && value.isNotEmpty)
+                    widget.onSubmitted(value);
+                },
+                onChanged: (value) {
+                  if (value != null) widget.onChanged(value);
+                },
+              );
+            })
           : Text('Search Results'),
       backgroundColor: Colors.transparent,
       elevation: 15.0,
@@ -85,7 +109,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                     return List<PopupMenuEntry<Sort>>.generate(5, (index) {
                       return PopupMenuItem(
                           value: Sort.values[index],
-                          child: Text(Sort.values[index].toString()));
+                          child: Text(_sortToString(Sort.values[index])));
                     });
                   },
                   elevation: 15.0,

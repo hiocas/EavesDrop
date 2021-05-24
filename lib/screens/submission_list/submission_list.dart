@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gwa_app/widgets/gwa_bottom_navigation_bar.dart';
 import 'local_widgets/submission_list_item.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +96,6 @@ class SubmissionListState extends State<SubmissionList> {
           if (this.submittedSearchQuery == this.currentSearchQuery)
             _updateSearch();
         },
-        /*FIXME: Disable query submission when GlobalState search is busy. */
         onSubmitted: (query) {
           this.submittedSearchQuery = query;
           _updateSearch();
@@ -155,24 +155,7 @@ class SubmissionListState extends State<SubmissionList> {
           },
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).backgroundColor,
-        selectedItemColor: Theme.of(context).primaryColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Library',
-          )
-        ],
-      ),
+      bottomNavigationBar: GWABottomNavigationBar(),
     );
   }
 }

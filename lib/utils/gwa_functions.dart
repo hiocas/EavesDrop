@@ -1,5 +1,4 @@
-
-
+//TODO: Make this work better as well as more efficient.
 /// Returns a string of the name of the submission.
 String findSubmissionTitle(String fullTitle) {
   var exp = RegExp(r'(?<=\])(.*?)(?=\[)');
@@ -18,9 +17,18 @@ String findSubmissionTitle(String fullTitle) {
   }
   /*Check if it starts with a tag and has only 1 tag (for instance
     '[META] hello' or 'Nice to meet you [verification]'). */
-  var title = fullTitle.substring(0, fullTitle.indexOf('['));
-  if (title.isNotEmpty && title.contains(RegExp('[a-z]', caseSensitive: false))) return title.trim();
-  title = fullTitle.substring(fullTitle.lastIndexOf(']') + 1, fullTitle.length);
-  if (title.isNotEmpty && title.contains(RegExp('[a-z]', caseSensitive: false))) return title.trim();
+  if (fullTitle.contains('[')) {
+    var title = fullTitle.substring(0, fullTitle.indexOf('['));
+    if (title.isNotEmpty &&
+        title.contains(RegExp('[a-z]', caseSensitive: false)))
+      return title.trim();
+  }
+  if (fullTitle.contains(']')) {
+    var title =
+        fullTitle.substring(fullTitle.lastIndexOf(']') + 1, fullTitle.length);
+    if (title.isNotEmpty &&
+        title.contains(RegExp('[a-z]', caseSensitive: false)))
+      return title.trim();
+  }
   return fullTitle;
 }

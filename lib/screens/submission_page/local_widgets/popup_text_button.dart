@@ -34,8 +34,7 @@ class PopupTextButton extends StatelessWidget {
       child: Hero(
         tag: this.heroTag,
         child: this.text,
-        createRectTween: (begin, end) =>
-            CalmRectTween(begin: begin, end: end),
+        createRectTween: (begin, end) => CalmRectTween(begin: begin, end: end),
         flightShuttleBuilder: _flightShuttleBuilder,
       ),
     );

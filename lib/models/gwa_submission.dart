@@ -19,6 +19,13 @@ class GwaSubmission {
   bool hasAudioUrl = false;
   String fromNow;
   int upvotes;
+  DateTime created;
+  int gold;
+  int silver;
+  int platinum;
+  String linkFlairText;
+  String authorFlairText;
+  int numComments;
 
   GwaSubmission(Submission submission) {
     this.fullTitle = submission.title;
@@ -40,6 +47,13 @@ class GwaSubmission {
     this.hasAudioUrl = checkHasAudioUrl();
     this.fromNow = getTimeSinceCreated(submission.createdUtc);
     this.upvotes = submission.upvotes;
+    this.created = submission.createdUtc;
+    this.gold = submission.gold ?? 0;
+    this.silver = submission.silver ?? 0;
+    this.platinum = submission.platinum ?? 0;
+    this.linkFlairText = submission.linkFlairText ?? '';
+    this.authorFlairText = submission.authorFlairText ?? '';
+    this.numComments = submission.numComments ?? 0;
   }
 
   List<String> findSubmissionTags(Submission submission) {
@@ -112,7 +126,7 @@ class GwaSubmission {
       errorBuilder:
           (BuildContext context, Object exception, StackTrace stackTrace) {
         return Image.network(
-          this.thumbnailUrl,
+          this.thumbnailUrl ?? 'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9',
           fit: BoxFit.cover,
           loadingBuilder: (BuildContext context, Widget child,
               ImageChunkEvent loadingProgress) {

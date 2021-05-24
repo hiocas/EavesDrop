@@ -45,64 +45,72 @@ class GlobalState with ChangeNotifier {
       [int limit = 100]) {
     _searchResults = [];
 
-    _searchResultsStream = _gwaSubreddit.search(
-      query,
-      timeFilter: TimeFilter.all,
-      sort: sort,
-      params: {'after': _lastSeenSubmission, 'limit': limit.toString()},
-    ).asBroadcastStream();
+    if (!this._isBusy) {
+      _searchResultsStream = _gwaSubreddit.search(
+        query,
+        timeFilter: TimeFilter.all,
+        sort: sort,
+        params: {'after': _lastSeenSubmission, 'limit': limit.toString()},
+      ).asBroadcastStream();
 
-    _isBusy = true;
-    _subscription = _searchResultsStream.listen((value) {});
-    _handleSubscription();
+      _isBusy = true;
+      _subscription = _searchResultsStream.listen((value) {});
+      _handleSubscription();
 
-    if (_searchResults.isNotEmpty) notifyListeners();
+      if (_searchResults.isNotEmpty) notifyListeners();
+    }
   }
 
   loadTop(TimeFilter timeFilter) {
-    _searchResults = [];
+    if (!this._isBusy) {
+      _searchResults = [];
 
-    _searchResultsStream = _gwaSubreddit.top(
-      timeFilter: TimeFilter.all,
-      limit: 200,
-      params: {'after': _lastSeenSubmission},
-    ).asBroadcastStream();
+      _searchResultsStream = _gwaSubreddit.top(
+        timeFilter: TimeFilter.all,
+        limit: 100,
+        params: {'after': _lastSeenSubmission},
+      ).asBroadcastStream();
 
-    _isBusy = true;
-    _subscription = _searchResultsStream.listen((value) {});
-    _handleSubscription();
+      _isBusy = true;
+      _subscription = _searchResultsStream.listen((value) {});
+      _handleSubscription();
 
-    if (_searchResults.isNotEmpty) notifyListeners();
+      if (_searchResults.isNotEmpty) notifyListeners();
+    }
   }
 
   loadHot() {
-    _searchResults = [];
+    if (!this._isBusy) {
+      _searchResults = [];
 
-    _searchResultsStream = _gwaSubreddit.hot(
-      limit: 200,
-      params: {'after': _lastSeenSubmission},
-    ).asBroadcastStream();
+      _searchResultsStream = _gwaSubreddit.hot(
+        limit: 100,
+        params: {'after': _lastSeenSubmission},
+      ).asBroadcastStream();
 
-    _isBusy = true;
-    _subscription = _searchResultsStream.listen((value) {});
-    _handleSubscription();
+      _isBusy = true;
+      _subscription = _searchResultsStream.listen((value) {});
+      _handleSubscription();
 
-    if (_searchResults.isNotEmpty) notifyListeners();
+      if (_searchResults.isNotEmpty) notifyListeners();
+    }
   }
 
   loadNewest() {
-    _searchResults = [];
+    if (!this._isBusy) {
+      _searchResults = [];
 
-    _searchResultsStream = _gwaSubreddit.newest(
-      limit: 200,
-      params: {'after': _lastSeenSubmission},
-    ).asBroadcastStream();
+      _searchResultsStream = _gwaSubreddit.newest(
+        limit: 100,
+        params: {'after': _lastSeenSubmission},
+      ).asBroadcastStream();
 
-    _isBusy = true;
-    _subscription = _searchResultsStream.listen((value) {});
-    _handleSubscription();
+      _isBusy = true;
+      _subscription = _searchResultsStream.listen((value) {});
+      _handleSubscription();
 
-    if (_searchResults.isNotEmpty) notifyListeners();
+      if (_searchResults.isNotEmpty) notifyListeners();
+    }
   }
 
   /// Returns a Future<Submission> belonging to the submission ID given.
@@ -123,6 +131,7 @@ class GlobalState with ChangeNotifier {
       this._subscription.onData((submission) {
         GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
         _searchResults.add(gwaSubmission);
+        if (gwaSubmission.title.contains("black")) print(gwaSubmission.title);
       });
 
       this._subscription.onDone(() {

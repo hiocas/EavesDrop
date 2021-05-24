@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gwa_app/screens/submission_page/local_widgets/submission_details.dart';
 import 'package:gwa_app/widgets/markdown_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
@@ -221,24 +222,17 @@ class SubmissionPageState extends State<SubmissionPage> {
                               onPressed: () =>
                                   launch(_submission.shortlink.toString()),
                             ),
-                            //TODO: Replace the Title button with a details button.
                             PopupCardButton(
                               icon: Icons.expand,
-                              label: 'Title',
+                              label: 'Details',
                               subtext: 'Show the full title of the post',
                               color: Theme
                                   .of(context)
                                   .primaryColor,
-                              heroTag: 'submission-fullTitle-popup',
+                              heroTag: 'submission-details-popup',
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  _submission.fullTitle,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
+                                child: SubmissionDetails(gwaSubmission: _submission),
                               ),
                               usePlaceholder: true,
                             ),
