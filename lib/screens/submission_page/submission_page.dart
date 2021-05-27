@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/widgets/markdown_viewer.dart';
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
 import '../../widgets/popup_card_button.dart';
 import 'package:gwa_app/widgets/particles_icon_text_button.dart';
@@ -212,7 +212,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               subtext: 'Upvote this and show your support!',
                               color: Theme.of(context).primaryColor,
                               onPressed: () {
-                                // launch(_submission.shortlink.toString());
+                                launch(_submission.shortlink.toString());
                               },
                               confettiDuration: Duration(milliseconds: 300),
                             ),
