@@ -73,7 +73,7 @@ class SubmissionListState extends State<SubmissionList> {
     super.dispose();
     scrollController.dispose();
     scrollController = null;
-    if (globalState != null){
+    if (globalState != null) {
       globalState.dispose();
       globalState = null;
     }
@@ -84,6 +84,30 @@ class SubmissionListState extends State<SubmissionList> {
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           this.submittedSearchQuery, this.searchSort, TimeFilter.all);
       setState(() {});
+    } else {
+      switch (this.searchSort) {
+        case Sort.relevance:
+          // TODO: Handle this case.
+          break;
+        case Sort.hot:
+          Provider.of<GlobalState>(context, listen: false)
+              .loadHot();
+          setState(() {});
+          break;
+        case Sort.newest:
+          Provider.of<GlobalState>(context, listen: false)
+              .loadNewest();
+          setState(() {});
+          break;
+        case Sort.comments:
+          // TODO: Handle this case.
+          break;
+        case Sort.top:
+          Provider.of<GlobalState>(context, listen: false)
+              .loadTop(TimeFilter.all);
+          setState(() {});
+          break;
+      }
     }
   }
 
