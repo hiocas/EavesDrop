@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/widgets/markdown_viewer.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
 import '../../widgets/popup_card_button.dart';
 import 'package:gwa_app/widgets/particles_icon_text_button.dart';
@@ -197,16 +197,13 @@ class SubmissionPageState extends State<SubmissionPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            PopupCardButton(
+                            PopupAddCardButton(
                               icon: Icons.add,
                               label: 'Save',
                               subtext: 'Save this post to your library',
                               color: Theme.of(context).primaryColor,
+                              gwaSubmission: _submission,
                               heroTag: 'save-submission-popup',
-                              child: Container(
-                                height: 200.0,
-                                width: 200,
-                              ),
                               usePlaceholder: true,
                             ),
                             ParticlesIconTextButton(
@@ -214,14 +211,15 @@ class SubmissionPageState extends State<SubmissionPage> {
                               label: 'Open',
                               subtext: 'Upvote this and show your support!',
                               color: Theme.of(context).primaryColor,
-                              onPressed: () =>
-                                  launch(_submission.shortlink.toString()),
+                              onPressed: () {
+                                // launch(_submission.shortlink.toString());
+                              },
                               confettiDuration: Duration(milliseconds: 300),
                             ),
                             PopupCardButton(
                               icon: Icons.expand,
                               label: 'Details',
-                              subtext: 'Show the full title of the post',
+                              subtext: "Show all of the post's details",
                               color: Theme.of(context).primaryColor,
                               heroTag: 'submission-details-popup',
                               child: Padding(

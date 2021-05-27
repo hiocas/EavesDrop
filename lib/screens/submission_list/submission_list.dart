@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/widgets/gwa_bottom_navigation_bar.dart';
-import 'local_widgets/submission_list_item.dart';
+import '../../widgets/gwa_list_item.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
 import 'local_widgets/submission_list_appbar.dart';
@@ -140,7 +140,7 @@ class SubmissionListState extends State<SubmissionList> {
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            return SubmissionListItem(
+                            return GwaListItem(
                               submission: globalState.searchResults[index],
                             );
                           },

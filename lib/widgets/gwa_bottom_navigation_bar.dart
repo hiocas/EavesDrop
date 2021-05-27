@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gwa_app/screens/library/library.dart';
 
+// TODO: Implement actual navigation.
 class GWABottomNavigationBar extends StatelessWidget {
   const GWABottomNavigationBar({
     Key key,
@@ -27,6 +29,18 @@ class GWABottomNavigationBar extends StatelessWidget {
           label: 'Library',
         )
       ],
+      onTap: (index) {
+        switch (index) {
+          case 2:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Library(),
+              ),
+            );
+            break;
+        }
+      },
     );
   }
 }

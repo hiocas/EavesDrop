@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
-import 'local_widgets/submission_list_item.dart';
+import '../../widgets/gwa_list_item.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 
@@ -147,7 +147,7 @@ class SubmissionListState extends State<SubmissionList> {
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            return SubmissionListItem(
+                            return GwaListItem(
                               submission: list[index],
                             );
                           },

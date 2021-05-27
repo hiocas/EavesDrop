@@ -2,6 +2,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/states/global_state.dart';
+import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'package:provider/provider.dart';
 
 class SubmissionListAppBar extends StatefulWidget
@@ -60,7 +61,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                           BorderSide(color: Theme.of(context).accentColor)),
                   enabledBorder: UnderlineInputBorder(
                       borderSide:
-                      BorderSide(color: Theme.of(context).primaryColor)),
+                          BorderSide(color: Theme.of(context).primaryColor)),
                 ),
                 onSubmitted: (value) {
                   if (value != null && value.isNotEmpty)
@@ -74,17 +75,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
           : Text('Search Results'),
       backgroundColor: Colors.transparent,
       elevation: 15.0,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15.0),
-              bottomRight: Radius.circular(15.0)),
-          gradient: LinearGradient(colors: [
-            Theme.of(context).primaryColor,
-            Theme.of(context).cardColor,
-          ], begin: Alignment.bottomLeft, end: Alignment.bottomRight),
-        ),
-      ),
+      flexibleSpace: GradientAppBarFlexibleSpace(),
       leading: _isSearching
           ? Consumer<GlobalState>(builder: (context, state, child) {
               return Theme(

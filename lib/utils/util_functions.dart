@@ -83,7 +83,7 @@ Future<Map<String, dynamic>> parseJsonFromAssets(String assetsPath) {
 
 String getUrlTitle(String url) {
   if (url.contains('soundgasm')) {
-    return url.substring(url.lastIndexOf('/') + 1);
+    return url.substring(url.lastIndexOf('/') + 1).replaceAll('-', ' ');
   }
   return url;
 }

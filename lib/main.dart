@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:gwa_app/screens/submission_list/submission_list.dart';
 import 'package:gwa_app/states/global_state.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'screens/submission_list/submission_list.dart';
+import 'models/library_gwa_submission.dart';
 
-Future<void> main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(LibraryGwaSubmissionAdapter());
 
   GlobalState globalState = GlobalState();
   await globalState.initApp();
+
   runApp(MyApp(
     globalState: globalState,
   ));
