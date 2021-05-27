@@ -21,6 +21,10 @@ class PopupAddCardButton extends StatefulWidget {
   ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
+  ///This will be used to determine whether to close the library box when
+  ///disposing this widget. If we're coming from the [Library] we shouldn't close
+  ///it since the library relies on it. Otherwise we should close it.
+  final bool fromLibrary;
 
   const PopupAddCardButton({
     Key key,
@@ -33,6 +37,7 @@ class PopupAddCardButton extends StatefulWidget {
     @required this.gwaSubmission,
     this.usePlaceholder,
     this.placeholder,
+    @required this.fromLibrary,
   }) : super(key: key);
 
   @override
@@ -61,7 +66,11 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
 
   @override
   void dispose() {
-    Hive.close();
+    /*FIXME: This makes sure the library isn't open so that we won't close the
+        hive box on it but it's a pretty hacky solution. */
+    if (!widget.fromLibrary){
+      Hive.close();
+    }
     super.dispose();
   }
 

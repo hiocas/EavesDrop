@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gwa_app/screens/library/library.dart';
 import 'package:gwa_app/screens/submission_list/submission_list.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:hive/hive.dart';
@@ -21,16 +22,33 @@ Future main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final GlobalState globalState;
 
   const MyApp({Key key, this.globalState}) : super(key: key);
 
   @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _currentPageIndex = 0;
+  List<Widget> _screens = [
+    SubmissionList(),
+    Center(
+      child: Text('Home'),
+    ),
+    Library(),
+  ];
+
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider<GlobalState>.value(value: globalState)],
+      providers: [
+        ChangeNotifierProvider<GlobalState>.value(value: widget.globalState)
+      ],
       child: MaterialApp(
+        title: 'GoneWildAudio App',
         themeMode: ThemeMode.dark,
         theme: ThemeData(
             primaryColor: Color.fromARGB(255, 119, 23, 45),
@@ -44,8 +62,57 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 28, 18, 28),
           cardColor: Color.fromARGB(255, 7, 13, 43),
         ),
-        home: SubmissionList(),
+        home: Scaffold(
+          body: AnimatedSwitcher(
+            duration: Duration(milliseconds: 500),
+            transitionBuilder: (child, animation) {
+              //TODO(Design): Make a better transition.
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            child: _screens.elementAt(_currentPageIndex),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentPageIndex,
+            backgroundColor: Color.fromARGB(255, 28, 18, 28),
+            selectedItemColor: Color.fromARGB(255, 119, 23, 45),
+            unselectedItemColor: Colors.grey[700],
+            elevation: 15.0,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.book),
+                label: 'Library',
+              )
+            ],
+            onTap: (index) {
+              setState(() {
+                _currentPageIndex = index;
+              });
+            },
+          ),
+        ),
       ),
     );
+  }
+}
+
+class InstantRoute<T> extends MaterialPageRoute<T> {
+  InstantRoute({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return child;
   }
 }

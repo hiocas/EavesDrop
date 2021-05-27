@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/screens/library/library.dart';
 
-// TODO: Implement actual navigation.
+@Deprecated('This class is no longer useful, the bottom navigation bar now'
+    'lives in main')
 class GWABottomNavigationBar extends StatelessWidget {
+  final int currentPageIndex;
+
   const GWABottomNavigationBar({
     Key key,
+    @required this.currentPageIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      currentIndex: currentPageIndex,
       backgroundColor: Theme.of(context).backgroundColor,
       selectedItemColor: Theme.of(context).primaryColor,
       unselectedItemColor: Colors.grey[700],
@@ -31,13 +35,15 @@ class GWABottomNavigationBar extends StatelessWidget {
       ],
       onTap: (index) {
         switch (index) {
+          case 0:
+            if (currentPageIndex != 0){
+              Navigator.pushReplacementNamed(context, 'SubmissionList');
+            }
+            break;
           case 2:
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Library(),
-              ),
-            );
+            if (currentPageIndex != 2){
+              Navigator.pushReplacementNamed(context, 'Library');
+            }
             break;
         }
       },

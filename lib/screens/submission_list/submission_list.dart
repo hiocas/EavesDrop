@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/widgets/gwa_bottom_navigation_bar.dart';
 import '../../widgets/gwa_list_item.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
@@ -74,8 +73,10 @@ class SubmissionListState extends State<SubmissionList> {
     super.dispose();
     scrollController.dispose();
     scrollController = null;
-    globalState.dispose();
-    globalState = null;
+    if (globalState != null){
+      globalState.dispose();
+      globalState = null;
+    }
   }
 
   _updateSearch() {
@@ -155,7 +156,6 @@ class SubmissionListState extends State<SubmissionList> {
           },
         ),
       ),
-      bottomNavigationBar: GWABottomNavigationBar(),
     );
   }
 }

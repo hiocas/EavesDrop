@@ -62,6 +62,7 @@ class GwaListItem extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => SubmissionPage(
                   submissionFullname: submission.fullname,
+                  fromLibrary: false,
                 ),
               ),
             );
@@ -139,6 +140,7 @@ class GwaLibraryListItem extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => SubmissionPage(
                   submissionFullname: fullname,
+                  fromLibrary: true,
                 ),
               ),
             );

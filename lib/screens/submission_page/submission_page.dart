@@ -14,7 +14,14 @@ import 'package:gwa_app/states/global_state.dart';
 class SubmissionPage extends StatefulWidget {
   final String submissionFullname;
 
-  const SubmissionPage({Key key, this.submissionFullname}) : super(key: key);
+  ///Are we coming here from the [Library] page?
+  final bool fromLibrary;
+
+  const SubmissionPage({
+    Key key,
+    this.submissionFullname,
+    @required this.fromLibrary,})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => SubmissionPageState();
@@ -41,7 +48,7 @@ class SubmissionPageState extends State<SubmissionPage> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future:
-          Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
+      Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -52,7 +59,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                    scuffed. */
           if (_selectedTags.length == 0) {
             _selectedTags =
-                List<bool>.generate(_submission.tags.length, (index) => false);
+            List<bool>.generate(_submission.tags.length, (index) => false);
             if (!_isOneSelected) {
               for (bool tag in _selectedTags) {
                 if (tag) {
@@ -69,7 +76,9 @@ class SubmissionPageState extends State<SubmissionPage> {
               return Future.value();
             },
             child: Scaffold(
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme
+                  .of(context)
+                  .backgroundColor,
               body: SafeArea(
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(
@@ -201,16 +210,21 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.add,
                               label: 'Save',
                               subtext: 'Save this post to your library',
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               gwaSubmission: _submission,
                               heroTag: 'save-submission-popup',
                               usePlaceholder: true,
+                              fromLibrary: widget.fromLibrary,
                             ),
                             ParticlesIconTextButton(
                               icon: Icons.favorite_border,
                               label: 'Open',
                               subtext: 'Upvote this and show your support!',
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               onPressed: () {
                                 launch(_submission.shortlink.toString());
                               },
@@ -220,7 +234,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.expand,
                               label: 'Details',
                               subtext: "Show all of the post's details",
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               heroTag: 'submission-details-popup',
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -234,7 +250,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.search,
                               label: 'Tags',
                               subtext: "View and query all of the post's tags",
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               heroTag: 'submission-tags-popup',
                               gwaSubmission: _submission,
                               selectedTags: _selectedTags,
@@ -261,7 +279,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                           itemBuilder: (BuildContext context, int index) {
                             var tagList = _submission.tags;
                             var avatarCreator =
-                                UtilFunctions.tagChipAvatar(tagList[index]);
+                            UtilFunctions.tagChipAvatar(tagList[index]);
                             Widget avatar = avatarCreator[0];
                             int chars = avatarCreator[1];
                             //If there are 2 chars as an avatar.
@@ -276,8 +294,12 @@ class SubmissionPageState extends State<SubmissionPage> {
                                   selected: _selectedTags[index],
                                   label: Text(tagList[index]),
                                   backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  selectedColor: Theme.of(context).accentColor,
+                                  Theme
+                                      .of(context)
+                                      .primaryColor,
+                                  selectedColor: Theme
+                                      .of(context)
+                                      .accentColor,
                                   side: BorderSide(width: 0.0),
                                   avatar: avatar,
                                   onSelected: (bool value) {
@@ -300,8 +322,12 @@ class SubmissionPageState extends State<SubmissionPage> {
                                   selected: _selectedTags[index],
                                   label: Text(tagList[index]),
                                   backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  selectedColor: Theme.of(context).accentColor,
+                                  Theme
+                                      .of(context)
+                                      .primaryColor,
+                                  selectedColor: Theme
+                                      .of(context)
+                                      .accentColor,
                                   side: BorderSide(width: 0.0),
                                   avatar: avatar,
                                   onSelected: (bool value) {
@@ -325,19 +351,21 @@ class SubmissionPageState extends State<SubmissionPage> {
                       padding: const EdgeInsets.all(10.0),
                       sliver: SliverToBoxAdapter(
                           child: Material(
-                        color: Theme.of(context).backgroundColor,
-                        elevation: 15.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
+                            color: Theme
+                                .of(context)
+                                .backgroundColor,
+                            elevation: 15.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
                                 BorderRadius.all(Radius.circular(32.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: MarkdownViewer(
-                            text: _submission.selftext,
-                            bodyTextFontSize: 14.0,
-                          ),
-                        ),
-                      )),
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: MarkdownViewer(
+                                text: _submission.selftext,
+                                bodyTextFontSize: 14.0,
+                              ),
+                            ),
+                          )),
                     ),
                     /*FIXME(Design): This makes sure the SelfTextViewer (now the
                         MarkdownViewer) can be fully read without the floating
@@ -357,7 +385,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                 submission: _submission,
               ),
               floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
+              FloatingActionButtonLocation.centerFloat,
             ),
           );
         }

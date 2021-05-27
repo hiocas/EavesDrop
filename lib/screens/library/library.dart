@@ -96,11 +96,12 @@ class _LibraryState extends State<Library> {
     return FutureBuilder(
       future: HiveBoxes.openLibraryBox(),
       builder: (context, futureBox) {
-        if (futureBox.hasData)
+        if (futureBox.hasData) {
           return ValueListenableBuilder<Box<LibraryGwaSubmission>>(
             valueListenable: HiveBoxes.getLibraryBox().listenable(),
             builder: (context, libraryBox, _) {
-              final List<LibraryGwaSubmission> librarySubmissions =
+              print('changed');
+              List<LibraryGwaSubmission> librarySubmissions =
                   libraryBox.values.toList().cast<LibraryGwaSubmission>();
               return DefaultTabController(
                 initialIndex: 0,
@@ -156,7 +157,15 @@ class _LibraryState extends State<Library> {
               );
             },
           );
-        return CircularProgressIndicator();
+        }
+        /* FIXME: This is can be seen for a very quick duration and is very
+            jarring. */
+        return Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
     );
   }
