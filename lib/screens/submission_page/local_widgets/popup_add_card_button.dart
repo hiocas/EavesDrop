@@ -21,6 +21,7 @@ class PopupAddCardButton extends StatefulWidget {
   ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
+
   ///This will be used to determine whether to close the library box when
   ///disposing this widget. If we're coming from the [Library] we shouldn't close
   ///it since the library relies on it. Otherwise we should close it.
@@ -68,7 +69,7 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
   void dispose() {
     /*FIXME: This makes sure the library isn't open so that we won't close the
         hive box on it but it's a pretty hacky solution. */
-    if (!widget.fromLibrary){
+    if (!widget.fromLibrary) {
       Hive.close();
     }
     super.dispose();
@@ -232,27 +233,21 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ListView.builder(
+              ListView.separated(
+                separatorBuilder: (BuildContext context, int index) =>
+                    Divider(color: Colors.black),
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    enabled: _inLibrary,
-                    onTap: () {
-                      _updateLibrarySubmissionList(index);
-                    },
+                  return CheckboxListTile(
                     title: Text(HiveBoxes.listTags[index],
                         style: TextStyle(
                           color: _inLibrary ? Colors.white : Colors.grey[800],
                         )),
-                    trailing: Checkbox(
-                      value: _inLists[index],
-                      onChanged: (bool value) {
-                        /* So that if it isn't in the library the checkbox will
-                        be "disabled"... */
-                        if (_inLibrary) {
-                          _updateLibrarySubmissionList(index);
-                        }
-                      },
-                    ),
+                    value: _inLists[index],
+                    onChanged: (bool value) {
+                      if (_inLibrary) {
+                        _updateLibrarySubmissionList(index);
+                      }
+                    },
                   );
                 },
                 itemCount: HiveBoxes.listTags.length,

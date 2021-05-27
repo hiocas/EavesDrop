@@ -73,44 +73,50 @@ class _PopupCard extends StatelessWidget {
           tag: this.heroTag,
           createRectTween: (begin, end) =>
               CalmRectTween(begin: begin, end: end),
-          child: Material(
-            color: Theme.of(context).backgroundColor,
-            elevation: 2.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32.0)),
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black, width: 3.0))),
-                  child: ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WebsiteViewer(
-                            title: submission.title,
-                            url: submission.audioUrls[index],
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 700.0,),
+            child: Material(
+              color: Theme.of(context).backgroundColor,
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0)),
+              child: ListView.separated(
+                padding: const EdgeInsets.all(14.0),
+                separatorBuilder: (BuildContext context, int index) =>
+                    Divider(color: Colors.black),
+                itemBuilder: (context, index) {
+                  return Container(
+                    // decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black, width: 3.0))),
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WebsiteViewer(
+                              title: submission.title,
+                              url: submission.audioUrls[index],
+                            ),
                           ),
+                        );
+                      },
+                      title: Text(
+                        getUrlTitle(submission.audioUrls[index]),
+                        style: TextStyle(
+                          color: Colors.grey[300],
                         ),
-                      );
-                    },
-                    title: Text(
-                      getUrlTitle(submission.audioUrls[index]),
-                      style: TextStyle(
-                        color: Colors.grey[300],
+                      ),
+                      subtitle: Text(
+                        submission.audioUrls[index],
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                        ),
                       ),
                     ),
-                    subtitle: Text(
-                      submission.audioUrls[index],
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                      ),
-                    ),
-                  ),
-                );
-              },
-              itemCount: submission.audioUrls.length,
-              shrinkWrap: true,
+                  );
+                },
+                itemCount: submission.audioUrls.length,
+                shrinkWrap: true,
+              ),
             ),
           ),
         ),
