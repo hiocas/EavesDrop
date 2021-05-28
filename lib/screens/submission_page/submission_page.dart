@@ -271,7 +271,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                     ),
                     //Tags
                     SliverToBoxAdapter(
-                      child: Container(
+                      child: _submission.tags.length > 0 ? Container(
                         margin: const EdgeInsets.only(
                             left: 10.0, top: 4.0, bottom: 4.0),
                         height: 35,
@@ -344,7 +344,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                         ),
-                      ),
+                        /* This makes it so we won't show the tag list if the
+                        post has no tags. */
+                      ) : null,
                     ),
                     //SelftextViewer
                     SliverPadding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gwa_app/screens/home/home.dart';
 import 'package:gwa_app/screens/library/library.dart';
 import 'package:gwa_app/screens/submission_list/submission_list.dart';
 import 'package:gwa_app/states/global_state.dart';
@@ -32,12 +33,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _currentPageIndex = 0;
+  int _currentPageIndex = 1;
   List<Widget> _screens = [
     SubmissionList(),
-    Center(
-      child: Text('Home'),
-    ),
+    Home(),
     Library(),
   ];
 

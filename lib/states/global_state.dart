@@ -61,13 +61,13 @@ class GlobalState with ChangeNotifier {
     }
   }
 
-  loadTop(TimeFilter timeFilter) {
+  loadTop(TimeFilter timeFilter, [int limit]) {
     if (!this._isBusy) {
       _searchResults = [];
 
       _searchResultsStream = _gwaSubreddit.top(
         timeFilter: TimeFilter.all,
-        limit: 100,
+        limit: limit ?? 100,
         params: {'after': _lastSeenSubmission},
       ).asBroadcastStream();
 
@@ -141,6 +141,25 @@ class GlobalState with ChangeNotifier {
         notifyListeners();
       });
     }
+  }
+
+  Stream<UserContent> getTopStream(TimeFilter timeFilter, int limit) {
+    return _gwaSubreddit.top(
+      timeFilter: timeFilter,
+      limit: limit,
+    ).asBroadcastStream();
+  }
+
+  Stream<UserContent> getHotStream(int limit) {
+    return _gwaSubreddit.hot(
+      limit: limit,
+    ).asBroadcastStream();
+  }
+
+  Stream<UserContent> getNewestStream(int limit) {
+    return _gwaSubreddit.newest(
+      limit: limit,
+    ).asBroadcastStream();
   }
 
 }

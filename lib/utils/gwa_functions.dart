@@ -1,6 +1,8 @@
 //TODO: Make this work better as well as more efficient.
 /// Returns a string of the name of the submission.
 String findSubmissionTitle(String fullTitle) {
+  if (fullTitle.startsWith(RegExp('[a-z]', caseSensitive: false)) && fullTitle.contains('['))
+    return fullTitle.substring(0, fullTitle.indexOf('['));
   var exp = RegExp(r'(?<=\])(.*?)(?=\[)');
   var matches = exp.allMatches(fullTitle);
   var results = List<String>.generate(
