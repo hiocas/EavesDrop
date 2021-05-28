@@ -70,10 +70,12 @@ class _HorizontalClickableListWheelScrollView extends StatefulWidget {
   final double offAxisFraction;
 
   @override
-  __HorizontalClickableListWheelScrollViewState createState() => __HorizontalClickableListWheelScrollViewState();
+  __HorizontalClickableListWheelScrollViewState createState() =>
+      __HorizontalClickableListWheelScrollViewState();
 }
 
-class __HorizontalClickableListWheelScrollViewState extends State<_HorizontalClickableListWheelScrollView> {
+class __HorizontalClickableListWheelScrollViewState
+    extends State<_HorizontalClickableListWheelScrollView> {
   final _scrollController = FixedExtentScrollController(initialItem: 1);
 
   @override
@@ -195,8 +197,9 @@ class _HorizontalClickableListWheelScrollViewStreamState
                       itemSize: widget.itemSize,
                       offAxisFraction: widget.offAxisFraction,
                     )
-                  : _DummyList(itemSize: widget.itemSize ?? 150,)
-              );
+                  : _DummyList(
+                      itemSize: widget.itemSize ?? 150,
+                    ));
         });
   }
 }
@@ -224,31 +227,31 @@ class _DummyListState extends State<_DummyList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: widget.itemSize * 1.14,
-        child: RotatedBox(
-          quarterTurns: -1,
-          child: ListWheelScrollView.useDelegate(
-            controller: _scrollController,
-            offAxisFraction: 0.0,
-            itemExtent: widget.itemSize,
-            perspective: 0.002,
-            physics: BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            childDelegate: ListWheelChildBuilderDelegate(
-                childCount: 3,
-                builder: (BuildContext context, int index) {
-                  return RotatedBox(
-                    quarterTurns: 1,
-                    child: SizedBox(
-                      width: widget.itemSize,
-                      height: widget.itemSize,
-                      child: DummyListItem(),
-                    ),
-                  );
-                }),
-          ),
+      height: widget.itemSize * 1.14,
+      child: RotatedBox(
+        quarterTurns: -1,
+        child: ListWheelScrollView.useDelegate(
+          controller: _scrollController,
+          offAxisFraction: 0.0,
+          itemExtent: widget.itemSize,
+          perspective: 0.002,
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          childDelegate: ListWheelChildBuilderDelegate(
+              childCount: 3,
+              builder: (BuildContext context, int index) {
+                return RotatedBox(
+                  quarterTurns: 1,
+                  child: SizedBox(
+                    width: widget.itemSize,
+                    height: widget.itemSize,
+                    child: DummyListItem(),
+                  ),
+                );
+              }),
         ),
-      );
+      ),
+    );
   }
 }
 
@@ -299,37 +302,57 @@ class __HomeSectionState extends State<_HomeSection>
       padding: const EdgeInsets.all(8.0),
       child: SlideTransition(
         position: Tween<Offset>(
-          begin: Offset(0.0, 1.0),
+          begin: Offset(0.0, 0.06),
           end: Offset.zero,
         ).animate(CurvedAnimation(
             parent: _animationController, curve: Curves.easeInOut)),
         child: FadeTransition(
           opacity: _animationController,
-          child: Material(
-            color: Theme.of(context).primaryColor,
-            elevation: 15.0,
-            borderRadius: BorderRadius.all(Radius.circular(24.0)),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      this.widget.title,
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+          child: Container(
+            child: Material(
+              color: Theme.of(context).backgroundColor,
+              elevation: 15,
+              borderRadius: BorderRadius.all(Radius.circular(24.0)),
+              child: InkWell(
+                onLongPress: () {},
+                borderRadius: BorderRadius.all(Radius.circular(24.0)),
+                highlightColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          this.widget.title,
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(
+                            radius: 2.5,
+                            colors: [
+                              Theme.of(context).primaryColor,
+                              Theme.of(context).accentColor,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(24.0)),
+                        ),
+                        child: _HorizontalClickableListWheelScrollViewStream(
+                          stream: this.widget.contentStream,
+                          itemSize: 130,
+                        ),
+                      ),
+                    ],
                   ),
-                  _HorizontalClickableListWheelScrollViewStream(
-                    stream: this.widget.contentStream,
-                    itemSize: 130,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
