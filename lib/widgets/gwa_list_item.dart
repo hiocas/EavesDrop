@@ -96,8 +96,9 @@ class GwaLibraryListItem extends StatelessWidget {
           color: Colors.grey[900],
           borderRadius: BorderRadius.all(Radius.circular(15)),
           image: new DecorationImage(
-            image: NetworkImage(thumbnailUrl == null || thumbnailUrl.isEmpty ?
-                'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9' : thumbnailUrl),
+            image: NetworkImage(thumbnailUrl == null || thumbnailUrl.isEmpty
+                ? 'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9'
+                : thumbnailUrl),
             fit: BoxFit.cover,
           ),
           boxShadow: [
@@ -147,6 +148,46 @@ class GwaLibraryListItem extends StatelessWidget {
           },
         ),
       )
+    ]);
+  }
+}
+
+class DummyListItem extends StatelessWidget {
+  const DummyListItem({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              offset: Offset(4, 4),
+              blurRadius: 5.0,
+              spreadRadius: 1.0,
+            ),
+          ],
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [Colors.black, Colors.transparent],
+        )),
+      ),
+      Padding(
+        padding: EdgeInsets.all(4.0),
+        child: Align(
+          alignment: Alignment.bottomLeft,
+        ),
+      ),
     ]);
   }
 }

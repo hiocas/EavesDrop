@@ -5,6 +5,7 @@ import 'package:gwa_app/states/global_state.dart';
 import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'package:provider/provider.dart';
 
+//TODO: Implement time filtering.
 class SubmissionListAppBar extends StatefulWidget
     implements PreferredSizeWidget {
   final void Function(Sort value) onSelectedItem;
