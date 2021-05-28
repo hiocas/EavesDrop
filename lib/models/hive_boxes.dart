@@ -35,6 +35,5 @@ class HiveBoxes {
     if (lists != null) submission.lists = lists;
 
     submission.save();
-
   }
 }

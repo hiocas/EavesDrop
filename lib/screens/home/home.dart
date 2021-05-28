@@ -299,7 +299,7 @@ class __HomeSectionState extends State<_HomeSection>
       padding: const EdgeInsets.all(8.0),
       child: SlideTransition(
         position: Tween<Offset>(
-          begin: Offset(1.0, 0),
+          begin: Offset(0.0, 1.0),
           end: Offset.zero,
         ).animate(CurvedAnimation(
             parent: _animationController, curve: Curves.easeInOut)),
