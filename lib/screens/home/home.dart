@@ -43,7 +43,6 @@ class Home extends StatelessWidget {
             contentStream: Provider.of<GlobalState>(context, listen: false)
                 .getTopStream(TimeFilter.week, 21),
             homeSectionPage: HomeSectionPage(
-              pageShowOnlyPictures: true,
               sectionTitle: 'Top Posts of The Week',
               contentStream: Provider.of<GlobalState>(context, listen: false)
                   .getTopStream(TimeFilter.week, 72),
