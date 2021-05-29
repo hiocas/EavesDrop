@@ -122,6 +122,7 @@ class _LibraryState extends State<Library> {
                     actions: [
                       IconButton(
                         icon: Icon(Icons.close),
+                        tooltip: 'Clear your library',
                         onPressed: () => showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(

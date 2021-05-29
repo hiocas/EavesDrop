@@ -41,6 +41,7 @@ class SubmissionListState extends State<SubmissionList> {
   ScrollController scrollController = ScrollController();
   GlobalState globalState;
   Sort searchSort = Sort.relevance;
+  TimeFilter searchTimeFilter = TimeFilter.all;
   String submittedSearchQuery = '';
   String currentSearchQuery = '';
 
@@ -58,10 +59,7 @@ class SubmissionListState extends State<SubmissionList> {
     });
 
     if (widget.initialQuery.isEmpty || widget.initialQuery == null) {
-      /*FIXME: For testing purposes I'm putting this as top but it should be
-         newest (commented). */
-      Provider.of<GlobalState>(context, listen: false).loadTop(TimeFilter.all);
-      // Provider.of<GlobalState>(context, listen: false).loadNewest();
+      Provider.of<GlobalState>(context, listen: false).loadNewest();
     } else {
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           widget.initialQuery, widget.initialSort, widget.initialTimeFilter);
@@ -82,7 +80,7 @@ class SubmissionListState extends State<SubmissionList> {
   _updateSearch() {
     if (this.submittedSearchQuery.isNotEmpty) {
       Provider.of<GlobalState>(context, listen: false).loadSearch(
-          this.submittedSearchQuery, this.searchSort, TimeFilter.all);
+          this.submittedSearchQuery, this.searchSort, this.searchTimeFilter);
       setState(() {});
     } else {
       switch (this.searchSort) {
@@ -103,8 +101,9 @@ class SubmissionListState extends State<SubmissionList> {
           // TODO: Handle this case.
           break;
         case Sort.top:
+          print('hey');
           Provider.of<GlobalState>(context, listen: false)
-              .loadTop(TimeFilter.all);
+              .loadTop(this.searchTimeFilter);
           setState(() {});
           break;
       }
@@ -115,6 +114,12 @@ class SubmissionListState extends State<SubmissionList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SubmissionListAppBar(
+        onSelectedFilter: (TimeFilter result) {
+          this.searchTimeFilter = result;
+          if (this.submittedSearchQuery == this.currentSearchQuery) {
+            _updateSearch();
+          }
+        },
         onSelectedItem: (Sort result) {
           this.searchSort = result;
           //This way the search only gets updated after every submission.

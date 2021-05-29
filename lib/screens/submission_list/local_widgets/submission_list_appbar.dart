@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class SubmissionListAppBar extends StatefulWidget
     implements PreferredSizeWidget {
   final void Function(Sort value) onSelectedItem;
+  final void Function(TimeFilter value) onSelectedFilter;
   final void Function(String query) onSubmitted;
   final void Function(String query) onChanged;
 
@@ -17,6 +18,7 @@ class SubmissionListAppBar extends StatefulWidget
     @required this.onSubmitted,
     @required this.onChanged,
     @required this.onSelectedItem,
+    @required this.onSelectedFilter,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,8 @@ class SubmissionListAppBar extends StatefulWidget
 
 class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   bool _isSearching = false;
-  Sort sort = Sort.relevance;
+  Sort _sort = Sort.newest;
+  TimeFilter _timeFilter = TimeFilter.all;
 
   String _sortToString(Sort sort) {
     switch (sort) {
@@ -45,6 +48,154 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
       default:
         return '';
     }
+  }
+
+  String _timeFilterToString(TimeFilter timeFilter) {
+    switch (timeFilter) {
+      case TimeFilter.all:
+        return 'All';
+      case TimeFilter.day:
+        return 'Day';
+      case TimeFilter.hour:
+        return 'Hour';
+      case TimeFilter.month:
+        return 'Month';
+      case TimeFilter.week:
+        return 'Week';
+      case TimeFilter.year:
+        return 'Year';
+      default:
+        return '';
+    }
+  }
+
+  bool _timeFilterRelevant() {
+    return _sort == Sort.top ||
+        _sort == Sort.relevance ||
+        _sort == Sort.comments;
+  }
+
+  List<Widget> _makeAppBarActions() {
+    if (_isSearching) {
+      if (_timeFilterRelevant()) {
+        return [
+          Consumer<GlobalState>(builder: (context, state, child) {
+            return Theme(
+              data: Theme.of(context).copyWith(
+                cardColor: Theme.of(context).primaryColor,
+                iconTheme: IconThemeData(color: Colors.white),
+              ),
+              child: PopupMenuButton<TimeFilter>(
+                icon: Icon(Icons.filter_alt_outlined),
+                enabled: !state.isBusy,
+                tooltip: "Filter results based on creation time",
+                initialValue: this._timeFilter,
+                /*FIXME: This is a really hacky solution. Like in
+                        PopupTagsCardButton, the parent widget gets called
+                        with a function to change it's value. Change this
+                        (maybe look into keys). */
+                onSelected: (TimeFilter value) {
+                  widget.onSelectedFilter(value);
+                  setState(() {
+                    _timeFilter = value;
+                    _showSnackBar();
+                  });
+                },
+                itemBuilder: (context) {
+                  return List<PopupMenuEntry<TimeFilter>>.generate(6, (index) {
+                    return PopupMenuItem(
+                        value: TimeFilter.values[index],
+                        child: Text(
+                            _timeFilterToString(TimeFilter.values[index])));
+                  });
+                },
+                elevation: 15.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              ),
+            );
+          }),
+          IconButton(
+            icon: Icon(Icons.close),
+            tooltip: 'Close search',
+            onPressed: () {
+              setState(() {
+                _isSearching = false;
+              });
+            },
+          ),
+        ];
+      } else {
+        return [
+          IconButton(
+            icon: Icon(Icons.close),
+            tooltip: 'Close search',
+            onPressed: () {
+              setState(() {
+                _isSearching = false;
+              });
+            },
+          )
+        ];
+      }
+    } else {
+      return [
+        IconButton(
+          icon: Icon(Icons.search),
+          tooltip: 'Search',
+          onPressed: () {
+            print('User requested to search');
+            setState(() {
+              _isSearching = true;
+            });
+          },
+        )
+      ];
+    }
+  }
+
+  String _makeSearchHint() {
+    String timeFilter;
+    switch (_timeFilter) {
+      case TimeFilter.all:
+        timeFilter = 'All Time';
+        break;
+      case TimeFilter.day:
+        timeFilter = 'Past 24 Hours';
+        break;
+      case TimeFilter.hour:
+        timeFilter = 'Past Hour';
+        break;
+      case TimeFilter.month:
+        timeFilter = 'Past Month';
+        break;
+      case TimeFilter.week:
+        timeFilter = 'Past Week';
+        break;
+      case TimeFilter.year:
+        timeFilter = 'Past Year';
+        break;
+    }
+    switch (_sort) {
+      case Sort.relevance:
+        return 'Search Most Relevant, ' + timeFilter + '...';
+      case Sort.hot:
+        return 'Search Hot...';
+      case Sort.top:
+        return 'Search Top, ' + timeFilter + '...';
+      case Sort.newest:
+        return 'Search New...';
+        break;
+      case Sort.comments:
+        return 'Search Comment Count, ' + timeFilter + '...';
+      default:
+        return '';
+    }
+  }
+
+  void _showSnackBar() {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(_makeSearchHint())));
   }
 
   @override
@@ -85,8 +236,10 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                   iconTheme: IconThemeData(color: Colors.white),
                 ),
                 child: PopupMenuButton<Sort>(
+                  icon: Icon(Icons.sort_outlined),
                   enabled: !state.isBusy,
-                  initialValue: this.sort,
+                  tooltip: 'Sort results',
+                  initialValue: this._sort,
                   /*FIXME: This is a really hacky solution. Like in
                       PopupTagsCardButton, the parent widget gets called with a
                       function to change it's value. Change this (maybe look into
@@ -94,7 +247,8 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                   onSelected: (Sort value) {
                     widget.onSelectedItem(value);
                     setState(() {
-                      sort = value;
+                      _sort = value;
+                      _showSnackBar();
                     });
                   },
                   itemBuilder: (context) {
@@ -115,26 +269,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
               onPressed: () {
                 print('The app bar leading button has been pressed.');
               }),
-      actions: [
-        _isSearching
-            ? IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  setState(() {
-                    _isSearching = false;
-                  });
-                },
-              )
-            : IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  print('User requested to search');
-                  setState(() {
-                    _isSearching = true;
-                  });
-                },
-              )
-      ],
+      actions: _makeAppBarActions(),
     );
   }
 }

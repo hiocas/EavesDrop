@@ -48,7 +48,7 @@ class GlobalState with ChangeNotifier {
     if (!this._isBusy) {
       _searchResultsStream = _gwaSubreddit.search(
         query,
-        timeFilter: TimeFilter.all,
+        timeFilter: timeFilter ?? TimeFilter.all,
         sort: sort,
         params: {'after': _lastSeenSubmission, 'limit': limit.toString()},
       ).asBroadcastStream();
@@ -66,7 +66,7 @@ class GlobalState with ChangeNotifier {
       _searchResults = [];
 
       _searchResultsStream = _gwaSubreddit.top(
-        timeFilter: TimeFilter.all,
+        timeFilter: timeFilter ?? TimeFilter.all,
         limit: limit ?? 100,
         params: {'after': _lastSeenSubmission},
       ).asBroadcastStream();

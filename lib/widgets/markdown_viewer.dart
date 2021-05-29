@@ -26,12 +26,13 @@ class MarkdownViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     /*TODO: For now I'm handling &amp; myself since it isn't handled by the
        package, should find a better way to handle it. Same thing for &nbsp;,
-       &lt; and &gt;. I'm just replacing it with a space character (and not
+       &lt;, &gt; and &#x200B;. I'm just replacing it with a space character (and not
        very efficiently). */
     String markdown = this.text.replaceAll('&amp;', '&');
     markdown = markdown.replaceAll('&nbsp;', ' ');
     markdown = markdown.replaceAll('&lt;', '<');
     markdown = markdown.replaceAll('&gt;', '>');
+    markdown = markdown.replaceAll(r'&#x200B;', '\u{200B}');
 
     return Container(
       child: MarkdownBody(
