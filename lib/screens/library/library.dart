@@ -96,80 +96,83 @@ class _LibraryState extends State<Library> {
     /*TODO: Find a more efficient way to update the list (I don't think we need
        this since we won't be in this page when adding submissions to the
        library unless I change it). */
-    return FutureBuilder(
-      future: HiveBoxes.openLibraryBox(),
-      builder: (context, futureBox) {
-        if (futureBox.hasData) {
-          return ValueListenableBuilder<Box<LibraryGwaSubmission>>(
-            valueListenable: HiveBoxes.getLibraryBox().listenable(),
-            builder: (context, libraryBox, _) {
-              List<LibraryGwaSubmission> librarySubmissions =
-                  libraryBox.values.toList().cast<LibraryGwaSubmission>();
-              return DefaultTabController(
-                initialIndex: 0,
-                length: HiveBoxes.listTags.length + 1,
-                child: Scaffold(
-                  appBar: AppBar(
-                    title: Text('Library'),
-                    backgroundColor: Colors.transparent,
-                    elevation: 15.0,
-                    flexibleSpace: GradientAppBarFlexibleSpace(),
-                    leading: IconButton(
-                      icon: Icon(Icons.menu),
-                      onPressed: () {
-                        print('The app bar leading button has been pressed');
-                        // Navigator.pop(context);
-                      },
-                    ),
-                    actions: [
-                      IconButton(
-                        icon: Icon(Icons.close),
-                        tooltip: 'Clear your library',
-                        onPressed: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Clear Library'),
-                            content: const Text('Are you sure you want to clear'
-                                ' your library? This action cannot be reverted.'),
-                            actions: <Widget>[
-                              TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Cancel'),
-                                  child: const Text('Cancel')),
-                              TextButton(
-                                  onPressed: () {
-                                    libraryBox.clear();
-                                    Navigator.pop(context, 'Clear my Library');
-                                  },
-                                  child: const Text('Clear my Library'))
-                            ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: FutureBuilder(
+        future: HiveBoxes.openLibraryBox(),
+        builder: (context, futureBox) {
+          if (futureBox.hasData) {
+            return ValueListenableBuilder<Box<LibraryGwaSubmission>>(
+              valueListenable: HiveBoxes.getLibraryBox().listenable(),
+              builder: (context, libraryBox, _) {
+                List<LibraryGwaSubmission> librarySubmissions =
+                    libraryBox.values.toList().cast<LibraryGwaSubmission>();
+                return DefaultTabController(
+                  initialIndex: 0,
+                  length: HiveBoxes.listTags.length + 1,
+                  child: Scaffold(
+                    appBar: AppBar(
+                      title: Text('Library'),
+                      backgroundColor: Colors.transparent,
+                      elevation: 15.0,
+                      flexibleSpace: GradientAppBarFlexibleSpace(),
+                      leading: IconButton(
+                        icon: Icon(Icons.menu),
+                        onPressed: () {
+                          print('The app bar leading button has been pressed');
+                          // Navigator.pop(context);
+                        },
+                      ),
+                      actions: [
+                        IconButton(
+                          icon: Icon(Icons.close),
+                          tooltip: 'Clear your library',
+                          onPressed: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Clear Library'),
+                              content: const Text('Are you sure you want to clear'
+                                  ' your library? This action cannot be reverted.'),
+                              actions: <Widget>[
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Cancel'),
+                                    child: const Text('Cancel')),
+                                TextButton(
+                                    onPressed: () {
+                                      libraryBox.clear();
+                                      Navigator.pop(context, 'Clear my Library');
+                                    },
+                                    child: const Text('Clear my Library'))
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                    bottom: TabBar(
-                      tabs: _makeListTabs(),
-                      indicatorSize: TabBarIndicatorSize.label,
+                        )
+                      ],
+                      bottom: TabBar(
+                        tabs: _makeListTabs(),
+                        indicatorSize: TabBarIndicatorSize.label,
+                      ),
+                    ),
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    body: TabBarView(
+                      children: _makeListTabViews(librarySubmissions),
                     ),
                   ),
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  body: TabBarView(
-                    children: _makeListTabViews(librarySubmissions),
-                  ),
-                ),
-              );
-            },
+                );
+              },
+            );
+          }
+          /* FIXME: This is can be seen for a very quick duration and is very
+              jarring. */
+          return Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
-        }
-        /* FIXME: This is can be seen for a very quick duration and is very
-            jarring. */
-        return Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }

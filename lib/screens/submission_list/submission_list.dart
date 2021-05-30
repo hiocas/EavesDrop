@@ -116,81 +116,84 @@ class SubmissionListState extends State<SubmissionList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: SubmissionListAppBar(
-        onSelectedFilter: (TimeFilter result) {
-          this.searchTimeFilter = result;
-          if (this.submittedSearchQuery == this.currentSearchQuery) {
-            _updateSearch();
-          }
-        },
-        onSelectedItem: (Sort result) {
-          this.searchSort = result;
-          //This way the search only gets updated after every submission.
-          if (this.submittedSearchQuery == this.currentSearchQuery)
-            _updateSearch();
-        },
-        onSubmitted: (query) {
-          this.submittedSearchQuery = query;
-          _updateSearch();
-        },
-        /*FIXME: There's probably a more efficient way to check if the user
-            changed their query, maybe using onEditingComplete. Fix this. */
-        onChanged: (query) {
-          this.currentSearchQuery = query;
-        },
-      ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        child: StreamBuilder(
-          stream: Provider.of<GlobalState>(context).searchResultsStream,
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (Provider.of<GlobalState>(context).searchEmpty) {
-              return Center(child: Text('No Submissions Found.'));
-            } else if (!snapshot.hasData ||
-                (Provider.of<GlobalState>(context).searchResults.isEmpty)) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              this.globalState = Provider.of<GlobalState>(context);
-              return RefreshIndicator(
-                //TODO: Implement pull to refresh.
-                onRefresh: () {
-                  print('User requested a refresh');
-                  return Future.value();
-                },
-                child: PrimaryScrollController(
-                  controller: scrollController,
-                  child: GwaScrollbar(
-                    child: CustomScrollView(
-                      physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      controller: scrollController,
-                      slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          sliver: SliverGrid(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 5,
-                            ),
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return GwaListItem(
-                                  submission: globalState.searchResults[index],
-                                );
-                              },
-                              childCount: globalState.searchResults.length,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              );
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: SubmissionListAppBar(
+          onSelectedFilter: (TimeFilter result) {
+            this.searchTimeFilter = result;
+            if (this.submittedSearchQuery == this.currentSearchQuery) {
+              _updateSearch();
             }
           },
+          onSelectedItem: (Sort result) {
+            this.searchSort = result;
+            //This way the search only gets updated after every submission.
+            if (this.submittedSearchQuery == this.currentSearchQuery)
+              _updateSearch();
+          },
+          onSubmitted: (query) {
+            this.submittedSearchQuery = query;
+            _updateSearch();
+          },
+          /*FIXME: There's probably a more efficient way to check if the user
+              changed their query, maybe using onEditingComplete. Fix this. */
+          onChanged: (query) {
+            this.currentSearchQuery = query;
+          },
+        ),
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: Container(
+          child: StreamBuilder(
+            stream: Provider.of<GlobalState>(context).searchResultsStream,
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (Provider.of<GlobalState>(context).searchEmpty) {
+                return Center(child: Text('No Submissions Found.'));
+              } else if (!snapshot.hasData ||
+                  (Provider.of<GlobalState>(context).searchResults.isEmpty)) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                this.globalState = Provider.of<GlobalState>(context);
+                return RefreshIndicator(
+                  //TODO: Implement pull to refresh.
+                  onRefresh: () {
+                    print('User requested a refresh');
+                    return Future.value();
+                  },
+                  child: PrimaryScrollController(
+                    controller: scrollController,
+                    child: GwaScrollbar(
+                      child: CustomScrollView(
+                        physics: const BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                        controller: scrollController,
+                        slivers: [
+                          SliverPadding(
+                            padding: const EdgeInsets.all(8.0),
+                            sliver: SliverGrid(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 5,
+                                crossAxisSpacing: 5,
+                              ),
+                              delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return GwaListItem(
+                                    submission: globalState.searchResults[index],
+                                  );
+                                },
+                                childCount: globalState.searchResults.length,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

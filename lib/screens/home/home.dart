@@ -17,60 +17,56 @@ import 'package:gwa_app/widgets/gwa_list_item.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .backgroundColor,
-      appBar: AppBar(
-        title: Text('Home'),
-        elevation: 15.0,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: GradientAppBarFlexibleSpace(),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            print('The app bar leading button has been pressed');
-            // Navigator.pop(context);
-          },
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(
+          title: Text('Home'),
+          elevation: 15.0,
+          backgroundColor: Colors.transparent,
+          flexibleSpace: GradientAppBarFlexibleSpace(),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              print('The app bar leading button has been pressed');
+              // Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _HomeSection(
-            title: 'Top Posts of The Week',
-            waitDuration: Duration(milliseconds: 800),
-            contentStream: Provider.of<GlobalState>(context, listen: false)
-                .getTopStream(TimeFilter.week, 21),
-            homeSectionPage: HomeSectionPage(
-              sectionTitle: 'Top Posts of The Week',
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _HomeSection(
+              title: 'Top Posts of The Month',
+              waitDuration: Duration(milliseconds: 800),
               contentStream: Provider.of<GlobalState>(context, listen: false)
-                  .getTopStream(TimeFilter.week, 72),
+                  .getTopStream(TimeFilter.month, 21),
+              homeSectionPageContentStream:
+                  Provider.of<GlobalState>(context, listen: false)
+                      .getTopStream(TimeFilter.month, 99),
             ),
-          ),
-          _HomeSection(
-            title: 'Hot Posts',
-            waitDuration: Duration(milliseconds: 700),
-            contentStream: Provider.of<GlobalState>(context, listen: false)
-                .getHotStream(21),
-            homeSectionPage: HomeSectionPage(
-              sectionTitle: 'Hot Posts',
+            _HomeSection(
+              title: 'Top Posts of The Week',
+              waitDuration: Duration(milliseconds: 700),
               contentStream: Provider.of<GlobalState>(context, listen: false)
-                  .getHotStream(72),
+                  .getTopStream(TimeFilter.week, 21),
+              homeSectionPageContentStream:
+                  Provider.of<GlobalState>(context, listen: false)
+                      .getTopStream(TimeFilter.week, 99),
             ),
-          ),
-          _HomeSection(
-              title: 'New Posts',
+            _HomeSection(
+              title: 'Hot Posts',
               waitDuration: Duration(milliseconds: 600),
               contentStream: Provider.of<GlobalState>(context, listen: false)
-                  .getNewestStream(21),
-              homeSectionPage: HomeSectionPage(
-                sectionTitle: 'New Posts',
-                contentStream: Provider.of<GlobalState>(context, listen: false)
-                    .getNewestStream(72),
-              )
-          )
-        ],
+                  .getHotStream(21),
+              homeSectionPageShufflePages: true,
+              homeSectionPageContentStream:
+                  Provider.of<GlobalState>(context, listen: false)
+                      .getHotStream(99),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -116,18 +112,14 @@ class __HorizontalClickableListWheelScrollViewState
           onItemTapCallback: (index) {
             Timer(
                 Duration(milliseconds: 600),
-                    () =>
-                    Navigator.push(
+                () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            SubmissionPage(
-                              submissionFullname:
-                              widget.itemList
-                                  .elementAt(index)
-                                  .fullname,
-                              fromLibrary: false,
-                            ),
+                        builder: (context) => SubmissionPage(
+                          submissionFullname:
+                              widget.itemList.elementAt(index).fullname,
+                          fromLibrary: false,
+                        ),
                       ),
                     ));
           },
@@ -137,7 +129,7 @@ class __HorizontalClickableListWheelScrollViewState
             itemExtent: this.widget.itemSize ?? 150,
             perspective: 0.002,
             physics:
-            BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             childDelegate: ListWheelChildBuilderDelegate(
                 childCount: widget.itemList.length,
                 builder: (BuildContext context, int index) {
@@ -186,10 +178,10 @@ class _HorizontalClickableListWheelScrollViewStreamState
       Submission submission = event;
       GwaSubmissionPreview preview = new GwaSubmissionPreview(submission);
       this._itemList.add(GwaLibraryListItem(
-        title: preview.title,
-        fullname: preview.fullname,
-        thumbnailUrl: preview.thumbnailUrl,
-      ));
+            title: preview.title,
+            fullname: preview.fullname,
+            thumbnailUrl: preview.thumbnailUrl,
+          ));
     });
     widget.stream.pipe(_streamController);
     super.initState();
@@ -216,13 +208,13 @@ class _HorizontalClickableListWheelScrollViewStreamState
                   ),
               child: snapshot.hasData
                   ? _HorizontalClickableListWheelScrollView(
-                itemList: this._itemList,
-                itemSize: widget.itemSize,
-                offAxisFraction: widget.offAxisFraction,
-              )
+                      itemList: this._itemList,
+                      itemSize: widget.itemSize,
+                      offAxisFraction: widget.offAxisFraction,
+                    )
                   : _DummyList(
-                itemSize: widget.itemSize ?? 150,
-              ));
+                      itemSize: widget.itemSize ?? 150,
+                    ));
         });
   }
 }
@@ -259,7 +251,7 @@ class _DummyListState extends State<_DummyList> {
           itemExtent: widget.itemSize,
           perspective: 0.002,
           physics:
-          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           childDelegate: ListWheelChildBuilderDelegate(
               childCount: 3,
               builder: (BuildContext context, int index) {
@@ -285,13 +277,19 @@ class _HomeSection extends StatefulWidget {
     @required this.contentStream,
     this.animationDuration,
     this.waitDuration,
-    this.homeSectionPage,
+    this.homeSectionPageContentStream,
+    this.homeSectionPageShowOnlyPictures,
+    this.homeSectionPageMaxPages,
+    this.homeSectionPageShufflePages,
   }) : super(key: key);
 
   final String title;
   final Stream<UserContent> contentStream;
   final Duration animationDuration;
-  final HomeSectionPage homeSectionPage;
+  final Stream<UserContent> homeSectionPageContentStream;
+  final bool homeSectionPageShowOnlyPictures;
+  final bool homeSectionPageShufflePages;
+  final int homeSectionPageMaxPages;
 
   /// The Duration to wait after instantiating this widget before playing the
   /// initial load animation.
@@ -312,7 +310,7 @@ class __HomeSectionState extends State<_HomeSection>
         vsync: this,
         duration: widget.animationDuration ?? Duration(milliseconds: 500));
     Timer(widget.waitDuration ?? Duration(seconds: 1),
-            () => _animationController.forward());
+        () => _animationController.forward());
   }
 
   @override
@@ -329,34 +327,32 @@ class __HomeSectionState extends State<_HomeSection>
         animationController: this._animationController,
         child: Container(
           child: Material(
-            color: Theme
-                .of(context)
-                .backgroundColor,
+            color: Theme.of(context).backgroundColor,
             elevation: 15,
             borderRadius: BorderRadius.all(Radius.circular(24.0)),
             child: InkWell(
               onLongPress: () {
-                if (widget.homeSectionPage != null) {
+                if (widget.homeSectionPageContentStream != null) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => widget.homeSectionPage,
+                      builder: (context) => HomeSectionPage(
+                          sectionTitle: widget.title,
+                          pageShowOnlyPictures:
+                              widget.homeSectionPageShowOnlyPictures,
+                          shufflePages: widget.homeSectionPageShufflePages,
+                          maxPages: widget.homeSectionPageMaxPages,
+                          contentStream: widget.homeSectionPageContentStream),
                     ),
                   );
                 }
               },
               borderRadius: BorderRadius.all(Radius.circular(24.0)),
-              highlightColor: Theme
-                  .of(context)
-                  .primaryColor
-                  .withOpacity(0.3),
-              splashColor: Theme
-                  .of(context)
-                  .primaryColor
-                  .withOpacity(0.5),
+              highlightColor: Theme.of(context).primaryColor.withOpacity(0.3),
+              splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 4.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
                 child: Column(
                   children: [
                     Padding(
@@ -375,12 +371,8 @@ class __HomeSectionState extends State<_HomeSection>
                         gradient: RadialGradient(
                           radius: 2.5,
                           colors: [
-                            Theme
-                                .of(context)
-                                .primaryColor,
-                            Theme
-                                .of(context)
-                                .accentColor,
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).accentColor,
                           ],
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(24.0)),
