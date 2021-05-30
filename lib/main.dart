@@ -33,7 +33,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _currentPageIndex = 1;
+  int _currentPageIndex = 2;
   List<Widget> _screens = [
     SubmissionList(),
     Home(),
@@ -63,11 +63,14 @@ class _MyAppState extends State<MyApp> {
             cardColor: Color.fromARGB(255, 7, 13, 43),
             textTheme: TextTheme(bodyText2: TextStyle(color: Colors.black))),
         darkTheme: ThemeData(
-          primaryColor: Color.fromARGB(255, 119, 23, 45),
-          accentColor: Color.fromARGB(255, 62, 26, 92),
-          backgroundColor: Color.fromARGB(255, 28, 18, 28),
-          cardColor: Color.fromARGB(255, 7, 13, 43),
-        ),
+            primaryColor: Color.fromARGB(255, 119, 23, 45),
+            accentColor: Color.fromARGB(255, 62, 26, 92),
+            backgroundColor: Color.fromARGB(255, 28, 18, 28),
+            cardColor: Color.fromARGB(255, 7, 13, 43),
+            scrollbarTheme: ScrollbarThemeData(
+              thumbColor: MaterialStateProperty.all(
+                  Color.fromARGB(255, 119, 23, 45).withOpacity(0.3)),
+            )),
         home: Scaffold(
           body: AnimatedSwitcher(
             duration: Duration(milliseconds: 500),

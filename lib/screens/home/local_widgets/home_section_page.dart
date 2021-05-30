@@ -6,6 +6,7 @@ import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/screens/submission_page/submission_page.dart';
 import 'package:gwa_app/widgets/animations%20and%20transitions/transitions.dart';
 import 'package:gwa_app/widgets/gwa_list_item.dart';
+import 'package:gwa_app/widgets/gwa_scrollbar.dart';
 
 class HomeSectionPage extends StatefulWidget {
   const HomeSectionPage({
@@ -62,18 +63,25 @@ class _HomeSectionPageState extends State<HomeSectionPage> {
         backgroundColor: Colors.transparent,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
+              color: Theme
+                  .of(context)
+                  .backgroundColor,
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(24.0),
                   bottomRight: Radius.circular(24.0))),
         ),
         title: ShaderMask(
-          shaderCallback: (bounds) => LinearGradient(
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).accentColor,
-            ],
-          ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+          shaderCallback: (bounds) =>
+              LinearGradient(
+                colors: [
+                  Theme
+                      .of(context)
+                      .primaryColor,
+                  Theme
+                      .of(context)
+                      .accentColor,
+                ],
+              ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
           child: Text(
             widget.sectionTitle,
             style: TextStyle(
@@ -84,7 +92,9 @@ class _HomeSectionPageState extends State<HomeSectionPage> {
         ),
       ),
       extendBodyBehindAppBar: true,
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(top: 90.0),
         child: StreamBuilder(
@@ -94,54 +104,58 @@ class _HomeSectionPageState extends State<HomeSectionPage> {
                 duration: Duration(milliseconds: 500),
                 transitionBuilder:
                     (Widget child, Animation<double> animation) =>
-                        FadeTransition(
-                  opacity: animation,
-                  child: child,
-                ),
+                    FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
                 child: snapshot.hasData
                     ? Builder(builder: (context) {
-                        List<GwaSubmissionPreviewWithAuthor> _pageList;
-                        if (widget.pageShowOnlyPictures ?? false) {
-                          _pageList = [];
-                          int count = 0;
-                          for (var i = 0;
-                              i < _submissionsList.length &&
-                                  count < (widget.maxPages ?? 15);
-                              i++) {
-                            if (_submissionsList[i].thumbnailUrl !=
-                                'https://styles.redditmedia.com/t5_2u463/'
-                                    'styles/communityIcon_1lj5xecdisi31.png?'
-                                    'width=256&s=98e8187f0403751b02c03e7ffb9f0'
-                                    '59ce0ce18d9') {
-                              _pageList.add(_submissionsList[i]);
-                              count++;
-                            }
-                          }
-                        } else {
-                          _pageList = List<GwaSubmissionPreviewWithAuthor>.from(
-                              _submissionsList);
-                          _pageList.shuffle();
-                          _pageList.sublist(0, widget.maxPages ?? 15);
-                        }
-                        return CustomScrollView(
-                          physics: BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          slivers: [
-                            SliverToBoxAdapter(
-                                child: _HomeSectionPageView(
+                  List<GwaSubmissionPreviewWithAuthor> _pageList;
+                  if (widget.pageShowOnlyPictures ?? false) {
+                    _pageList = [];
+                    int count = 0;
+                    for (var i = 0;
+                    i < _submissionsList.length &&
+                        count < (widget.maxPages ?? 15);
+                    i++) {
+                      if (_submissionsList[i].thumbnailUrl !=
+                          'https://styles.redditmedia.com/t5_2u463/'
+                              'styles/communityIcon_1lj5xecdisi31.png?'
+                              'width=256&s=98e8187f0403751b02c03e7ffb9f0'
+                              '59ce0ce18d9') {
+                        _pageList.add(_submissionsList[i]);
+                        count++;
+                      }
+                    }
+                  } else {
+                    _pageList = List<GwaSubmissionPreviewWithAuthor>.from(
+                        _submissionsList);
+                    _pageList.shuffle();
+                    _pageList.sublist(0, widget.maxPages ?? 15);
+                  }
+                  return GwaScrollbar(
+                    child: CustomScrollView(
+                      physics: BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      slivers: [
+                        SliverToBoxAdapter(
+                            child: _HomeSectionPageView(
                               previews: _pageList,
                             )),
-                            SliverToBoxAdapter(
-                                child: Divider(
-                                    color: Theme.of(context).primaryColor,
-                                    indent: 12.0,
-                                    endIndent: 12.0)),
-                            _SubmissionList(
-                              submissionList: _submissionsList,
-                            ),
-                          ],
-                        );
-                      })
+                        SliverToBoxAdapter(
+                            child: Divider(
+                                color: Theme
+                                    .of(context)
+                                    .primaryColor,
+                                indent: 12.0,
+                                endIndent: 12.0)),
+                        _SubmissionList(
+                          submissionList: _submissionsList,
+                        ),
+                      ],
+                    ),
+                  );
+                })
                     : _DummyPage(),
               );
             }),
@@ -171,7 +185,7 @@ class _SubmissionList extends StatelessWidget {
           crossAxisSpacing: 5,
         ),
         delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
+              (BuildContext context, int index) {
             return GwaListItem(
               submission: submissionList[index].toGwaSubmissionPreview(),
             );
@@ -214,7 +228,7 @@ class _HomeSectionPageViewState extends State<_HomeSectionPageView> {
 
       /* To get rid of errors that happen when the page controller isn't
       attached to any scroll views. */
-      if (this._pageController.hasClients){
+      if (this._pageController.hasClients) {
         this._pageController.animateToPage(_currentPage,
             duration: Duration(milliseconds: 800),
             curve: Curves.easeInOutQuint);
@@ -241,16 +255,17 @@ class _HomeSectionPageViewState extends State<_HomeSectionPageView> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SubmissionPage(
-                    submissionFullname: widget.previews[index].fullname,
-                    fromLibrary: false,
-                  ),
+                  builder: (context) =>
+                      SubmissionPage(
+                        submissionFullname: widget.previews[index].fullname,
+                        fromLibrary: false,
+                      ),
                 ),
               );
             },
             child: Container(
               margin:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+              const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
               width: 120.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
@@ -368,7 +383,9 @@ class __DummyPageState extends State<_DummyPage>
           ),
           SliverToBoxAdapter(
               child: Divider(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
                   indent: 12.0,
                   endIndent: 12.0)),
           _DummySubmissionList(
@@ -455,7 +472,7 @@ class _DummySubmissionList extends StatelessWidget {
           crossAxisSpacing: 5,
         ),
         delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
+              (BuildContext context, int index) {
             return DummyListItem();
           },
           childCount: 12,

@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gwa_app/widgets/gwa_scrollbar.dart';
 import '../../widgets/gwa_list_item.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
@@ -156,30 +158,35 @@ class SubmissionListState extends State<SubmissionList> {
                   print('User requested a refresh');
                   return Future.value();
                 },
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
+                child: PrimaryScrollController(
                   controller: scrollController,
-                  slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.all(8.0),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 5,
-                          crossAxisSpacing: 5,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            return GwaListItem(
-                              submission: globalState.searchResults[index],
-                            );
-                          },
-                          childCount: globalState.searchResults.length,
-                        ),
-                      ),
-                    )
-                  ],
+                  child: GwaScrollbar(
+                    child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      controller: scrollController,
+                      slivers: [
+                        SliverPadding(
+                          padding: const EdgeInsets.all(8.0),
+                          sliver: SliverGrid(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 5,
+                              crossAxisSpacing: 5,
+                            ),
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                return GwaListItem(
+                                  submission: globalState.searchResults[index],
+                                );
+                              },
+                              childCount: globalState.searchResults.length,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               );
             }

@@ -4,6 +4,7 @@ import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
 import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'package:gwa_app/widgets/gwa_list_item.dart';
+import 'package:gwa_app/widgets/gwa_scrollbar.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -53,31 +54,33 @@ class _LibraryState extends State<Library> {
   /// Makes the UI list based on a [LibraryGwaSubmission] list it receives.
   Widget _makeListOf(List<LibraryGwaSubmission> list) {
     return Container(
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(8.0),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 5,
-                crossAxisSpacing: 5,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return GwaLibraryListItem(
-                    title: list[index].title,
-                    fullname: list[index].fullname,
-                    thumbnailUrl: list[index].thumbnailUrl,
-                  );
-                },
-                childCount: list.length,
+      child: GwaScrollbar(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(8.0),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 5,
+                  crossAxisSpacing: 5,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return GwaLibraryListItem(
+                      title: list[index].title,
+                      fullname: list[index].fullname,
+                      thumbnailUrl: list[index].thumbnailUrl,
+                    );
+                  },
+                  childCount: list.length,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
