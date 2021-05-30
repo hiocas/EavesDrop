@@ -100,7 +100,6 @@ class _LibraryState extends State<Library> {
           return ValueListenableBuilder<Box<LibraryGwaSubmission>>(
             valueListenable: HiveBoxes.getLibraryBox().listenable(),
             builder: (context, libraryBox, _) {
-              print('changed');
               List<LibraryGwaSubmission> librarySubmissions =
                   libraryBox.values.toList().cast<LibraryGwaSubmission>();
               return DefaultTabController(

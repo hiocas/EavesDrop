@@ -41,6 +41,13 @@ class _MyAppState extends State<MyApp> {
   ];
 
   @override
+  void dispose() {
+    // TODO: Figure out the correct place for this, and if it's even needed.
+    Provider.of<GlobalState>(context, listen: false).dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [

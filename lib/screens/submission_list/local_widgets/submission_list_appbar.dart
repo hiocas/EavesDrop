@@ -144,7 +144,6 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
           icon: Icon(Icons.search),
           tooltip: 'Search',
           onPressed: () {
-            print('User requested to search');
             setState(() {
               _isSearching = true;
             });

@@ -71,10 +71,13 @@ class SubmissionListState extends State<SubmissionList> {
     super.dispose();
     scrollController.dispose();
     scrollController = null;
-    if (globalState != null) {
-      globalState.dispose();
-      globalState = null;
-    }
+    /* TODO: This is giving me a lot of errors so I'm not sure if I should keep
+        it here. For now I put it in main. Figure out if it's where it should
+        be and if it's even needed. */
+    // if (globalState != null) {
+    //   globalState.dispose();
+    //   globalState = null;
+    // }
   }
 
   _updateSearch() {
@@ -101,7 +104,6 @@ class SubmissionListState extends State<SubmissionList> {
           // TODO: Handle this case.
           break;
         case Sort.top:
-          print('hey');
           Provider.of<GlobalState>(context, listen: false)
               .loadTop(this.searchTimeFilter);
           setState(() {});
@@ -148,7 +150,6 @@ class SubmissionListState extends State<SubmissionList> {
               return Center(child: CircularProgressIndicator());
             } else {
               this.globalState = Provider.of<GlobalState>(context);
-              print(globalState.searchResults.length);
               return RefreshIndicator(
                 //TODO: Implement pull to refresh.
                 onRefresh: () {

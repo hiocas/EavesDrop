@@ -42,7 +42,7 @@ class GlobalState with ChangeNotifier {
   }
 
   loadSearch(String query, Sort sort, TimeFilter timeFilter,
-      [int limit = 100]) {
+      [int limit = 99]) {
     _searchResults = [];
 
     if (!this._isBusy) {
@@ -61,13 +61,13 @@ class GlobalState with ChangeNotifier {
     }
   }
 
-  loadTop(TimeFilter timeFilter, [int limit]) {
+  loadTop(TimeFilter timeFilter, [int limit = 99]) {
     if (!this._isBusy) {
       _searchResults = [];
 
       _searchResultsStream = _gwaSubreddit.top(
         timeFilter: timeFilter ?? TimeFilter.all,
-        limit: limit ?? 100,
+        limit: limit,
         params: {'after': _lastSeenSubmission},
       ).asBroadcastStream();
 
@@ -79,12 +79,12 @@ class GlobalState with ChangeNotifier {
     }
   }
 
-  loadHot() {
+  loadHot([int limit = 99]) {
     if (!this._isBusy) {
       _searchResults = [];
 
       _searchResultsStream = _gwaSubreddit.hot(
-        limit: 100,
+        limit: limit,
         params: {'after': _lastSeenSubmission},
       ).asBroadcastStream();
 
@@ -96,12 +96,12 @@ class GlobalState with ChangeNotifier {
     }
   }
 
-  loadNewest() {
+  loadNewest([int limit = 99]) {
     if (!this._isBusy) {
       _searchResults = [];
 
       _searchResultsStream = _gwaSubreddit.newest(
-        limit: 100,
+        limit: limit,
         params: {'after': _lastSeenSubmission},
       ).asBroadcastStream();
 

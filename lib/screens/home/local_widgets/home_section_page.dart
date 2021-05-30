@@ -212,8 +212,13 @@ class _HomeSectionPageViewState extends State<_HomeSectionPageView> {
         this._currentPage = 0;
       }
 
-      this._pageController.animateToPage(_currentPage,
-          duration: Duration(milliseconds: 800), curve: Curves.easeInOutQuint);
+      /* To get rid of errors that happen when the page controller isn't
+      attached to any scroll views. */
+      if (this._pageController.hasClients){
+        this._pageController.animateToPage(_currentPage,
+            duration: Duration(milliseconds: 800),
+            curve: Curves.easeInOutQuint);
+      }
     });
   }
 
