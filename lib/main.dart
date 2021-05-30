@@ -33,7 +33,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _currentPageIndex = 2;
+  int _currentPageIndex = 1;
   List<Widget> _screens = [
     SubmissionList(),
     Home(),
