@@ -9,9 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/screens/submission_page/submission_page.dart';
 import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'package:gwa_app/widgets/gwa_list_item.dart';
+import 'package:gwa_app/utils/util_functions.dart';
 
 //FIXME: Sometimes certain lists don't load.
 class Home extends StatelessWidget {
@@ -78,11 +78,13 @@ class _HorizontalClickableListWheelScrollView extends StatefulWidget {
     @required this.itemList,
     this.itemSize,
     this.offAxisFraction,
+    this.squeeze,
   }) : super(key: key);
 
   final List<GwaLibraryListItem> itemList;
   final double itemSize;
   final double offAxisFraction;
+  final double squeeze;
 
   @override
   __HorizontalClickableListWheelScrollViewState createState() =>
@@ -110,24 +112,27 @@ class __HorizontalClickableListWheelScrollViewState
           itemHeight: this.widget.itemSize ?? 150,
           itemCount: widget.itemList.length,
           onItemTapCallback: (index) {
-            Timer(
-                Duration(milliseconds: 600),
-                () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SubmissionPage(
-                          submissionFullname:
-                              widget.itemList.elementAt(index).fullname,
-                          fromLibrary: false,
-                        ),
-                      ),
-                    ));
+            Timer(Duration(milliseconds: 600), () {
+              pushSubmissionPageWithReturnData(
+                  context, widget.itemList.elementAt(index).fullname, false);
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => SubmissionPage(
+              //       submissionFullname:
+              //           widget.itemList.elementAt(index).fullname,
+              //       fromLibrary: false,
+              //     ),
+              //   ),
+              // );
+            });
           },
           child: ListWheelScrollView.useDelegate(
             offAxisFraction: this.widget.offAxisFraction ?? 0.0,
             controller: _scrollController,
             itemExtent: this.widget.itemSize ?? 150,
             perspective: 0.002,
+            squeeze: this.widget.squeeze ?? 1.0,
             physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             childDelegate: ListWheelChildBuilderDelegate(
@@ -155,11 +160,13 @@ class _HorizontalClickableListWheelScrollViewStream extends StatefulWidget {
     @required this.stream,
     this.itemSize,
     this.offAxisFraction,
+    this.squeeze,
   }) : super(key: key);
 
   final Stream<UserContent> stream;
   final double itemSize;
   final double offAxisFraction;
+  final double squeeze;
 
   @override
   _HorizontalClickableListWheelScrollViewStreamState createState() =>
@@ -211,6 +218,7 @@ class _HorizontalClickableListWheelScrollViewStreamState
                       itemList: this._itemList,
                       itemSize: widget.itemSize,
                       offAxisFraction: widget.offAxisFraction,
+                      squeeze: widget.squeeze,
                     )
                   : _DummyList(
                       itemSize: widget.itemSize ?? 150,
@@ -281,6 +289,9 @@ class _HomeSection extends StatefulWidget {
     this.homeSectionPageShowOnlyPictures,
     this.homeSectionPageMaxPages,
     this.homeSectionPageShufflePages,
+    this.itemSize,
+    this.offAxisFraction,
+    this.squeeze,
   }) : super(key: key);
 
   final String title;
@@ -290,6 +301,9 @@ class _HomeSection extends StatefulWidget {
   final bool homeSectionPageShowOnlyPictures;
   final bool homeSectionPageShufflePages;
   final int homeSectionPageMaxPages;
+  final double itemSize;
+  final double offAxisFraction;
+  final double squeeze;
 
   /// The Duration to wait after instantiating this widget before playing the
   /// initial load animation.
@@ -379,7 +393,9 @@ class __HomeSectionState extends State<_HomeSection>
                       ),
                       child: _HorizontalClickableListWheelScrollViewStream(
                         stream: this.widget.contentStream,
-                        itemSize: 130,
+                        itemSize: widget.itemSize ?? 130,
+                        offAxisFraction: widget.offAxisFraction,
+                        squeeze: widget.squeeze,
                       ),
                     ),
                   ],

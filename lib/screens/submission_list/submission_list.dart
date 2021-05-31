@@ -60,9 +60,12 @@ class SubmissionListState extends State<SubmissionList> {
       }
     });
 
-    if (widget.initialQuery.isEmpty || widget.initialQuery == null) {
+    if (widget.initialQuery == null || widget.initialQuery.isEmpty) {
       Provider.of<GlobalState>(context, listen: false).loadNewest();
     } else {
+      print(widget.initialQuery);
+      print(widget.initialSort);
+      print(widget.initialTimeFilter);
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           widget.initialQuery, widget.initialSort, widget.initialTimeFilter);
     }
@@ -93,13 +96,11 @@ class SubmissionListState extends State<SubmissionList> {
           // TODO: Handle this case.
           break;
         case Sort.hot:
-          Provider.of<GlobalState>(context, listen: false)
-              .loadHot();
+          Provider.of<GlobalState>(context, listen: false).loadHot();
           setState(() {});
           break;
         case Sort.newest:
-          Provider.of<GlobalState>(context, listen: false)
-              .loadNewest();
+          Provider.of<GlobalState>(context, listen: false).loadNewest();
           setState(() {});
           break;
         case Sort.comments:
@@ -120,6 +121,11 @@ class SubmissionListState extends State<SubmissionList> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: SubmissionListAppBar(
+          initialIsSearching:
+              widget.initialQuery != null && widget.initialQuery.isNotEmpty,
+          initialQuery: widget.initialQuery,
+          initialSort: widget.initialSort,
+          initialTimeFilter: widget.initialTimeFilter,
           onSelectedFilter: (TimeFilter result) {
             this.searchTimeFilter = result;
             if (this.submittedSearchQuery == this.currentSearchQuery) {
@@ -171,7 +177,8 @@ class SubmissionListState extends State<SubmissionList> {
                           SliverPadding(
                             padding: const EdgeInsets.all(8.0),
                             sliver: SliverGrid(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 mainAxisSpacing: 5,
                                 crossAxisSpacing: 5,
@@ -179,7 +186,8 @@ class SubmissionListState extends State<SubmissionList> {
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
                                   return GwaListItem(
-                                    submission: globalState.searchResults[index],
+                                    submission:
+                                        globalState.searchResults[index],
                                   );
                                 },
                                 childCount: globalState.searchResults.length,

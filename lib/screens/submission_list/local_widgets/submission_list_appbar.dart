@@ -12,6 +12,10 @@ class SubmissionListAppBar extends StatefulWidget
   final void Function(TimeFilter value) onSelectedFilter;
   final void Function(String query) onSubmitted;
   final void Function(String query) onChanged;
+  final bool initialIsSearching;
+  final String initialQuery;
+  final Sort initialSort;
+  final TimeFilter initialTimeFilter;
 
   const SubmissionListAppBar({
     Key key,
@@ -19,6 +23,10 @@ class SubmissionListAppBar extends StatefulWidget
     @required this.onChanged,
     @required this.onSelectedItem,
     @required this.onSelectedFilter,
+    this.initialSort,
+    this.initialTimeFilter,
+    this.initialIsSearching,
+    this.initialQuery,
   }) : super(key: key);
 
   @override
@@ -32,6 +40,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   bool _isSearching = false;
   Sort _sort = Sort.newest;
   TimeFilter _timeFilter = TimeFilter.all;
+  TextEditingController _textFieldController;
 
   String _sortToString(Sort sort) {
     switch (sort) {
@@ -198,12 +207,23 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   }
 
   @override
+  void initState() {
+    _isSearching = widget.initialIsSearching ?? false;
+    _sort = widget.initialSort ?? Sort.newest;
+    _timeFilter = widget.initialTimeFilter ?? TimeFilter.all;
+    _textFieldController =
+        TextEditingController(text: widget.initialQuery ?? null);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppBar(
       title: _isSearching
           ? Consumer<GlobalState>(builder: (context, state, child) {
               return TextField(
                 enabled: !state.isBusy,
+                controller: _textFieldController,
                 decoration: InputDecoration(
                   isDense: true,
                   hintText: 'Search...',

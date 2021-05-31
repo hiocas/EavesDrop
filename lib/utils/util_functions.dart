@@ -1,7 +1,11 @@
+import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:gwa_app/screens/submission_page/submission_page.dart';
+
+import '../main.dart';
 
 class UtilFunctions {
   //TODO: Implement per tag icons.
@@ -15,7 +19,8 @@ class UtilFunctions {
       return [Text('\u{1f9d1}'), 1];
     else if (tag.contains(RegExp('fingering', caseSensitive: false)))
       return [Text('\u{1f595}'), 1];
-    else if (tag.contains(RegExp('neko|catgirl|cat girl|purr|nyaa', caseSensitive: false)))
+    else if (tag.contains(
+        RegExp('neko|catgirl|cat girl|purr|nyaa', caseSensitive: false)))
       return [
         Image.asset(
           'lib/assets/images/headband.png',
@@ -86,4 +91,27 @@ String getUrlTitle(String url) {
     return url.substring(url.lastIndexOf('/') + 1).replaceAll('-', ' ');
   }
   return url;
+}
+
+void pushSubmissionPageWithReturnData(
+    BuildContext context, String submissionFullname, bool fromLibrary) async {
+  final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SubmissionPage(
+              submissionFullname: submissionFullname,
+              fromLibrary: fromLibrary)));
+  if (result != null) {
+    Navigator.pushReplacementNamed(
+        context, ExtractArgumentsSubmissionList.routeName,
+        arguments: SubmissionListArguments(
+            result['query'], result['sort'], result['timeFilter']));
+  }
+
+}
+
+void popSubmissionPageWithDate(
+    BuildContext context, {String query, Sort sort, TimeFilter timeFilter}) {
+  Navigator.pop(
+      context, {'query': query, 'sort': sort, 'timeFilter': timeFilter});
 }

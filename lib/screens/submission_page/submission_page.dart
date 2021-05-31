@@ -1,3 +1,4 @@
+import 'package:draw/draw.dart' as Draw;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,6 +12,10 @@ import 'local_widgets/all_page_local.dart';
 import 'package:provider/provider.dart';
 import 'package:gwa_app/states/global_state.dart';
 
+/* FIXME: If we search for certain queries (for instance
+    'authorLookingForMyBlueSky') in SubmissionList and then press on them
+    to open their SubmissionPage sometimes the page will get stuck and the
+    whole app will freeze. */
 class SubmissionPage extends StatefulWidget {
   final String submissionFullname;
 
@@ -20,8 +25,8 @@ class SubmissionPage extends StatefulWidget {
   const SubmissionPage({
     Key key,
     this.submissionFullname,
-    @required this.fromLibrary,})
-      : super(key: key);
+    @required this.fromLibrary,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => SubmissionPageState();
@@ -46,9 +51,13 @@ class SubmissionPageState extends State<SubmissionPage> {
 
   @override
   Widget build(BuildContext context) {
+    /* This keeps track of how many times the user tapped the author name
+    so that if it's multiple times we can show them a Snackbar that tells them
+    to long press on the author's name if they want to see their submissions. */
+    int authorNameTapCounts = 0;
     return FutureBuilder(
       future:
-      Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
+          Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -59,7 +68,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                    scuffed. */
           if (_selectedTags.length == 0) {
             _selectedTags =
-            List<bool>.generate(_submission.tags.length, (index) => false);
+                List<bool>.generate(_submission.tags.length, (index) => false);
             if (!_isOneSelected) {
               for (bool tag in _selectedTags) {
                 if (tag) {
@@ -76,9 +85,7 @@ class SubmissionPageState extends State<SubmissionPage> {
               return Future.value();
             },
             child: Scaffold(
-              backgroundColor: Theme
-                  .of(context)
-                  .backgroundColor,
+              backgroundColor: Theme.of(context).backgroundColor,
               body: SafeArea(
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(
@@ -155,12 +162,37 @@ class SubmissionPageState extends State<SubmissionPage> {
                                       ),
                                       Visibility(
                                         visible: top >= maxTitleTop,
-                                        child: Text(
-                                          _submission.author,
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () {
+                                              if (authorNameTapCounts > 1) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            "If you want to see this author's posts, long press their name.")));
+                                                authorNameTapCounts = 0;
+                                              }
+                                              else {
+                                                authorNameTapCounts++;
+                                              }
+                                            },
+                                            onLongPress: () {
+                                              popSubmissionPageWithDate(context,
+                                                  query:
+                                                      'author:${_submission.author}',
+                                                  sort: Draw.Sort.newest,
+                                                  timeFilter:
+                                                      Draw.TimeFilter.all);
+                                            },
+                                            child: Text(
+                                              _submission.author,
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -210,9 +242,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.add,
                               label: 'Save',
                               subtext: 'Save this post to your library',
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               gwaSubmission: _submission,
                               heroTag: 'save-submission-popup',
                               usePlaceholder: true,
@@ -222,9 +252,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.favorite_border,
                               label: 'Open',
                               subtext: 'Upvote this and show your support!',
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               onPressed: () {
                                 launch(_submission.shortlink.toString());
                               },
@@ -234,9 +262,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.expand,
                               label: 'Details',
                               subtext: "Show all of the post's details",
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               heroTag: 'submission-details-popup',
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -250,9 +276,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                               icon: Icons.search,
                               label: 'Tags',
                               subtext: "View and query all of the post's tags",
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               heroTag: 'submission-tags-popup',
                               gwaSubmission: _submission,
                               selectedTags: _selectedTags,
@@ -271,103 +295,101 @@ class SubmissionPageState extends State<SubmissionPage> {
                     ),
                     //Tags
                     SliverToBoxAdapter(
-                      child: _submission.tags.length > 0 ? Container(
-                        margin: const EdgeInsets.only(
-                            left: 10.0, top: 4.0, bottom: 4.0),
-                        height: 35,
-                        child: ListView.builder(
-                          itemBuilder: (BuildContext context, int index) {
-                            var tagList = _submission.tags;
-                            var avatarCreator =
-                            UtilFunctions.tagChipAvatar(tagList[index]);
-                            Widget avatar = avatarCreator[0];
-                            int chars = avatarCreator[1];
-                            //If there are 2 chars as an avatar.
-                            if (chars == 2)
-                              return Container(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: FilterChip(
-                                  labelPadding: const EdgeInsets.only(
-                                      left: 2.0, right: 10.0),
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  visualDensity: VisualDensity.compact,
-                                  selected: _selectedTags[index],
-                                  label: Text(tagList[index]),
-                                  backgroundColor:
-                                  Theme
-                                      .of(context)
-                                      .primaryColor,
-                                  selectedColor: Theme
-                                      .of(context)
-                                      .accentColor,
-                                  side: BorderSide(width: 0.0),
-                                  avatar: avatar,
-                                  onSelected: (bool value) {
-                                    print(tagList[index]);
-                                    setState(() {
-                                      _selectedTags[index] = value;
-                                      print(_selectedTags[index]);
-                                    });
-                                  },
-                                ),
-                              );
-                            //If there is any other number of chars as an avatar.
-                            else
-                              return Container(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: FilterChip(
-                                  labelPadding: const EdgeInsets.only(
-                                      left: 3.0, right: 6.0),
-                                  visualDensity: VisualDensity.compact,
-                                  selected: _selectedTags[index],
-                                  label: Text(tagList[index]),
-                                  backgroundColor:
-                                  Theme
-                                      .of(context)
-                                      .primaryColor,
-                                  selectedColor: Theme
-                                      .of(context)
-                                      .accentColor,
-                                  side: BorderSide(width: 0.0),
-                                  avatar: avatar,
-                                  onSelected: (bool value) {
-                                    print(tagList[index]);
-                                    setState(() {
-                                      _selectedTags[index] = value;
-                                      print(_selectedTags[index]);
-                                    });
-                                  },
-                                ),
-                              );
-                          },
-                          itemCount: _submission.tags.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                        /* This makes it so we won't show the tag list if the
+                      child: _submission.tags.length > 0
+                          ? Container(
+                              margin: const EdgeInsets.only(
+                                  left: 10.0, top: 4.0, bottom: 4.0),
+                              height: 35,
+                              child: ListView.builder(
+                                itemBuilder: (BuildContext context, int index) {
+                                  var tagList = _submission.tags;
+                                  var avatarCreator =
+                                      UtilFunctions.tagChipAvatar(
+                                          tagList[index]);
+                                  Widget avatar = avatarCreator[0];
+                                  int chars = avatarCreator[1];
+                                  //If there are 2 chars as an avatar.
+                                  if (chars == 2)
+                                    return Container(
+                                      padding:
+                                          const EdgeInsets.only(right: 4.0),
+                                      child: FilterChip(
+                                        labelPadding: const EdgeInsets.only(
+                                            left: 2.0, right: 10.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 4.0),
+                                        visualDensity: VisualDensity.compact,
+                                        selected: _selectedTags[index],
+                                        label: Text(tagList[index]),
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor,
+                                        selectedColor:
+                                            Theme.of(context).accentColor,
+                                        side: BorderSide(width: 0.0),
+                                        avatar: avatar,
+                                        onSelected: (bool value) {
+                                          print(tagList[index]);
+                                          setState(() {
+                                            _selectedTags[index] = value;
+                                            print(_selectedTags[index]);
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  //If there is any other number of chars as an avatar.
+                                  else
+                                    return Container(
+                                      padding:
+                                          const EdgeInsets.only(right: 4.0),
+                                      child: FilterChip(
+                                        labelPadding: const EdgeInsets.only(
+                                            left: 3.0, right: 6.0),
+                                        visualDensity: VisualDensity.compact,
+                                        selected: _selectedTags[index],
+                                        label: Text(tagList[index]),
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor,
+                                        selectedColor:
+                                            Theme.of(context).accentColor,
+                                        side: BorderSide(width: 0.0),
+                                        avatar: avatar,
+                                        onSelected: (bool value) {
+                                          print(tagList[index]);
+                                          setState(() {
+                                            _selectedTags[index] = value;
+                                            print(_selectedTags[index]);
+                                          });
+                                        },
+                                      ),
+                                    );
+                                },
+                                itemCount: _submission.tags.length,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                              ),
+                              /* This makes it so we won't show the tag list if the
                         post has no tags. */
-                      ) : null,
+                            )
+                          : null,
                     ),
                     //SelftextViewer
                     SliverPadding(
                       padding: const EdgeInsets.all(10.0),
                       sliver: SliverToBoxAdapter(
                           child: Material(
-                            color: Theme
-                                .of(context)
-                                .backgroundColor,
-                            elevation: 15.0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
+                        color: Theme.of(context).backgroundColor,
+                        elevation: 15.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
                                 BorderRadius.all(Radius.circular(32.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(14.0),
-                              child: MarkdownViewer(
-                                text: _submission.selftext,
-                                bodyTextFontSize: 14.0,
-                              ),
-                            ),
-                          )),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: MarkdownViewer(
+                            text: _submission.selftext,
+                            bodyTextFontSize: 14.0,
+                          ),
+                        ),
+                      )),
                     ),
                     /*FIXME(Design): This makes sure the SelfTextViewer (now the
                         MarkdownViewer) can be fully read without the floating
@@ -387,7 +409,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                 submission: _submission,
               ),
               floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+                  FloatingActionButtonLocation.centerFloat,
             ),
           );
         }
