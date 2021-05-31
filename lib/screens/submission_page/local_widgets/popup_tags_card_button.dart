@@ -1,3 +1,4 @@
+import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -136,22 +137,153 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     return chips;
   }
 
+  bool _isOneSelected() {
+    for (bool tag in widget.selectedTags) {
+      if (tag) return true;
+    }
+    return false;
+  }
+
+  String _makeHardTagQuery() {
+    String query = '';
+    for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
+      if (widget.selectedTags[i]) {
+        query += 'title:${widget.gwaSubmission.tags[i]} ';
+      }
+    }
+    return query;
+  }
+
+  String _makeForgivingTagQuery() {
+    String query = '';
+    for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
+      if (widget.selectedTags[i]) {
+        query += '${widget.gwaSubmission.tags[i]} ';
+      }
+    }
+    return query;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Theme.of(context).backgroundColor,
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
-      child: SingleChildScrollView(
+      child: CustomScrollView(
+        shrinkWrap: true,
         scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Wrap(
-            spacing: 5.0,
-            children: getChipList(),
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(16.0),
+            sliver: SliverToBoxAdapter(
+              child: Wrap(
+                spacing: 5.0,
+                children: getChipList(),
+              ),
+            ),
           ),
-        ),
+          SliverPadding(
+              padding: const EdgeInsets.all(16.0),
+              sliver: SliverToBoxAdapter(
+                  child: Wrap(
+                alignment: WrapAlignment.spaceEvenly,
+                children: [
+                  _TagElevatedButton(
+                    label: 'Identical Search',
+                    icon: Icons.title,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      popSubmissionPageWithData(context,
+                          query: _makeHardTagQuery(),
+                          sort: Sort.relevance,
+                          timeFilter: TimeFilter.all);
+                    },
+                    snackBarText: "An identical search, searching post"
+                        " titles with these exact tag names in"
+                        " them.",
+                    enabled: _isOneSelected(),
+                  ),
+                  _TagElevatedButton(
+                    label: 'Search',
+                    icon: Icons.search,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      popSubmissionPageWithData(context,
+                          query: _makeForgivingTagQuery(),
+                          sort: Sort.relevance,
+                          timeFilter: TimeFilter.all);
+                    },
+                    snackBarText: 'Regular reddit search using these tags.',
+                    enabled: _isOneSelected(),
+                  ),
+                  _TagElevatedButton(
+                    label: 'Clear Selected Tags',
+                    icon: Icons.close,
+                    onPressed: () {
+                      widget.selectedTags
+                          .fillRange(1, widget.selectedTags.length, false);
+                      //Just so we setState() in SubmissionPage.
+                      widget.onSelected.call(false, 0);
+                      setState(() {});
+                    },
+                    snackBarText: 'Clear currently selected tags.',
+                    enabled: _isOneSelected(),
+                  ),
+                ],
+              )))
+        ],
       ),
     );
+  }
+}
+
+class _TagElevatedButton extends StatelessWidget {
+  const _TagElevatedButton(
+      {Key key,
+      this.label,
+      this.icon,
+      @required this.onPressed,
+      @required this.snackBarText,
+      @required this.enabled})
+      : super(key: key);
+
+  final String label;
+  final IconData icon;
+  final void Function() onPressed;
+  final String snackBarText;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+        label: Text(label,
+            style: TextStyle(
+              color: enabled ? Colors.white : Colors.black38,
+            )),
+        icon: Icon(
+          icon,
+          color: enabled ? Colors.white : Colors.black38,
+        ),
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all<double>(15.0),
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Theme.of(context).accentColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14.0))),
+        ),
+        onPressed: () {
+          if (enabled) {
+            onPressed.call();
+          }
+        },
+        onLongPress: () {
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+              content: Text(snackBarText),
+            ));
+        });
   }
 }

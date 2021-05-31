@@ -146,6 +146,10 @@ class SubmissionListState extends State<SubmissionList> {
           onChanged: (query) {
             this.currentSearchQuery = query;
           },
+          clearQuery: () {
+            this.submittedSearchQuery = '';
+            this.currentSearchQuery = '';
+          },
         ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: Container(

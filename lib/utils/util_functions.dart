@@ -113,7 +113,7 @@ void pushSubmissionPageWithReturnData(
 
 /// Use this function when you want to pop SubmissionList and return data with
 /// it.
-void popSubmissionPageWithDate(BuildContext context,
+void popSubmissionPageWithData(BuildContext context,
     {String query, Sort sort, TimeFilter timeFilter}) {
   Navigator.pop(
       context, {'query': query, 'sort': sort, 'timeFilter': timeFilter});

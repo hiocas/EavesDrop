@@ -12,6 +12,7 @@ class SubmissionListAppBar extends StatefulWidget
   final void Function(TimeFilter value) onSelectedFilter;
   final void Function(String query) onSubmitted;
   final void Function(String query) onChanged;
+  final void Function() clearQuery;
   final bool initialIsSearching;
   final String initialQuery;
   final Sort initialSort;
@@ -23,6 +24,7 @@ class SubmissionListAppBar extends StatefulWidget
     @required this.onChanged,
     @required this.onSelectedItem,
     @required this.onSelectedFilter,
+    @required this.clearQuery,
     this.initialSort,
     this.initialTimeFilter,
     this.initialIsSearching,
@@ -155,6 +157,8 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
           onPressed: () {
             setState(() {
               _isSearching = true;
+              _textFieldController.clear();
+              widget.clearQuery.call();
             });
           },
         )

@@ -36,7 +36,6 @@ class SubmissionPageState extends State<SubmissionPage> {
   String _fullname;
   GwaSubmission _submission;
   List<bool> _selectedTags = [];
-  bool _isOneSelected = false;
 
   //These are all thresholds for elements in the sliver app bar to appear or disappear.
   var top = 0.0;
@@ -69,14 +68,6 @@ class SubmissionPageState extends State<SubmissionPage> {
           if (_selectedTags.length == 0) {
             _selectedTags =
                 List<bool>.generate(_submission.tags.length, (index) => false);
-            if (!_isOneSelected) {
-              for (bool tag in _selectedTags) {
-                if (tag) {
-                  _isOneSelected = true;
-                  break;
-                }
-              }
-            }
           }
           return RefreshIndicator(
             //TODO: Implement pull to refresh.
@@ -172,13 +163,12 @@ class SubmissionPageState extends State<SubmissionPage> {
                                                         content: Text(
                                                             "If you want to see this author's posts, long press their name.")));
                                                 authorNameTapCounts = 0;
-                                              }
-                                              else {
+                                              } else {
                                                 authorNameTapCounts++;
                                               }
                                             },
                                             onLongPress: () {
-                                              popSubmissionPageWithDate(context,
+                                              popSubmissionPageWithData(context,
                                                   query:
                                                       'author:${_submission.author}',
                                                   sort: Draw.Sort.newest,
