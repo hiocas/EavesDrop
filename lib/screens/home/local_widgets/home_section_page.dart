@@ -3,7 +3,6 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/screens/submission_page/submission_page.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/widgets/animations%20and%20transitions/transitions.dart';
 import 'package:gwa_app/widgets/gwa_list_item.dart';
