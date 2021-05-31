@@ -293,19 +293,3 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
     );
   }
 }
-
-// ElevatedButton.icon(
-//   icon: Icon(_inLibrary ? Icons.close : Icons.add),
-//   label: Text(
-//     _inLibrary ? 'Remove from Library' : 'Add to Library',
-//   ),
-//   style: ElevatedButton.styleFrom(
-//       primary: Theme.of(context).primaryColor, elevation: 15.0),
-//   onPressed: () {
-//     if (_inLibrary) {
-//       _removeFromLibrary();
-//     } else {
-//       _addToLibrary();
-//     }
-//   },
-// ),
