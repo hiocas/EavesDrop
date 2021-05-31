@@ -1,8 +1,10 @@
+import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:gwa_app/screens/submission_page/submission_page.dart';
+
 import '../main.dart';
 
 class UtilFunctions {
@@ -91,6 +93,8 @@ String getUrlTitle(String url) {
   return url;
 }
 
+/// Use this function when you want to push a SubmissionPage. It'll handle
+/// returning the query data from it (if it exists).
 void pushSubmissionPageWithReturnData(
     BuildContext context, String submissionFullname, bool fromLibrary) async {
   final result = await Navigator.push(
@@ -105,4 +109,12 @@ void pushSubmissionPageWithReturnData(
         arguments: SubmissionListArguments(
             result['query'], result['sort'], result['timeFilter']));
   }
+}
+
+/// Use this function when you want to pop SubmissionList and return data with
+/// it.
+void popSubmissionPageWithDate(BuildContext context,
+    {String query, Sort sort, TimeFilter timeFilter}) {
+  Navigator.pop(
+      context, {'query': query, 'sort': sort, 'timeFilter': timeFilter});
 }

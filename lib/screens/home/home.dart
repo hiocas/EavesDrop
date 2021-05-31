@@ -115,16 +115,6 @@ class __HorizontalClickableListWheelScrollViewState
             Timer(Duration(milliseconds: 600), () {
               pushSubmissionPageWithReturnData(
                   context, widget.itemList.elementAt(index).fullname, false);
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => SubmissionPage(
-              //       submissionFullname:
-              //           widget.itemList.elementAt(index).fullname,
-              //       fromLibrary: false,
-              //     ),
-              //   ),
-              // );
             });
           },
           child: ListWheelScrollView.useDelegate(

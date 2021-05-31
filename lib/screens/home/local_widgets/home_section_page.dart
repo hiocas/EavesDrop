@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/screens/submission_page/submission_page.dart';
+import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/widgets/animations%20and%20transitions/transitions.dart';
 import 'package:gwa_app/widgets/gwa_list_item.dart';
 import 'package:gwa_app/widgets/gwa_scrollbar.dart';
@@ -254,15 +255,8 @@ class _HomeSectionPageViewState extends State<_HomeSectionPageView> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SubmissionPage(
-                    submissionFullname: widget.previews[index].fullname,
-                    fromLibrary: false,
-                  ),
-                ),
-              );
+              pushSubmissionPageWithReturnData(
+                  context, widget.previews[index].fullname, false);
             },
             child: Container(
               margin:

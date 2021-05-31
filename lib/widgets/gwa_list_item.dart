@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
-import '../screens/submission_page/submission_page.dart';
 
 class GwaListItem extends StatelessWidget {
   final GwaSubmissionPreview submission;
@@ -139,14 +138,10 @@ class GwaLibraryListItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            Navigator.push(
+            pushSubmissionPageWithReturnData(
               context,
-              MaterialPageRoute(
-                builder: (context) => SubmissionPage(
-                  submissionFullname: fullname,
-                  fromLibrary: true,
-                ),
-              ),
+              fullname,
+              true,
             );
           },
         ),
