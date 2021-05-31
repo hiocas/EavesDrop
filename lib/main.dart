@@ -105,7 +105,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
 
   @override
   void initState() {
-    this._currentPageIndex = widget.initialIndex ?? 1;
+    this._currentPageIndex = widget.initialIndex ?? 2;
     this._screens = [
       SubmissionList(
         initialQuery: widget.initialSearchQuery ?? '',

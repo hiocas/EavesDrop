@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:draw/draw.dart';
 import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,7 +48,7 @@ class GwaSubmission {
     if (submission.preview.length > 0)
       this.thumbnailUrl = submission.preview[0].source.url.toString();
     this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
-    this.img = getImg();
+    this.img = _getImg();
     this.hasAudioUrl = checkHasAudioUrl();
     this.fromNow = getTimeSinceCreated(submission.createdUtc);
     this.upvotes = submission.upvotes;
@@ -118,7 +120,7 @@ class GwaSubmission {
     return false;
   }
 
-  Image getImg() {
+  Image _getImg() {
     return Image.network(
       this.firstImageOrGifUrl,
       fit: BoxFit.cover,

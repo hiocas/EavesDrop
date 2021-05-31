@@ -131,7 +131,8 @@ class _LibraryState extends State<Library> {
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
                               title: const Text('Clear Library'),
-                              content: const Text('Are you sure you want to clear'
+                              content: const Text(
+                                  'Are you sure you want to clear'
                                   ' your library? This action cannot be reverted.'),
                               actions: <Widget>[
                                 TextButton(
@@ -141,7 +142,8 @@ class _LibraryState extends State<Library> {
                                 TextButton(
                                     onPressed: () {
                                       libraryBox.clear();
-                                      Navigator.pop(context, 'Clear my Library');
+                                      Navigator.pop(
+                                          context, 'Clear my Library');
                                     },
                                     child: const Text('Clear my Library'))
                               ],
@@ -151,7 +153,9 @@ class _LibraryState extends State<Library> {
                       ],
                       bottom: TabBar(
                         tabs: _makeListTabs(),
+                        indicatorColor: Theme.of(context).accentColor,
                         indicatorSize: TabBarIndicatorSize.label,
+                        isScrollable: HiveBoxes.listTags.length > 4,
                       ),
                     ),
                     backgroundColor: Theme.of(context).backgroundColor,

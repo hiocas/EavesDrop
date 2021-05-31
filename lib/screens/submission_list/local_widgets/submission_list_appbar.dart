@@ -207,7 +207,8 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
 
   void _showSnackBar() {
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(_makeSearchHint())));
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(_makeSearchHint())));
   }
 
   @override

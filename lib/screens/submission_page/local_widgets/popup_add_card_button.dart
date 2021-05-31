@@ -7,6 +7,7 @@ import 'package:gwa_app/models/library_gwa_submission.dart';
 import 'package:gwa_app/widgets/custom_popup_widget_button.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:math' as math;
 
 //FIXME: This all seems kinda scuffed and very inefficient.
 class PopupAddCardButton extends StatefulWidget {
@@ -230,49 +231,81 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListView.separated(
-                separatorBuilder: (BuildContext context, int index) =>
-                    Divider(color: Colors.black),
-                itemBuilder: (context, index) {
-                  return CheckboxListTile(
-                    title: Text(HiveBoxes.listTags[index],
-                        style: TextStyle(
-                          color: _inLibrary ? Colors.white : Colors.grey[800],
-                        )),
-                    value: _inLists[index],
-                    onChanged: (bool value) {
+        child: CustomScrollView(
+          semanticChildCount: HiveBoxes.listTags.length,
+          shrinkWrap: true,
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  if (index.isEven) {
+                    final int itemIndex = index ~/ 2;
+                    return CheckboxListTile(
+                      title: Text(HiveBoxes.listTags[itemIndex],
+                          style: TextStyle(
+                            color: _inLibrary ? Colors.white : Colors.grey[800],
+                          )),
+                      value: _inLists[itemIndex],
+                      onChanged: (bool value) {
+                        if (_inLibrary) {
+                          _updateLibrarySubmissionList(itemIndex);
+                        }
+                      },
+                    );
+                  }
+                  return Divider(color: Colors.black);
+                },
+                semanticIndexCallback: (Widget w, int localIndex) {
+                  if (localIndex.isEven) {
+                    return localIndex ~/ 2;
+                  }
+                  return null;
+                },
+                childCount: math.max(0, HiveBoxes.listTags.length * 2 - 1),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 55.0, vertical: 16.0),
+              sliver: SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 40,
+                  child: ElevatedButton.icon(
+                    icon: Icon(_inLibrary ? Icons.close : Icons.add),
+                    label: Text(
+                      _inLibrary ? 'Remove from Library' : 'Add to Library',
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor, elevation: 8.0),
+                    onPressed: () {
                       if (_inLibrary) {
-                        _updateLibrarySubmissionList(index);
+                        _removeFromLibrary();
+                      } else {
+                        _addToLibrary();
                       }
                     },
-                  );
-                },
-                itemCount: HiveBoxes.listTags.length,
-                shrinkWrap: true,
-              ),
-              // FIXME: Sometimes the button overflows.
-              ElevatedButton.icon(
-                icon: Icon(_inLibrary ? Icons.close : Icons.add),
-                label: Text(
-                  _inLibrary ? 'Remove from Library' : 'Add to Library',
+                  ),
                 ),
-                style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor, elevation: 15.0),
-                onPressed: () {
-                  if (_inLibrary) {
-                    _removeFromLibrary();
-                  } else {
-                    _addToLibrary();
-                  }
-                },
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
   }
 }
+
+// ElevatedButton.icon(
+//   icon: Icon(_inLibrary ? Icons.close : Icons.add),
+//   label: Text(
+//     _inLibrary ? 'Remove from Library' : 'Add to Library',
+//   ),
+//   style: ElevatedButton.styleFrom(
+//       primary: Theme.of(context).primaryColor, elevation: 15.0),
+//   onPressed: () {
+//     if (_inLibrary) {
+//       _removeFromLibrary();
+//     } else {
+//       _addToLibrary();
+//     }
+//   },
+// ),
