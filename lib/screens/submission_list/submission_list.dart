@@ -63,9 +63,8 @@ class SubmissionListState extends State<SubmissionList> {
     if (widget.initialQuery == null || widget.initialQuery.isEmpty) {
       Provider.of<GlobalState>(context, listen: false).loadNewest();
     } else {
-      print(widget.initialQuery);
-      print(widget.initialSort);
-      print(widget.initialTimeFilter);
+      submittedSearchQuery = widget.initialQuery;
+      currentSearchQuery = widget.initialQuery;
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           widget.initialQuery, widget.initialSort, widget.initialTimeFilter);
     }

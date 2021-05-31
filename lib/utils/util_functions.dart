@@ -1,10 +1,8 @@
-import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:gwa_app/screens/submission_page/submission_page.dart';
-
 import '../main.dart';
 
 class UtilFunctions {
@@ -102,16 +100,9 @@ void pushSubmissionPageWithReturnData(
               submissionFullname: submissionFullname,
               fromLibrary: fromLibrary)));
   if (result != null) {
-    Navigator.pushReplacementNamed(
-        context, ExtractArgumentsSubmissionList.routeName,
+    Navigator.pushNamedAndRemoveUntil(
+        context, ExtractArgumentsSubmissionList.routeName, (Route<dynamic> route) => false,
         arguments: SubmissionListArguments(
             result['query'], result['sort'], result['timeFilter']));
   }
-
-}
-
-void popSubmissionPageWithDate(
-    BuildContext context, {String query, Sort sort, TimeFilter timeFilter}) {
-  Navigator.pop(
-      context, {'query': query, 'sort': sort, 'timeFilter': timeFilter});
 }

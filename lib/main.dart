@@ -69,8 +69,12 @@ class _MyAppState extends State<MyApp> {
         routes: {
           ExtractArgumentsSubmissionList.routeName: (context) =>
               ExtractArgumentsSubmissionList(),
-          '/home': (context) => HomeScaffold(initialIndex: 1,),
-          '/library': (context) => HomeScaffold(initialIndex: 2,)
+          '/home': (context) => HomeScaffold(
+                initialIndex: 1,
+              ),
+          '/library': (context) => HomeScaffold(
+                initialIndex: 2,
+              )
         },
       ),
     );
