@@ -31,15 +31,12 @@ class MarkdownViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*TODO: For now I'm handling &amp; myself since it isn't handled by the
-       package, should find a better way to handle it. Same thing for &nbsp;,
-       &lt;, &gt; and &#x200B;. I'm just replacing it with a space character (and not
-       very efficiently). */
-    String markdown = this.text.replaceAll('&amp;', '&');
-    markdown = markdown.replaceAll('&nbsp;', ' ');
+    /*TODO: For now I'm handling &lt;, &gt; myself since it isn't handled by the
+       package, should find a better way to handle it (custom inline syntax
+       won't work since it needs to be read as a markdown for the quote effect. */
+    String markdown = this.text;
     markdown = markdown.replaceAll('&lt;', '<');
     markdown = markdown.replaceAll('&gt;', '>');
-    markdown = markdown.replaceAll(r'&#x200B;', '\u{200B}');
 
     return Container(
       child: MarkdownBody(
@@ -96,6 +93,9 @@ class MarkdownViewer extends StatelessWidget {
         },
         inlineSyntaxes: [
           RedditUserInlineSyntax(),
+          ZeroWidthSpaceSyntax(),
+          NbspSyntax(),
+          AmpersandSyntax(),
         ],
       ),
     );
@@ -104,15 +104,52 @@ class MarkdownViewer extends StatelessWidget {
 
 class RedditUserInlineSyntax extends md.InlineSyntax {
   RedditUserInlineSyntax({
-    String pattern = r'u\/(\w+)',
+    String pattern = r'u\/([\w-]+)',
   }) : super(pattern);
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {
     final noUserPrefix = match.group(0);
-
     md.Element element = md.Element.text("username", noUserPrefix);
+    parser.addNode(element);
+    return true;
+  }
+}
 
+class AmpersandSyntax extends md.InlineSyntax {
+  AmpersandSyntax({
+    String pattern = r'(&amp;)',
+  }) : super(pattern);
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    md.Element element = md.Element.text("&amp;", "&");
+    parser.addNode(element);
+    return true;
+  }
+}
+
+class NbspSyntax extends md.InlineSyntax {
+  NbspSyntax({
+    String pattern = r'(&amp;nbsp;)|(&nbsp;)',
+  }) : super(pattern);
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    md.Element element = md.Element.text("&nbsp;", "\u{00A0}");
+    parser.addNode(element);
+    return true;
+  }
+}
+
+class ZeroWidthSpaceSyntax extends md.InlineSyntax {
+  ZeroWidthSpaceSyntax({
+    String pattern = r'(&amp;#x200B;)|(&#x200B;)',
+  }) : super(pattern);
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    md.Element element = md.Element.text("&nbsp;", "\u{200B}");
     parser.addNode(element);
     return true;
   }
