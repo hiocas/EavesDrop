@@ -33,6 +33,7 @@ class SubmissionDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return MarkdownViewer(
       text: _makeMarkdownDetails(),
+      fromLibrary: false,
       bodyTextColor: Colors.black,
       blockQuoteDecoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(5.0)),

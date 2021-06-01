@@ -45,7 +45,10 @@ class SubmissionPageState extends State<SubmissionPage> {
   @override
   void initState() {
     super.initState();
-    _fullname = widget.submissionFullname.substring(3);
+    _fullname = widget.submissionFullname;
+    if (_fullname.contains('t3_')){
+      _fullname = _fullname.substring(3);
+    }
   }
 
   @override
@@ -54,6 +57,7 @@ class SubmissionPageState extends State<SubmissionPage> {
     so that if it's multiple times we can show them a Snackbar that tells them
     to long press on the author's name if they want to see their submissions. */
     int authorNameTapCounts = 0;
+    print(_fullname);
     return FutureBuilder(
       future:
           Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
@@ -376,6 +380,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                           padding: const EdgeInsets.all(14.0),
                           child: MarkdownViewer(
                             text: _submission.selftext,
+                            fromLibrary: widget.fromLibrary,
                             bodyTextFontSize: 14.0,
                           ),
                         ),
