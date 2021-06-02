@@ -42,13 +42,22 @@ class SubmissionPageState extends State<SubmissionPage> {
   var maxTitleTop = 120;
   var maxTitleAlignTop = 200;
 
+  ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
     _fullname = widget.submissionFullname;
-    if (_fullname.contains('t3_')){
+    if (_fullname.contains('t3_')) {
       _fullname = _fullname.substring(3);
     }
+    _scrollController = new ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,7 +72,12 @@ class SubmissionPageState extends State<SubmissionPage> {
           Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else {
           _submission = new GwaSubmission(snapshot.data);
           /*FIXME: This gets called every setState so if I want the selected
@@ -83,6 +97,7 @@ class SubmissionPageState extends State<SubmissionPage> {
               backgroundColor: Theme.of(context).backgroundColor,
               body: SafeArea(
                 child: CustomScrollView(
+                  controller: _scrollController,
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
                   slivers: [
@@ -366,7 +381,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                             )
                           : null,
                     ),
-                    //SelftextViewer
+                    //MarkdownViewer
                     SliverPadding(
                       padding: const EdgeInsets.all(10.0),
                       sliver: SliverToBoxAdapter(
@@ -402,6 +417,7 @@ class SubmissionPageState extends State<SubmissionPage> {
               floatingActionButton: FloatingPlayButton(
                 heroTag: 'floating-play-button-popup',
                 submission: _submission,
+                scrollController: _scrollController,
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,

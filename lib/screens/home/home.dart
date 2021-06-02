@@ -332,14 +332,14 @@ class __HomeSectionState extends State<_HomeSection>
         child: Container(
           child: Material(
             color: Theme.of(context).backgroundColor,
-            elevation: 15,
+            elevation: 15.0,
             borderRadius: BorderRadius.all(Radius.circular(24.0)),
             child: InkWell(
               onLongPress: () {
                 if (widget.homeSectionPageContentStream != null) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    CupertinoPageRoute(
                       builder: (context) => HomeSectionPage(
                           sectionTitle: widget.title,
                           pageShowOnlyPictures:
@@ -358,6 +358,7 @@ class __HomeSectionState extends State<_HomeSection>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
