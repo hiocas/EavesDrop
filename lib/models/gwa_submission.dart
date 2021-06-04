@@ -1,9 +1,9 @@
-import 'dart:ui';
-
+import 'package:markdown/markdown.dart' as md;
 import 'package:draw/draw.dart';
 import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart' show parse;
 
 //TODO: Add support for tags in a submission's selftext.
 class GwaSubmission {
@@ -15,7 +15,7 @@ class GwaSubmission {
   Uri url;
   String fullname = '';
   List<String> tags = [];
-  List<String> urls = [];
+  List<String> urls = ['hey'];
   List<String> audioUrls = [];
   String firstImageOrGifUrl = '';
   Image img;
@@ -32,15 +32,16 @@ class GwaSubmission {
   int numComments;
 
   GwaSubmission(Submission submission) {
-    this.fullTitle = submission.title;
-    this.title = findSubmissionTitle(this.fullTitle);
+    this.fullTitle = submission.title ?? '';
+    this.title = findSubmissionTitle(this.fullTitle) ?? '';
     this.shortlink = submission.shortlink;
-    this.selftext = submission.selftext;
-    this.author = submission.author;
+    this.selftext = submission.selftext ?? '';
+    print(submission.selftext.length);
+    this.author = submission.author ?? '';
     this.url = submission.url;
-    this.fullname = submission.fullname;
-    this.tags = findSubmissionTags(submission);
-    this.urls = findSubmissionURLS(submission);
+    this.fullname = submission.fullname ?? '';
+    this.tags = findSubmissionTags();
+    this.urls = findSubmissionURLS(this.selftext);
     _populateAudioUrls(submission);
     var urlStr = this.url.toString();
     //Only add the url to urls if it has soundgasm in it -> when posting a link submission to reddit this is where the link is.
@@ -51,8 +52,8 @@ class GwaSubmission {
     this.img = _getImg();
     this.hasAudioUrl = checkHasAudioUrl();
     this.fromNow = getTimeSinceCreated(submission.createdUtc);
-    this.upvotes = submission.upvotes;
-    this.created = submission.createdUtc;
+    this.upvotes = submission.upvotes ?? 0;
+    this.created = submission.createdUtc ?? DateTime.now();
     this.gold = submission.gold ?? 0;
     this.silver = submission.silver ?? 0;
     this.platinum = submission.platinum ?? 0;
@@ -61,9 +62,9 @@ class GwaSubmission {
     this.numComments = submission.numComments ?? 0;
   }
 
-  List<String> findSubmissionTags(Submission submission) {
+  List<String> findSubmissionTags() {
     var exp = RegExp(r'(?<=\[)(.*?)(?=\])');
-    var matches = exp.allMatches(submission.title);
+    var matches = exp.allMatches(this.fullTitle);
     return List<String>.generate(
         matches.length,
         (int index) =>
@@ -72,22 +73,26 @@ class GwaSubmission {
 
   // Returns a list strings of all urls found in a submission's self text.
   // There's an issue with the reddit &amp; flag, it can appear mid url
-  List<String> findSubmissionURLS(Submission submission) {
-    List<String> urls = [];
-    var exp = RegExp(
-      r"""\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))""",
-      caseSensitive: false,
-    );
-    var matches = exp.allMatches(submission.selftext);
-    var matchesList = List<String>.generate(
-        matches.length, (int index) => matches.elementAt(index).group(0));
-    /*TODO(DoubleCheck): For now I'll replace all $amp; with an &. I don't know
-       if this could cause problems but it fixes some.*/
-    for (var i = 0; i < matchesList.length; i++) {
-      matchesList[i] = matchesList[i].replaceAll(r'&amp;', '&');
-      urls.add(matchesList[i]);
-    }
-    return urls;
+  /* FIXME: There is a possibility that this won't work 100% of the times,
+      I'm assuming here that every link in a reddit posts gets turned into
+      a Markdown hyper link (in the [text](link) format).
+      I would've used a regex, but a simple regex sometimes fails on me (gets
+      stuff that aren't in the link) and a more complex one gets accurate
+      results but can sometimes freeze the app completely as I guess it uses
+      too much resources. This current way assumes every link would be picked
+      up by markdown but it works (doesn't freeze the app and gets accurate
+      results).
+      I could dump this and search only for soundcloud/image/gif links, which
+      are the only links I use this for.
+   */
+  List<String> findSubmissionURLS(String text) {
+    final html = parse(md.markdownToHtml(text));
+    final List<String> hrefs = html
+        .getElementsByTagName('a')
+        .where((e) => e.attributes.containsKey('href'))
+        .map((e) => e.attributes['href'])
+        .toList();
+    return hrefs;
   }
 
   /// Returns a string of the first image or gif url found in a submission's self text.
@@ -172,6 +177,7 @@ class GwaSubmission {
   }
 
   String getTimeSinceCreated(DateTime created) {
+    if (created == null) return 'None';
     var diff = DateTime.now().difference(created);
     var years = (diff.inDays / 365).truncate();
     var months = (diff.inDays / 30).truncate();

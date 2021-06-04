@@ -43,10 +43,7 @@ class MarkdownViewer extends StatelessWidget {
         data: markdown,
         onTapLink: (text, url, title) {
           if (url.contains('reddit.com/r/gonewildaudio/comments/')) {
-            String fullname = url.substring(
-              url.indexOf('comments/') + 9,
-            );
-            fullname = fullname.substring(0, fullname.indexOf('/'));
+            String fullname = SubmissionRef.idFromUrl(url);
             pushSubmissionPageWithReturnData(context, fullname, false);
           } else {
             Navigator.push(
@@ -85,6 +82,10 @@ class MarkdownViewer extends StatelessWidget {
         builders: {
           "username": RedditUserMarkdownElementBuilder(
               onTap: (String username, String text) {
+            /* FIXME: Not sure if popping here does any harm. I'm doing this
+                so that clicking the user from the Details button on
+                SubmissionPage could also query the user. */
+            Navigator.pop(context);
             popSubmissionPageWithData(context,
                 query: 'author:$username',
                 sort: Sort.newest,
