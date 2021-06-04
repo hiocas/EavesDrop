@@ -4,3 +4,5 @@ export 'popup_text_button.dart';
 export 'submission_details.dart';
 export 'floating_play_button.dart';
 export 'popup_add_card_button.dart';
+export 'submission_page_app_bar.dart';
+export 'submission_page_buttons_and_tags.dart';
