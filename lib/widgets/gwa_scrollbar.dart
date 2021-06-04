@@ -11,6 +11,7 @@ class GwaScrollbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
+      interactive: true,
       thickness: 4.8,
       radius: Radius.circular(8.0),
       child: child,
