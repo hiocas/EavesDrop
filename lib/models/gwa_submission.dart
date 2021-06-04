@@ -36,7 +36,6 @@ class GwaSubmission {
     this.title = findSubmissionTitle(this.fullTitle) ?? '';
     this.shortlink = submission.shortlink;
     this.selftext = submission.selftext ?? '';
-    print(submission.selftext.length);
     this.author = submission.author ?? '';
     this.url = submission.url;
     this.fullname = submission.fullname ?? '';
