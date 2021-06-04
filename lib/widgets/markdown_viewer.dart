@@ -18,6 +18,9 @@ class MarkdownViewer extends StatelessWidget {
   final BoxDecoration horizontalRuleDecoration;
   final bool fromLibrary;
 
+  // This determines if the MarkdownViewer is in a popup card.
+  final bool inPopupCard;
+
   const MarkdownViewer({
     Key key,
     @required this.text,
@@ -27,6 +30,7 @@ class MarkdownViewer extends StatelessWidget {
     this.blockQuoteDecoration,
     this.horizontalRuleDecoration,
     @required this.fromLibrary,
+    @required this.inPopupCard,
   }) : super(key: key);
 
   @override
@@ -85,7 +89,9 @@ class MarkdownViewer extends StatelessWidget {
             /* FIXME: Not sure if popping here does any harm. I'm doing this
                 so that clicking the user from the Details button on
                 SubmissionPage could also query the user. */
-            Navigator.pop(context);
+            if (inPopupCard) {
+              Navigator.pop(context);
+            }
             popSubmissionPageWithData(context,
                 query: 'author:$username',
                 sort: Sort.newest,

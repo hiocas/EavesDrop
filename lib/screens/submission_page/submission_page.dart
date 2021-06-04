@@ -396,6 +396,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                           child: MarkdownViewer(
                             text: _submission.selftext,
                             fromLibrary: widget.fromLibrary,
+                            inPopupCard: false,
                             bodyTextFontSize: 14.0,
                           ),
                         ),
