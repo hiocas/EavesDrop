@@ -30,7 +30,7 @@ class GlobalState with ChangeNotifier {
 
   Future<void> initApp() async {
     Map<String, dynamic> _data =
-    await parseJsonFromAssets('lib/assets/reddit.json');
+        await parseJsonFromAssets('lib/assets/reddit.json');
 
     _reddit = await Reddit.createScriptInstance(
       clientId: _data["CLIENT_ID"],
@@ -136,7 +136,7 @@ class GlobalState with ChangeNotifier {
   /// to load).
   _loadContent(
       {@required Stream<UserContent> Function(int overrideLimit) stream,
-        @required limit}) {
+      @required limit}) {
     if (!this._isBusy) {
       // Means this is a new search.
       if (this._lastSeenSubmission.isEmpty) {
@@ -195,37 +195,43 @@ class GlobalState with ChangeNotifier {
 
     if (this._subscription != null) {
       this._subscription.onData((submission) {
-        GwaSubmissionPreview gwaSubmission = new GwaSubmissionPreview(submission);
+        GwaSubmissionPreview gwaSubmission =
+            new GwaSubmissionPreview(submission);
         _searchResults.add(gwaSubmission);
-        if (gwaSubmission.title.contains("black")) print(gwaSubmission.title);
       });
 
       this._subscription.onDone(() {
         this._isBusy = false;
         this._searchEmpty = this._searchResults.isEmpty;
-        _subscription.cancel();
+        this._subscription.cancel();
+        print(this._searchResults.length);
         notifyListeners();
       });
     }
   }
 
   Stream<UserContent> getTopStream(TimeFilter timeFilter, int limit) {
-    return _gwaSubreddit.top(
-      timeFilter: timeFilter,
-      limit: limit,
-    ).asBroadcastStream();
+    return _gwaSubreddit
+        .top(
+          timeFilter: timeFilter,
+          limit: limit,
+        )
+        .asBroadcastStream();
   }
 
   Stream<UserContent> getHotStream(int limit) {
-    return _gwaSubreddit.hot(
-      limit: limit,
-    ).asBroadcastStream();
+    return _gwaSubreddit
+        .hot(
+          limit: limit,
+        )
+        .asBroadcastStream();
   }
 
   Stream<UserContent> getNewestStream(int limit) {
-    return _gwaSubreddit.newest(
-      limit: limit,
-    ).asBroadcastStream();
+    return _gwaSubreddit
+        .newest(
+          limit: limit,
+        )
+        .asBroadcastStream();
   }
-
 }
