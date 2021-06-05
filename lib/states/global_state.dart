@@ -14,7 +14,7 @@ class GlobalState with ChangeNotifier {
   Stream<UserContent> _searchResultsStream;
   StreamSubscription<UserContent> _subscription;
   List<GwaSubmissionPreview> _searchResults = [];
-  String _lastSeenSubmission = 'None';
+  String _lastSeenSubmission = '';
   bool _isBusy = false;
   bool _searchEmpty = false;
 
