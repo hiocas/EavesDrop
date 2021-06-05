@@ -42,7 +42,7 @@ class SubmissionList extends StatefulWidget {
 class SubmissionListState extends State<SubmissionList> {
   ScrollController scrollController = ScrollController();
   GlobalState globalState;
-  Sort searchSort = Sort.relevance;
+  Sort searchSort = Sort.newest;
   TimeFilter searchTimeFilter = TimeFilter.all;
   String submittedSearchQuery = '';
   String currentSearchQuery = '';
@@ -53,6 +53,9 @@ class SubmissionListState extends State<SubmissionList> {
     scrollController.addListener(() {
       if (scrollController.offset ==
           scrollController.position.maxScrollExtent) {
+        Provider.of<GlobalState>(context, listen: false)
+            .updateLastSeenSubmission();
+        _updateSearch(false);
         /*FIXME: This is what's responsible for loading more submissions when
            the user reaches the end of the list but it's scuffed... */
         // Provider.of<GlobalState>(context, listen: false)
@@ -84,28 +87,40 @@ class SubmissionListState extends State<SubmissionList> {
     // }
   }
 
-  _updateSearch() {
+  _updateSearch(bool shouldRenew) {
     if (this.submittedSearchQuery.isNotEmpty) {
+      if (shouldRenew)
+        Provider.of<GlobalState>(context, listen: false)
+            .clearLastSeenSubmission();
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           this.submittedSearchQuery, this.searchSort, this.searchTimeFilter);
       setState(() {});
     } else {
       switch (this.searchSort) {
         case Sort.relevance:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           break;
         case Sort.hot:
+          if (shouldRenew)
+            Provider.of<GlobalState>(context, listen: false)
+                .clearLastSeenSubmission();
           Provider.of<GlobalState>(context, listen: false).loadHot();
           setState(() {});
           break;
         case Sort.newest:
+          if (shouldRenew)
+            Provider.of<GlobalState>(context, listen: false)
+                .clearLastSeenSubmission();
           Provider.of<GlobalState>(context, listen: false).loadNewest();
           setState(() {});
           break;
         case Sort.comments:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           break;
         case Sort.top:
+          if (shouldRenew)
+            Provider.of<GlobalState>(context, listen: false)
+                .clearLastSeenSubmission();
           Provider.of<GlobalState>(context, listen: false)
               .loadTop(this.searchTimeFilter);
           setState(() {});
@@ -121,25 +136,25 @@ class SubmissionListState extends State<SubmissionList> {
       child: Scaffold(
         appBar: SubmissionListAppBar(
           initialIsSearching:
-              widget.initialQuery != null && widget.initialQuery.isNotEmpty,
+          widget.initialQuery != null && widget.initialQuery.isNotEmpty,
           initialQuery: widget.initialQuery,
           initialSort: widget.initialSort,
           initialTimeFilter: widget.initialTimeFilter,
           onSelectedFilter: (TimeFilter result) {
             this.searchTimeFilter = result;
             if (this.submittedSearchQuery == this.currentSearchQuery) {
-              _updateSearch();
+              _updateSearch(true);
             }
           },
           onSelectedItem: (Sort result) {
             this.searchSort = result;
             //This way the search only gets updated after every submission.
             if (this.submittedSearchQuery == this.currentSearchQuery)
-              _updateSearch();
+              _updateSearch(true);
           },
           onSubmitted: (query) {
             this.submittedSearchQuery = query;
-            _updateSearch();
+            _updateSearch(true);
           },
           /*FIXME: There's probably a more efficient way to check if the user
               changed their query, maybe using onEditingComplete. Fix this. */
@@ -181,22 +196,40 @@ class SubmissionListState extends State<SubmissionList> {
                             padding: const EdgeInsets.all(8.0),
                             sliver: SliverGrid(
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 mainAxisSpacing: 5,
                                 crossAxisSpacing: 5,
                               ),
                               delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
+                                    (BuildContext context, int index) {
                                   return GwaListItem(
                                     submission:
-                                        globalState.searchResults[index],
+                                    globalState.searchResults[index],
                                   );
                                 },
                                 childCount: globalState.searchResults.length,
                               ),
                             ),
-                          )
+                          ),
+                          SliverToBoxAdapter(
+                              child: Builder(
+                                  builder: (context) {
+                                    if (globalState.isBusy) {
+                                      scrollController.animateTo(
+                                          scrollController.position.maxScrollExtent + 100,
+                                          duration: Duration(milliseconds: 200),
+                                          curve: Curves.easeOut);
+                                      return Container(
+                                        width: double.infinity,
+                                        height: 120,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      );
+                                    }
+                                    return Container();
+                                  }
+                              )),
                         ],
                       ),
                     ),
