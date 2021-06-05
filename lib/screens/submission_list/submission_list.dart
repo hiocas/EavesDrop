@@ -17,6 +17,9 @@ import 'local_widgets/submission_list_appbar.dart';
 
 /*TODO: I think there are too many separate calls for Provider.of... I dunno
     how this impacts performance but you should look into it. */
+
+/*TODO: Make the sorting be based on relevance after the user searched a query,
+    unless the user changes it. */
 class SubmissionList extends StatefulWidget {
   final String initialQuery;
   final TimeFilter initialTimeFilter;
@@ -98,7 +101,7 @@ class SubmissionListState extends State<SubmissionList> {
     } else {
       switch (this.searchSort) {
         case Sort.relevance:
-        // TODO: Handle this case.
+          // TODO: Handle this case.
           break;
         case Sort.hot:
           if (shouldRenew)
@@ -115,7 +118,7 @@ class SubmissionListState extends State<SubmissionList> {
           setState(() {});
           break;
         case Sort.comments:
-        // TODO: Handle this case.
+          // TODO: Handle this case.
           break;
         case Sort.top:
           if (shouldRenew)
@@ -136,7 +139,7 @@ class SubmissionListState extends State<SubmissionList> {
       child: Scaffold(
         appBar: SubmissionListAppBar(
           initialIsSearching:
-          widget.initialQuery != null && widget.initialQuery.isNotEmpty,
+              widget.initialQuery != null && widget.initialQuery.isNotEmpty,
           initialQuery: widget.initialQuery,
           initialSort: widget.initialSort,
           initialTimeFilter: widget.initialTimeFilter,
@@ -196,40 +199,40 @@ class SubmissionListState extends State<SubmissionList> {
                             padding: const EdgeInsets.all(8.0),
                             sliver: SliverGrid(
                               gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 mainAxisSpacing: 5,
                                 crossAxisSpacing: 5,
                               ),
                               delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
+                                (BuildContext context, int index) {
                                   return GwaListItem(
                                     submission:
-                                    globalState.searchResults[index],
+                                        globalState.searchResults[index],
                                   );
                                 },
                                 childCount: globalState.searchResults.length,
                               ),
                             ),
                           ),
-                          SliverToBoxAdapter(
-                              child: Builder(
-                                  builder: (context) {
-                                    if (globalState.isBusy) {
-                                      scrollController.animateTo(
-                                          scrollController.position.maxScrollExtent + 100,
-                                          duration: Duration(milliseconds: 200),
-                                          curve: Curves.easeOut);
-                                      return Container(
-                                        width: double.infinity,
-                                        height: 120,
-                                        child: Center(
-                                            child: CircularProgressIndicator()),
-                                      );
-                                    }
-                                    return Container();
-                                  }
-                              )),
+                          SliverToBoxAdapter(child: Builder(builder: (context) {
+                            if (globalState.isBusy) {
+                              if (globalState.searchResults.length >= 50) {
+                                scrollController.animateTo(
+                                    scrollController.position.maxScrollExtent +
+                                        100,
+                                    duration: Duration(milliseconds: 200),
+                                    curve: Curves.easeOut);
+                              }
+                              return Container(
+                                width: double.infinity,
+                                height: 120,
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                              );
+                            }
+                            return Container();
+                          })),
                         ],
                       ),
                     ),
