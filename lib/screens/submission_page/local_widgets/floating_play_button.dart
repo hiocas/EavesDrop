@@ -1,3 +1,4 @@
+import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -73,11 +74,12 @@ class _FloatingPlayButtonState extends State<FloatingPlayButton>
         }
 
         // Switch directions.
-        if (widget.scrollController.offset >= widget.scrollController.position.maxScrollExtent) {
+        if (widget.scrollController.offset >=
+            widget.scrollController.position.maxScrollExtent) {
           hideDirection = ScrollDirection.forward;
           showDirection = ScrollDirection.reverse;
-        }
-        else if (widget.scrollController.offset <= widget.scrollController.position.minScrollExtent) {
+        } else if (widget.scrollController.offset <=
+            widget.scrollController.position.minScrollExtent) {
           showDirection = ScrollDirection.forward;
           hideDirection = ScrollDirection.reverse;
         }
@@ -169,12 +171,41 @@ class _PopupCard extends StatelessWidget {
                 if (submission.audioUrls.length == 0) {
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Couldn't find a Soundgasm.net url to launch.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.1),
-                        fontSize: 22.0,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "Couldn't find a Soundgasm.net url to launch.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.1),
+                              fontSize: 22.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6.0),
+                            child: ElevatedButton.icon(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).primaryColor)),
+                              onPressed: () {
+                                //First pop this page.
+                                Navigator.pop(context);
+                                //Then pop submission page and send data.
+                                popSubmissionPageWithData(
+                                  context,
+                                  query: submission.title,
+                                  sort: Sort.relevance,
+                                  timeFilter: TimeFilter.all,
+                                );
+                              },
+                              icon: Icon(Icons.search),
+                              label: Text('Search Fills'),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   );
