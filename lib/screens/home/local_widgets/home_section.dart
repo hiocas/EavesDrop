@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'horizontal_list_wheel_scrollviews.dart';
 
+// FIXME: Sometimes after the sections load they don't show up.
+/* FIXME: The tapping mechanism of the home sections lists can be pretty bad
+    sometimes. */
 class HomeSection extends StatefulWidget {
   const HomeSection({
     Key key,
