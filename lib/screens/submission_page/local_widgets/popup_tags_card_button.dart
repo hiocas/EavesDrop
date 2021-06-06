@@ -75,7 +75,7 @@ class PopupStatefulTagsCard extends StatefulWidget {
 class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
   /*TODO: Find a way to make this one function that would work also on
      submission_page instead of two different ones... */
-  List<Widget> getChipList() {
+  List<Widget> _getChipList() {
     List<Widget> chips = [];
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       var avatarCreator =
@@ -87,7 +87,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
           chips.add(
             FilterChip(
               selected: widget.selectedTags[i],
-              label: Text(widget.gwaSubmission.tags[i]),
+              label: Text(getTagName(widget.gwaSubmission.tags[i])),
               backgroundColor: Theme.of(context).primaryColor,
               labelPadding: const EdgeInsets.only(left: 3.0, right: 6.0),
               selectedColor: Theme.of(context).accentColor,
@@ -112,7 +112,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
                 be seen fully. */
             FilterChip(
               selected: widget.selectedTags[i],
-              label: Text(widget.gwaSubmission.tags[i]),
+              label: Text(getTagName(widget.gwaSubmission.tags[i])),
               backgroundColor: Theme.of(context).primaryColor,
               labelPadding: const EdgeInsets.only(left: 3.0, right: 6.0),
               padding: const EdgeInsets.only(left: 4.0),
@@ -148,12 +148,12 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     String query = '';
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.selectedTags[i]) {
-        if (widget.gwaSubmission.tags[i].startsWith('{author:}')) {
-          query += widget.gwaSubmission.tags[i].toString().substring(1, 8) +
-              widget.gwaSubmission.tags[i].toString().substring(9) +
-              ' ';
-        } else {
+        String _specialQuery =
+        _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
+        if (_specialQuery.isEmpty) {
           query += 'title:${widget.gwaSubmission.tags[i]} ';
+        } else {
+          query += _specialQuery;
         }
       }
     }
@@ -164,14 +164,22 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     String query = '';
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.selectedTags[i]) {
-        if (widget.gwaSubmission.tags[i].startsWith('{author:}')) {
-          query += widget.gwaSubmission.tags[i].toString().substring(1, 8) +
-              widget.gwaSubmission.tags[i].toString().substring(9) +
-              ' ';
-        } else {
+        String _specialQuery =
+            _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
+        if (_specialQuery.isEmpty) {
           query += '${widget.gwaSubmission.tags[i]} ';
+        } else {
+          query += _specialQuery;
         }
       }
+    }
+    return query;
+  }
+
+  String _findSpecialTagNameQuery(String tag) {
+    String query = '';
+    if (tag.startsWith('{author:}')) {
+      query += tag.substring(1, 8) + tag.substring(9) + ' ';
     }
     return query;
   }
@@ -191,7 +199,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
             sliver: SliverToBoxAdapter(
               child: Wrap(
                 spacing: 5.0,
-                children: getChipList(),
+                children: _getChipList(),
               ),
             ),
           ),

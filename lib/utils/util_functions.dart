@@ -84,6 +84,13 @@ class UtilFunctions {
   }
 }
 
+String getTagName(String tag) {
+  if (tag.startsWith('{author:}'))
+    return tag.substring(9);
+  else
+    return tag;
+}
+
 Future<Map<String, dynamic>> parseJsonFromAssets(String assetsPath) {
   return rootBundle.loadString(assetsPath).then((value) => jsonDecode(value));
 }

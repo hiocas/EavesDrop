@@ -3,7 +3,7 @@ import 'package:gwa_app/models/gwa_submission.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_add_card_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_tags_card_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/submission_details.dart';
-import 'package:gwa_app/utils/util_functions.dart' show UtilFunctions;
+import 'package:gwa_app/utils/util_functions.dart' show UtilFunctions, getTagName;
 import 'package:gwa_app/widgets/particles_icon_text_button.dart';
 import 'package:gwa_app/widgets/popup_card_button.dart';
 import 'package:url_launcher/url_launcher.dart' show launch;
@@ -130,7 +130,7 @@ class _SubmissionPageButtonsAndTagsState
                             padding: const EdgeInsets.only(left: 4.0),
                             visualDensity: VisualDensity.compact,
                             selected: _selectedTags[index],
-                            label: Text(tagList[index]),
+                            label: Text(getTagName(tagList[index])),
                             backgroundColor: Theme.of(context).primaryColor,
                             selectedColor: Theme.of(context).accentColor,
                             side: BorderSide(width: 0.0),
@@ -153,7 +153,7 @@ class _SubmissionPageButtonsAndTagsState
                                 const EdgeInsets.only(left: 3.0, right: 6.0),
                             visualDensity: VisualDensity.compact,
                             selected: _selectedTags[index],
-                            label: Text(tagList[index]),
+                            label: Text(getTagName(tagList[index])),
                             backgroundColor: Theme.of(context).primaryColor,
                             selectedColor: Theme.of(context).accentColor,
                             side: BorderSide(width: 0.0),
