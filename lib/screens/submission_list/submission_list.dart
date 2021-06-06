@@ -45,13 +45,14 @@ class SubmissionList extends StatefulWidget {
 class SubmissionListState extends State<SubmissionList> {
   ScrollController scrollController = ScrollController();
   GlobalState globalState;
-  Sort searchSort = Sort.newest;
-  TimeFilter searchTimeFilter = TimeFilter.all;
+  Sort searchSort;
+  TimeFilter searchTimeFilter;
   String submittedSearchQuery = '';
   String currentSearchQuery = '';
 
   @override
   void initState() {
+    print('initial sort ${widget.initialSort}');
     super.initState();
     scrollController.addListener(() {
       if (scrollController.offset ==
@@ -71,6 +72,8 @@ class SubmissionListState extends State<SubmissionList> {
     } else {
       submittedSearchQuery = widget.initialQuery;
       currentSearchQuery = widget.initialQuery;
+      searchSort = widget.initialSort;
+      searchTimeFilter = widget.initialTimeFilter;
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           widget.initialQuery, widget.initialSort, widget.initialTimeFilter);
     }
@@ -93,27 +96,37 @@ class SubmissionListState extends State<SubmissionList> {
   _updateSearch(bool shouldRenew) {
     if (this.submittedSearchQuery.isNotEmpty) {
       if (shouldRenew)
-        Provider.of<GlobalState>(context, listen: false)
-            .clearLastSeenSubmission();
+        Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
       Provider.of<GlobalState>(context, listen: false).loadSearch(
           this.submittedSearchQuery, this.searchSort, this.searchTimeFilter);
       setState(() {});
     } else {
       switch (this.searchSort) {
         case Sort.relevance:
-          // TODO: Handle this case.
+          if (submittedSearchQuery.isNotEmpty) {
+            if (shouldRenew)
+              Provider.of<GlobalState>(context, listen: false)
+                  .prepareNewSearch();
+            Provider.of<GlobalState>(context, listen: false).loadSearch(
+                this.submittedSearchQuery,
+                this.searchSort,
+                this.searchTimeFilter);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text('To sort based on relevancy you must search something.'),
+            ));
+          }
           break;
         case Sort.hot:
           if (shouldRenew)
-            Provider.of<GlobalState>(context, listen: false)
-                .clearLastSeenSubmission();
+            Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
           Provider.of<GlobalState>(context, listen: false).loadHot();
           setState(() {});
           break;
         case Sort.newest:
           if (shouldRenew)
-            Provider.of<GlobalState>(context, listen: false)
-                .clearLastSeenSubmission();
+            Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
           Provider.of<GlobalState>(context, listen: false).loadNewest();
           setState(() {});
           break;
@@ -122,8 +135,7 @@ class SubmissionListState extends State<SubmissionList> {
           break;
         case Sort.top:
           if (shouldRenew)
-            Provider.of<GlobalState>(context, listen: false)
-                .clearLastSeenSubmission();
+            Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
           Provider.of<GlobalState>(context, listen: false)
               .loadTop(this.searchTimeFilter);
           setState(() {});
@@ -216,8 +228,16 @@ class SubmissionListState extends State<SubmissionList> {
                             ),
                           ),
                           SliverToBoxAdapter(child: Builder(builder: (context) {
+                            /* If we're loading new content (this will always
+                            be new submissions that are added to an existing
+                            search since we already determined the stream has
+                            data) show a CircularProgressIndicator and animate
+                            to it if the user can't see it (submissions are
+                            taking up the entire screen, this also makes sure
+                            we won't load automatically since the user has to
+                            scroll for that to happen.)*/
                             if (globalState.isBusy) {
-                              if (globalState.searchResults.length >= 50) {
+                              if (globalState.searchResults.length >= 18) {
                                 scrollController.animateTo(
                                     scrollController.position.maxScrollExtent +
                                         100,
@@ -231,6 +251,80 @@ class SubmissionListState extends State<SubmissionList> {
                                     Center(child: CircularProgressIndicator()),
                               );
                             }
+                            /* If we're not busy (loading new data) and there's
+                            no more search data in our stream, show a message
+                            that indicates to the user there's nothing more to
+                            load. */
+                            if (globalState.outOfSearchData) {
+                              /* If there are exactly 250 results and we can't
+                              load more it's probably because of the reddit api
+                              limitations. We should inform the user that. */
+                              if (globalState.searchResults.length == 249 ||
+                                  globalState.searchResults.length == 250) {
+                                return Container(
+                                    width: double.infinity,
+                                    height: 50,
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () => showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .backgroundColor,
+                                                  title: const Text(
+                                                      "If you got less results than you know you should get, this probably isn't a bug."
+                                                      "\n\nThe official reddit api (the thingy I get data from) lets me receive up to 250 posts on a subreddit search."
+                                                      "\n\nIf you just get the newest/hottest or top posts the limit is different, but for searching it's 250."
+                                                      "\n\nIn the future I'm planning on implementing a different api that's supposed to give me more results,"
+                                                      " but for now this is what I implemented, sorry!"
+                                                      "\n\nIf you're looking for a specific post, try to search for more of it's title."
+                                                      "\n\nThank you for reading this, have a great day!"
+                                                      "\n\ntldr: reddit bad limits results uwu.",
+                                                      style: TextStyle(
+                                                          fontSize: 14.0,
+                                                          color: Colors.white)),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        child: Text('Got it'))
+                                                  ],
+                                                )),
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'There are no more posts to load.',
+                                                style: TextStyle(
+                                                    color: Colors.grey[700]),
+                                              ),
+                                              Text(
+                                                  "Doesn't make sense? click me!",
+                                                  style: TextStyle(
+                                                      fontSize: 12.0,
+                                                      color: Colors.grey[400]))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ));
+                              }
+                              return Container(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: Center(
+                                    child: Text(
+                                      'There are no more posts to load.',
+                                      style: TextStyle(color: Colors.grey[700]),
+                                    ),
+                                  ));
+                            }
+                            /* If we're not busy and there are more stuff to
+                            load, show "nothing" (a Container with no child). */
                             return Container();
                           })),
                         ],

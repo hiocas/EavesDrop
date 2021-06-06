@@ -154,6 +154,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
         ],
         onTap: (index) {
           setState(() {
+            Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
             _currentPageIndex = index;
           });
         },
@@ -178,7 +179,8 @@ class ExtractArgumentsSubmissionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context).settings.arguments as SubmissionListArguments;
-
+    // Prepare a new search.
+    Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
     return HomeScaffold(
       initialIndex: 0,
       initialSearchQuery: args.initialSearchQuery,

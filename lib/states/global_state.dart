@@ -6,8 +6,16 @@ import 'package:gwa_app/models/gwa_submission_preview.dart';
 
 /*TODO: Make the load functions more clear or maybe change them. I'm not sure
     if I did lazy loading correctly and I don't know if the current way
-    does any kind of unintentional harm.
- */
+    does any kind of unintentional harm. */
+
+/* TODO: Think of a way that prepareForNewSearch() could be called automatically
+    from here so we won't depend on other classes to call it and if they don't
+    the user will just be stuck in a loading loop. */
+
+/* TODO: Use PUSHSHIFT in the future. The current reddit api allows only 250
+    results from a subreddit search. */
+
+// FIXME: When searching 'title:F4M' we get 249 results instead of 250.
 class GlobalState with ChangeNotifier {
   Reddit _reddit;
   SubredditRef _gwaSubreddit;
@@ -17,6 +25,10 @@ class GlobalState with ChangeNotifier {
   String _lastSeenSubmission = '';
   bool _isBusy = false;
   bool _searchEmpty = false;
+  /// Is there any more content to load in [searchResultsStream]?
+  /// This gets set when the content stream is done streaming and gets reset on
+  /// a [prepareNewSearch] call.
+  bool _outOfSearchData = false;
 
   SubredditRef get gwaSubreddit => _gwaSubreddit;
 
@@ -27,6 +39,11 @@ class GlobalState with ChangeNotifier {
   bool get isBusy => _isBusy;
 
   bool get searchEmpty => _searchEmpty;
+
+  /// Is there any more content to load in [searchResultsStream]?
+  /// This gets set when the content stream is done streaming and gets reset on
+  /// a [prepareNewSearch] call.
+  bool get outOfSearchData => _outOfSearchData;
 
   Future<void> initApp() async {
     Map<String, dynamic> _data =
@@ -50,7 +67,7 @@ class GlobalState with ChangeNotifier {
   /// This lazy loads by default, meaning if you call any [_loadContent]
   /// based function after it it won't clear anything, instead it'll load more
   /// submissions to [_searchResults] together with the current ones.
-  /// If you want to make a brand new load, call [clearLastSeenSubmission]
+  /// If you want to make a brand new load, call [prepareNewSearch]
   /// before this function.
   loadSearch(String query, Sort sort, TimeFilter timeFilter, [int limit = 99]) {
     _loadContent(
@@ -74,7 +91,7 @@ class GlobalState with ChangeNotifier {
   /// This lazy loads by default, meaning if you call any [_loadContent]
   /// based function after it it won't clear anything, instead it'll load more
   /// submissions to [_searchResults] together with the current ones.
-  /// If you want to make a brand new load, call [clearLastSeenSubmission]
+  /// If you want to make a brand new load, call [prepareNewSearch]
   /// before this function.
   loadTop(TimeFilter timeFilter, [int limit = 99]) {
     _loadContent(
@@ -94,7 +111,7 @@ class GlobalState with ChangeNotifier {
   /// This lazy loads by default, meaning if you call any [_loadContent]
   /// based function after it it won't clear anything, instead it'll load more
   /// submissions to [_searchResults] together with the current ones.
-  /// If you want to make a brand new load, call [clearLastSeenSubmission]
+  /// If you want to make a brand new load, call [prepareNewSearch]
   /// before this function.
   loadHot([int limit = 99]) {
     _loadContent(
@@ -113,7 +130,7 @@ class GlobalState with ChangeNotifier {
   /// This lazy loads by default, meaning if you call any [_loadContent]
   /// based function after it it won't clear anything, instead it'll load more
   /// submissions to [_searchResults] together with the current ones.
-  /// If you want to make a brand new load, call [clearLastSeenSubmission]
+  /// If you want to make a brand new load, call [prepareNewSearch]
   /// before this function.
   loadNewest([int limit = 99]) {
     _loadContent(
@@ -134,11 +151,13 @@ class GlobalState with ChangeNotifier {
   /// submissions loaded (which is the reddit cap) but not [limit] left
   /// (for instance, if [limit] is 99 but there are only 3 submissions left
   /// to load).
-  // TODO: Add a check to see if there's no more contant to be loaded.
+  // TODO: Add a check to see if there's no more content to be loaded.
   _loadContent(
       {@required Stream<UserContent> Function(int overrideLimit) stream,
       @required limit}) {
-    if (!this._isBusy) {
+    /* Don't load content if we're already loading content or if there's no
+    more content to load (based on current load)*/
+    if (!this._isBusy && !this._outOfSearchData) {
       // Means this is a new search.
       if (this._lastSeenSubmission.isEmpty) {
         _searchResults.clear();
@@ -146,7 +165,7 @@ class GlobalState with ChangeNotifier {
         _searchResultsStream = stream.call(limit);
         _isBusy = true;
         _subscription = _searchResultsStream.listen((value) {});
-        _handleSubscription();
+        _handleSubscription(limit);
 
         if (_searchResults.isNotEmpty) notifyListeners();
       }
@@ -164,7 +183,7 @@ class GlobalState with ChangeNotifier {
 
           _isBusy = true;
           _subscription = _searchResultsStream.listen((value) {});
-          _handleSubscription();
+          _handleSubscription(contentLimit);
 
           notifyListeners();
         }
@@ -189,24 +208,33 @@ class GlobalState with ChangeNotifier {
   /// This has to be called if a new stream is to be loaded, otherwise the new
   /// submissions will just get added to [_searchResults] with the current
   /// results.
-  clearLastSeenSubmission() {
+  prepareNewSearch() {
     this._lastSeenSubmission = '';
+    this._outOfSearchData = false;
   }
 
-  _handleSubscription() {
+  _handleSubscription(int requestsNum) {
     this._searchEmpty = false;
 
     if (this._subscription != null) {
+      int _requestsReceived = 0;
+
       this._subscription.onData((submission) {
         GwaSubmissionPreview gwaSubmission =
             new GwaSubmissionPreview(submission);
         _searchResults.add(gwaSubmission);
+        _requestsReceived++;
       });
 
       this._subscription.onDone(() {
         this._isBusy = false;
         this._searchEmpty = this._searchResults.isEmpty;
         this._subscription.cancel();
+        print('received: $_requestsReceived');
+        if (_requestsReceived < requestsNum) {
+          this._outOfSearchData = true;
+        }
+        print('Out of search data: ${this.outOfSearchData}');
         print(this._searchResults.length);
         notifyListeners();
       });
