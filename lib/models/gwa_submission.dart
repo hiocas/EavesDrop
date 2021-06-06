@@ -64,9 +64,13 @@ class GwaSubmission {
   List<String> findSubmissionTags() {
     var exp = RegExp(r'(?<=\[)(.*?)(?=\])');
     var matches = exp.allMatches(this.fullTitle);
-    List<String> tags = ['{author:}${this.author}'];
-    for (RegExpMatch match in matches) {
-      tags.add(match.group(0).replaceAll('&amp;', '&'));
+    List<String> tags = [];
+    print(matches.length);
+    if (matches.length > 0) {
+      tags = ['{author:}${this.author}'];
+      for (RegExpMatch match in matches) {
+        tags.add(match.group(0).replaceAll('&amp;', '&'));
+      }
     }
     return tags;
   }

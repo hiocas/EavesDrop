@@ -149,7 +149,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.selectedTags[i]) {
         String _specialQuery =
-        _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
+            _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
         if (_specialQuery.isEmpty) {
           query += 'title:${widget.gwaSubmission.tags[i]} ';
         } else {
@@ -186,6 +186,28 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
 
   @override
   Widget build(BuildContext context) {
+    // If there are no tags stored in the GwaSubmission...
+    if (widget.gwaSubmission.tags.length == 0) {
+      return Material(
+        color: Theme.of(context).backgroundColor,
+        elevation: 2.0,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "Couldn't find any tags for this post.",
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.grey[700],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    // If there are tags stored in the GwaSubmission...
     return Material(
       color: Theme.of(context).backgroundColor,
       elevation: 2.0,
