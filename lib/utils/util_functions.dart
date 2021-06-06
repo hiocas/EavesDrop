@@ -13,6 +13,8 @@ class UtilFunctions {
   static List tagChipAvatar(String tag) {
     if (tag.contains(RegExp('mf4|fm4', caseSensitive: false)))
       return [Text('\u{1f46b}'), 1];
+    else if (tag.contains(RegExp('{author:}', caseSensitive: false)))
+      return [Text('\u{1f4e3}'), 1];
     else if (tag.contains(RegExp('f4', caseSensitive: false)))
       return [Text('\u{1f469}'), 1];
     else if (tag.contains(RegExp('m4', caseSensitive: false)))

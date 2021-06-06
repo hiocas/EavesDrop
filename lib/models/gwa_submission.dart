@@ -64,10 +64,11 @@ class GwaSubmission {
   List<String> findSubmissionTags() {
     var exp = RegExp(r'(?<=\[)(.*?)(?=\])');
     var matches = exp.allMatches(this.fullTitle);
-    return List<String>.generate(
-        matches.length,
-        (int index) =>
-            matches.elementAt(index).group(0).replaceAll('&amp;', '&'));
+    List<String> tags = ['{author:}${this.author}'];
+    for (RegExpMatch match in matches) {
+      tags.add(match.group(0).replaceAll('&amp;', '&'));
+    }
+    return tags;
   }
 
   // Returns a list strings of all urls found in a submission's self text.

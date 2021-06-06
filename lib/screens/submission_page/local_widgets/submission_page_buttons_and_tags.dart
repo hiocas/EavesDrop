@@ -175,7 +175,7 @@ class _SubmissionPageButtonsAndTagsState
                   /* This makes it so we won't show the tag list if the
                         post has no tags. */
                 )
-              : null),
+              : Container()),
         ],
       ),
     );

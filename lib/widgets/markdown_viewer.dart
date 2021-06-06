@@ -46,6 +46,7 @@ class MarkdownViewer extends StatelessWidget {
       child: MarkdownBody(
         data: markdown,
         onTapLink: (text, url, title) {
+          print(url);
           if (url.contains('reddit.com/r/gonewildaudio/comments/')) {
             String fullname = SubmissionRef.idFromUrl(url);
             pushSubmissionPageWithReturnData(context, fullname, false);

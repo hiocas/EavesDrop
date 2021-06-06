@@ -148,7 +148,13 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     String query = '';
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.selectedTags[i]) {
-        query += 'title:${widget.gwaSubmission.tags[i]} ';
+        if (widget.gwaSubmission.tags[i].startsWith('{author:}')) {
+          query += widget.gwaSubmission.tags[i].toString().substring(1, 8) +
+              widget.gwaSubmission.tags[i].toString().substring(9) +
+              ' ';
+        } else {
+          query += 'title:${widget.gwaSubmission.tags[i]} ';
+        }
       }
     }
     return query;
@@ -158,7 +164,13 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     String query = '';
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.selectedTags[i]) {
-        query += '${widget.gwaSubmission.tags[i]} ';
+        if (widget.gwaSubmission.tags[i].startsWith('{author:}')) {
+          query += widget.gwaSubmission.tags[i].toString().substring(1, 8) +
+              widget.gwaSubmission.tags[i].toString().substring(9) +
+              ' ';
+        } else {
+          query += '${widget.gwaSubmission.tags[i]} ';
+        }
       }
     }
     return query;
