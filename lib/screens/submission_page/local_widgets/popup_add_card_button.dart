@@ -265,24 +265,32 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 55.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 55.0, vertical: 8.0),
               sliver: SliverToBoxAdapter(
+                /* FIXME: This makes sure the button won't have "infinite"
+                    width, but it seems really hacky. */
                 child: SizedBox(
-                  height: 40,
-                  child: ElevatedButton.icon(
-                    icon: Icon(_inLibrary ? Icons.close : Icons.add),
-                    label: Text(
-                      _inLibrary ? 'Remove from Library' : 'Add to Library',
+                  height: 50.0,
+                  child: FittedBox(
+                    /* TODO(Design): Make this button stay in it's place
+                        when scrolling the list. */
+                    child: ElevatedButton.icon(
+                      icon: Icon(_inLibrary ? Icons.close : Icons.add),
+                      label: Text(
+                        _inLibrary ? 'Remove from Library' : 'Add to Library',
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                          elevation: 8.0),
+                      onPressed: () {
+                        if (_inLibrary) {
+                          _removeFromLibrary();
+                        } else {
+                          _addToLibrary();
+                        }
+                      },
                     ),
-                    style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor, elevation: 8.0),
-                    onPressed: () {
-                      if (_inLibrary) {
-                        _removeFromLibrary();
-                      } else {
-                        _addToLibrary();
-                      }
-                    },
                   ),
                 ),
               ),

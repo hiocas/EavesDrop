@@ -28,38 +28,40 @@ class Home extends StatelessWidget {
             },
           ),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            HomeSection(
-              title: 'Top Posts of The Month',
-              waitDuration: Duration(milliseconds: 800),
-              contentStream: Provider.of<GlobalState>(context, listen: false)
-                  .getTopStream(TimeFilter.month, 21),
-              homeSectionPageContentStream:
-                  Provider.of<GlobalState>(context, listen: false)
-                      .getTopStream(TimeFilter.month, 99),
-            ),
-            HomeSection(
-              title: 'Top Posts of The Week',
-              waitDuration: Duration(milliseconds: 700),
-              contentStream: Provider.of<GlobalState>(context, listen: false)
-                  .getTopStream(TimeFilter.week, 21),
-              homeSectionPageContentStream:
-                  Provider.of<GlobalState>(context, listen: false)
-                      .getTopStream(TimeFilter.week, 99),
-            ),
-            HomeSection(
-              title: 'Hot Posts',
-              waitDuration: Duration(milliseconds: 600),
-              contentStream: Provider.of<GlobalState>(context, listen: false)
-                  .getHotStream(21),
-              homeSectionPageShufflePages: true,
-              homeSectionPageContentStream:
-                  Provider.of<GlobalState>(context, listen: false)
-                      .getHotStream(99),
-            )
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              HomeSection(
+                title: 'Top Posts of The Month',
+                waitDuration: Duration(milliseconds: 800),
+                contentStream: Provider.of<GlobalState>(context, listen: false)
+                    .getTopStream(TimeFilter.month, 21),
+                homeSectionPageContentStream:
+                    Provider.of<GlobalState>(context, listen: false)
+                        .getTopStream(TimeFilter.month, 99),
+              ),
+              HomeSection(
+                title: 'Top Posts of The Week',
+                waitDuration: Duration(milliseconds: 700),
+                contentStream: Provider.of<GlobalState>(context, listen: false)
+                    .getTopStream(TimeFilter.week, 21),
+                homeSectionPageContentStream:
+                    Provider.of<GlobalState>(context, listen: false)
+                        .getTopStream(TimeFilter.week, 99),
+              ),
+              HomeSection(
+                title: 'Hot Posts',
+                waitDuration: Duration(milliseconds: 600),
+                contentStream: Provider.of<GlobalState>(context, listen: false)
+                    .getHotStream(21),
+                homeSectionPageShufflePages: true,
+                homeSectionPageContentStream:
+                    Provider.of<GlobalState>(context, listen: false)
+                        .getHotStream(99),
+              )
+            ],
+          ),
         ),
       ),
     );
