@@ -20,6 +20,7 @@ class PopupImageGradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Feedback.forTap(context);
         Navigator.of(context).push(HeroDialogRoute(builder: (context) {
           return _PopupImageGradientFullPage(
             heroTag: this.heroTag,

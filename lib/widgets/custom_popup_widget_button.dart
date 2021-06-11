@@ -39,6 +39,7 @@ class CustomPopupWidgetButton extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
+            Feedback.forTap(context);
             Navigator.of(context).push(HeroDialogRoute(builder: (context) {
               return _PopupWidget(
                 widget: this.widget,

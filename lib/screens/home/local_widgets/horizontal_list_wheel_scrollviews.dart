@@ -48,6 +48,7 @@ class __HorizontalClickableListWheelScrollViewState
           itemHeight: this.widget.itemSize ?? 150,
           itemCount: widget.itemList.length,
           onItemTapCallback: (index) {
+            Feedback.forTap(context);
             Timer(Duration(milliseconds: 600), () {
               pushSubmissionPageWithReturnData(
                   context, widget.itemList.elementAt(index).fullname, false);

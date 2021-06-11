@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
+import 'package:uuid/uuid.dart';
 
 /*TODO: Make the load functions more clear or maybe change them. I'm not sure
     if I did lazy loading correctly and I don't know if the current way
@@ -25,6 +26,7 @@ class GlobalState with ChangeNotifier {
   String _lastSeenSubmission = '';
   bool _isBusy = false;
   bool _searchEmpty = false;
+
   /// Is there any more content to load in [searchResultsStream]?
   /// This gets set when the content stream is done streaming and gets reset on
   /// a [prepareNewSearch] call.
@@ -57,6 +59,16 @@ class GlobalState with ChangeNotifier {
       password: _data["password"],
     );
 
+    /* TODO: This is how we can log the user in without a reddit user. The
+        problem is that if this is done we can't get a submission's thumbnail
+        nsfw. Figure out some kind of a solution. */
+    // var uuid = Uuid();
+    //
+    // _reddit = await Reddit.createUntrustedReadOnlyInstance(
+    //     clientId: 'KzSdiSDWgu-XhQ',
+    //     deviceId: uuid.v4(),
+    //     userAgent: 'MyAPI/0.0.1',);
+
     _gwaSubreddit = _reddit.subreddit('gonewildaudio');
 
     notifyListeners();
@@ -77,9 +89,13 @@ class GlobalState with ChangeNotifier {
           query,
           timeFilter: timeFilter ?? TimeFilter.all,
           sort: sort,
+          /* TODO: Find a way to implement the raw_json=1 parameter so we won't
+              have to handle &amp etc... in MarkdownViewer. */
           params: {
             'after': _lastSeenSubmission,
-            'limit': overrideLimit.toString()
+            'limit': overrideLimit.toString(),
+            'count':
+                _searchResults.isEmpty ? '0' : _searchResults.length.toString(),
           },
         ).asBroadcastStream();
       },

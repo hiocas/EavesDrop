@@ -66,6 +66,7 @@ class _SubmissionPageButtonsAndTagsState
                 ),
                 ParticlesIconTextButton(
                   icon: Icons.favorite_border,
+                  iconPressed: Icons.favorite,
                   label: 'Open',
                   subtext: 'Upvote this and show your support!',
                   color: Theme.of(context).primaryColor,

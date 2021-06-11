@@ -7,6 +7,7 @@ class ParticlesIconTextButton extends StatefulWidget {
   final String label;
   final String subtext;
   final IconData icon;
+  final IconData iconPressed;
   final Color color;
   final Color subtextColor;
   final Color backgroundColor;
@@ -22,6 +23,7 @@ class ParticlesIconTextButton extends StatefulWidget {
     @required this.label,
     this.subtext,
     @required this.icon,
+    this.iconPressed,
     this.color,
     this.subtextColor,
     this.backgroundColor,
@@ -39,9 +41,11 @@ class ParticlesIconTextButton extends StatefulWidget {
 class _ParticlesIconTextButtonState extends State<ParticlesIconTextButton> {
   ConfettiController _confettiController;
   Timer _timer;
+  IconData _icon;
 
   @override
   void initState() {
+    _icon = widget.icon;
     _confettiController = ConfettiController(
         duration: widget.confettiDuration.inMilliseconds > 1
             ? widget.confettiDuration
@@ -64,7 +68,13 @@ class _ParticlesIconTextButtonState extends State<ParticlesIconTextButton> {
       children: [
         GestureDetector(
           onTap: () {
+            Feedback.forTap(context);
             _confettiController.play();
+            /* For some reason for the confetti to not get stuck I need to
+            update the UI. */
+            setState(() {
+              _icon = widget.iconPressed ?? widget.icon;
+            });
             _timer = new Timer(
                 Duration(
                     milliseconds: (widget.millisecondsBeforeOnPressed ?? 2000) +
@@ -79,7 +89,7 @@ class _ParticlesIconTextButtonState extends State<ParticlesIconTextButton> {
             children: [
               IconTextButtonElement(
                 label: this.widget.label,
-                icon: this.widget.icon,
+                icon: _icon,
                 color: this.widget.color,
                 backgroundColor: this.widget.backgroundColor,
               ),
