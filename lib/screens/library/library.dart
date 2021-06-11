@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
+import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
 import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'package:gwa_app/widgets/gwa_list_item.dart';
 import 'package:gwa_app/widgets/gwa_scrollbar.dart';
@@ -18,6 +19,8 @@ class Library extends StatefulWidget {
 /* FIXME: Sometimes if I remove a submission from the library while in it,
     when I come back it still shows it there until I reopen this screen. */
 class _LibraryState extends State<Library> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   /// Returns a list of [Tab] widgets from [HiveBoxes.listTags].
   List<Widget> _makeListTabs() {
     List<Widget> tabs = [Tab(text: 'All')];
@@ -111,6 +114,7 @@ class _LibraryState extends State<Library> {
                   initialIndex: 0,
                   length: HiveBoxes.listTags.length + 1,
                   child: Scaffold(
+                    key: _scaffoldKey,
                     appBar: AppBar(
                       title: Text('Library'),
                       backgroundColor: Colors.transparent,
@@ -119,8 +123,7 @@ class _LibraryState extends State<Library> {
                       leading: IconButton(
                         icon: Icon(Icons.menu),
                         onPressed: () {
-                          print('The app bar leading button has been pressed');
-                          // Navigator.pop(context);
+                          _scaffoldKey.currentState.openDrawer();
                         },
                       ),
                       actions: [
@@ -157,6 +160,9 @@ class _LibraryState extends State<Library> {
                         indicatorSize: TabBarIndicatorSize.label,
                         isScrollable: HiveBoxes.listTags.length > 4,
                       ),
+                    ),
+                    drawer: GwaDrawer(
+                      fromLibrary: true,
                     ),
                     backgroundColor: Theme.of(context).backgroundColor,
                     body: TabBarView(

@@ -122,7 +122,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedSwitcher(
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 400),
         transitionBuilder: (child, animation) {
           //TODO(Design): Make a better transition.
           return FadeTransition(

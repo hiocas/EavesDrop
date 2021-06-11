@@ -1,3 +1,4 @@
+import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
 import 'package:draw/draw.dart';
@@ -11,9 +12,11 @@ import 'local_widgets/home_section.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           title: Text('Home'),
@@ -23,11 +26,11 @@ class Home extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
-              print('The app bar leading button has been pressed');
-              // Navigator.pop(context);
+              _scaffoldKey.currentState.openDrawer();
             },
           ),
         ),
+        drawer: GwaDrawer(fromLibrary: false,),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

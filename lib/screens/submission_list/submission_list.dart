@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
 import 'package:gwa_app/widgets/gwa_scrollbar.dart';
 import '../../widgets/gwa_list_item.dart';
 import 'package:gwa_app/states/global_state.dart';
@@ -181,6 +182,7 @@ class SubmissionListState extends State<SubmissionList> {
             this.currentSearchQuery = '';
           },
         ),
+        drawer: GwaDrawer(fromLibrary: false),
         backgroundColor: Theme.of(context).backgroundColor,
         body: Container(
           child: StreamBuilder(

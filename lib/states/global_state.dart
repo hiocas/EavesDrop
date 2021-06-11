@@ -207,10 +207,15 @@ class GlobalState with ChangeNotifier {
     }
   }
 
-  /// Returns a Future<Submission> belonging to the submission ID given.
-  /// ID needs to be without the ID prefix (i.e. t3_).
-  Future<Submission> populateSubmission({@required String id}) {
+  /// Returns a Future<Submission> belonging to the submission of the ID given.
+  /// [id] needs to be without the ID prefix (i.e. t3_).
+  Future<Submission> populateSubmission({String id}) {
     return _reddit.submission(id: id).populate();
+  }
+
+  /// Returns a Future<Submission> belonging to the submission of the link given.
+  Future<Submission> populateSubmissionUrl({String url}) {
+    return _reddit.submission(url: url).populate();
   }
 
   /// Automatically set lastSeenSubmission as the last loaded submission in the

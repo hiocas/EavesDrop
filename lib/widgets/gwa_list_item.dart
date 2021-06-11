@@ -59,15 +59,6 @@ class GwaListItem extends StatelessWidget {
           onTap: () {
             pushSubmissionPageWithReturnData(
                 context, submission.fullname, false);
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => SubmissionPage(
-            //       submissionFullname: submission.fullname,
-            //       fromLibrary: false,
-            //     ),
-            //   ),
-            // );
           },
         ),
       )
