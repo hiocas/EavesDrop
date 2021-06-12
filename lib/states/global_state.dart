@@ -116,7 +116,8 @@ class GlobalState with ChangeNotifier {
         return _gwaSubreddit.top(
           timeFilter: timeFilter ?? TimeFilter.all,
           limit: overrideLimit,
-          params: {'after': _lastSeenSubmission},
+          after: _lastSeenSubmission,
+          // params: {'after': _lastSeenSubmission},
         ).asBroadcastStream();
       },
     );
@@ -135,7 +136,8 @@ class GlobalState with ChangeNotifier {
       stream: (overrideLimit) {
         return _gwaSubreddit.hot(
           limit: overrideLimit,
-          params: {'after': _lastSeenSubmission},
+          after: _lastSeenSubmission,
+          // params: {'after': _lastSeenSubmission},
         ).asBroadcastStream();
       },
     );
@@ -152,12 +154,30 @@ class GlobalState with ChangeNotifier {
     _loadContent(
       limit: limit,
       stream: (overrideLimit) {
-        return _gwaSubreddit.newest(
-          limit: overrideLimit,
-          params: {'after': _lastSeenSubmission},
-        ).asBroadcastStream();
+        return _gwaSubreddit
+            .newest(
+              limit: overrideLimit,
+              // TODO: Check if this works instead of in params.
+              after: _lastSeenSubmission,
+              // params: {'after': _lastSeenSubmission},
+            )
+            .asBroadcastStream();
       },
     );
+  }
+
+  loadControversial(TimeFilter timeFilter, [int limit = 99]) {
+    _loadContent(
+        limit: limit,
+        stream: (overrideLimit) {
+          return _gwaSubreddit
+              .controversial(
+                timeFilter: timeFilter ?? TimeFilter.all,
+                limit: limit,
+                after: _lastSeenSubmission,
+              )
+              .asBroadcastStream();
+        });
   }
 
   /// The template function to handle loading content.

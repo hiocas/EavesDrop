@@ -16,8 +16,6 @@ class Library extends StatefulWidget {
   _LibraryState createState() => _LibraryState();
 }
 
-/* FIXME: Sometimes if I remove a submission from the library while in it,
-    when I come back it still shows it there until I reopen this screen. */
 class _LibraryState extends State<Library> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -98,7 +96,9 @@ class _LibraryState extends State<Library> {
   Widget build(BuildContext context) {
     /*TODO: Find a more efficient way to update the list (I don't think we need
        this since we won't be in this page when adding submissions to the
-       library unless I change it). */
+       library unless I change it -> not true, this can be done if a link
+       to another submission is in a submission's selftext and the user clicks
+       it). */
     return WillPopScope(
       onWillPop: () async => false,
       child: FutureBuilder(

@@ -87,8 +87,7 @@ class GwaSubmission {
       up by markdown but it works (doesn't freeze the app and gets accurate
       results).
       I could dump this and search only for soundcloud/image/gif links, which
-      are the only links I use this for.
-   */
+      are the only links I use this for. */
   List<String> findSubmissionURLS(String text) {
     final html = parse(md.markdownToHtml(text));
     final List<String> hrefs = html

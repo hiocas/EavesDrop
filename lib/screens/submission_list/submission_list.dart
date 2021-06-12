@@ -18,9 +18,6 @@ import 'local_widgets/submission_list_appbar.dart';
 
 /*TODO: I think there are too many separate calls for Provider.of... I dunno
     how this impacts performance but you should look into it. */
-
-/*TODO: Make the sorting be based on relevance after the user searched a query,
-    unless the user changes it. */
 class SubmissionList extends StatefulWidget {
   final String initialQuery;
   final TimeFilter initialTimeFilter;
@@ -36,12 +33,6 @@ class SubmissionList extends StatefulWidget {
   @override
   SubmissionListState createState() => SubmissionListState();
 }
-
-/*FIXME: I managed to make some sort of paging but it needs to be revised and
-    better shown to the user.
-    When the user scrolls to the bottom load() gets called to add more
-    submissions to the submission list.
-    There's no DoOnce mechanism there so it can get called more than once. */
 
 class SubmissionListState extends State<SubmissionList> {
   ScrollController scrollController = ScrollController();
@@ -132,7 +123,11 @@ class SubmissionListState extends State<SubmissionList> {
           setState(() {});
           break;
         case Sort.comments:
-          // TODO: Handle this case.
+          if (shouldRenew)
+            Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
+          Provider.of<GlobalState>(context, listen: false)
+              .loadControversial(this.searchTimeFilter);
+          setState(() {});
           break;
         case Sort.top:
           if (shouldRenew)
