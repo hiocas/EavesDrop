@@ -166,6 +166,13 @@ class GlobalState with ChangeNotifier {
     );
   }
 
+  /// Load the posts with the most comments from GoneWildAudio to
+  /// [_searchResults] based on a [timeFilter] and an optional [limit].
+  /// This lazy loads by default, meaning if you call any [_loadContent]
+  /// based function after it it won't clear anything, instead it'll load more
+  /// submissions to [_searchResults] together with the current ones.
+  /// If you want to make a brand new load, call [prepareNewSearch]
+  /// before this function.
   loadControversial(TimeFilter timeFilter, [int limit = 99]) {
     _loadContent(
         limit: limit,

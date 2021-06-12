@@ -60,6 +60,9 @@ class SubmissionListState extends State<SubmissionList> {
     });
 
     if (widget.initialQuery == null || widget.initialQuery.isEmpty) {
+      print('cool');
+      searchSort = Sort.newest;
+      Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
       Provider.of<GlobalState>(context, listen: false).loadNewest();
     } else {
       submittedSearchQuery = widget.initialQuery;
