@@ -117,7 +117,6 @@ class GlobalState with ChangeNotifier {
           timeFilter: timeFilter ?? TimeFilter.all,
           limit: overrideLimit,
           after: _lastSeenSubmission,
-          // params: {'after': _lastSeenSubmission},
         ).asBroadcastStream();
       },
     );
@@ -137,7 +136,6 @@ class GlobalState with ChangeNotifier {
         return _gwaSubreddit.hot(
           limit: overrideLimit,
           after: _lastSeenSubmission,
-          // params: {'after': _lastSeenSubmission},
         ).asBroadcastStream();
       },
     );
@@ -157,9 +155,7 @@ class GlobalState with ChangeNotifier {
         return _gwaSubreddit
             .newest(
               limit: overrideLimit,
-              // TODO: Check if this works instead of in params.
               after: _lastSeenSubmission,
-              // params: {'after': _lastSeenSubmission},
             )
             .asBroadcastStream();
       },
