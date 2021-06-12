@@ -16,6 +16,8 @@ class WebsiteViewer extends StatefulWidget {
 }
 
 class _WebsiteViewerState extends State<WebsiteViewer> {
+  WebViewController _webViewController;
+
   @override
   void initState() {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
@@ -35,6 +37,17 @@ class _WebsiteViewerState extends State<WebsiteViewer> {
         actions: [
           IconButton(
             icon: Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              if (_webViewController != null) {
+                _webViewController.reload();
+              }
+            },
+          ),
+          IconButton(
+            icon: Icon(
               Icons.launch,
               color: Colors.white,
             ),
@@ -47,6 +60,9 @@ class _WebsiteViewerState extends State<WebsiteViewer> {
       body: WebView(
         initialUrl: widget.url,
         javascriptMode: JavascriptMode.unrestricted,
+        onWebViewCreated: (controller) {
+          _webViewController = controller;
+        },
       ),
     );
   }

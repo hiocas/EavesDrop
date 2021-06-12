@@ -194,9 +194,9 @@ class SubmissionListState extends State<SubmissionList> {
               } else {
                 this.globalState = Provider.of<GlobalState>(context);
                 return RefreshIndicator(
-                  //TODO: Implement pull to refresh.
                   onRefresh: () {
-                    print('User requested a refresh');
+                    globalState.prepareNewSearch();
+                    _updateSearch(true);
                     return Future.value();
                   },
                   child: PrimaryScrollController(

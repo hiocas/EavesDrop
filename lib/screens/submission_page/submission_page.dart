@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/widgets/markdown_viewer.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
 import 'local_widgets/all_page_local.dart';
@@ -30,7 +31,6 @@ class SubmissionPage extends StatefulWidget {
 class SubmissionPageState extends State<SubmissionPage> {
   String _fullname;
   GwaSubmission _submission;
-
   ScrollController _scrollController;
 
   @override
@@ -68,9 +68,11 @@ class SubmissionPageState extends State<SubmissionPage> {
         } else {
           _submission = new GwaSubmission(snapshot.data);
           return RefreshIndicator(
-            //TODO: Implement pull to refresh.
+            /*TODO: Implement pull to refresh without pushing a new route (it
+                looks confusing and a bit jarring). */
             onRefresh: () {
-              print('User requested a refresh');
+              pushReplacementSubmissionPageWithReturnData(
+                  context, widget.submissionFullname, widget.fromLibrary);
               return Future.value();
             },
             child: Scaffold(

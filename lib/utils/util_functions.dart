@@ -120,6 +120,25 @@ void pushSubmissionPageWithReturnData(
   }
 }
 
+/// Use this function when you want to replace the current rout and push a
+/// SubmissionPage. It'll handle returning the query data from it
+/// (if it exists).
+void pushReplacementSubmissionPageWithReturnData(
+    BuildContext context, String submissionFullname, bool fromLibrary) async {
+  final result = await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SubmissionPage(
+              submissionFullname: submissionFullname,
+              fromLibrary: fromLibrary)));
+  if (result != null) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, ExtractArgumentsSubmissionList.routeName, (Route<dynamic> route) => false,
+        arguments: SubmissionListArguments(
+            result['query'], result['sort'], result['timeFilter']));
+  }
+}
+
 /// Use this function when you want to pop SubmissionList and return data with
 /// it.
 void popSubmissionPageWithData(BuildContext context,
