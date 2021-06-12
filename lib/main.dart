@@ -121,6 +121,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: AnimatedSwitcher(
         duration: Duration(milliseconds: 400),
         transitionBuilder: (child, animation) {
