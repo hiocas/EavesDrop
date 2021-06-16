@@ -1,9 +1,8 @@
 import 'package:draw/draw.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:gwa_app/services/reddit_client_service.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:uuid/uuid.dart';
 
 /*TODO: Make the load functions more clear or maybe change them. I'm not sure
     if I did lazy loading correctly and I don't know if the current way
@@ -18,8 +17,6 @@ import 'package:uuid/uuid.dart';
 
 // FIXME: When searching 'title:F4M' we get 249 results instead of 250.
 class GlobalState with ChangeNotifier {
-  Reddit _reddit;
-  SubredditRef _gwaSubreddit;
   Stream<UserContent> _searchResultsStream;
   StreamSubscription<UserContent> _subscription;
   List<GwaSubmissionPreview> _searchResults = [];
@@ -32,7 +29,9 @@ class GlobalState with ChangeNotifier {
   /// a [prepareNewSearch] call.
   bool _outOfSearchData = false;
 
-  SubredditRef get gwaSubreddit => _gwaSubreddit;
+  RedditClientService _redditClientService;
+
+  SubredditRef get gwaSubreddit => _redditClientService.gwaSubreddit;
 
   Stream<UserContent> get searchResultsStream => _searchResultsStream;
 
@@ -47,29 +46,12 @@ class GlobalState with ChangeNotifier {
   /// a [prepareNewSearch] call.
   bool get outOfSearchData => _outOfSearchData;
 
+  RedditClientService get redditClientService => _redditClientService;
+
+  /// Constructs [_redditClientService] and initialises it.
   Future<void> initApp() async {
-    Map<String, dynamic> _data =
-        await parseJsonFromAssets('lib/assets/reddit.json');
-
-    _reddit = await Reddit.createScriptInstance(
-      clientId: _data["CLIENT_ID"],
-      clientSecret: _data["SECRET"],
-      userAgent: 'MyAPI/0.0.1',
-      username: _data["username"],
-      password: _data["password"],
-    );
-
-    /* TODO: This is how we can log the user in without a reddit user. The
-        problem is that if this is done we can't get a submission's thumbnail
-        nsfw. Figure out some kind of a solution. */
-    // var uuid = Uuid();
-    //
-    // _reddit = await Reddit.createUntrustedReadOnlyInstance(
-    //     clientId: 'KzSdiSDWgu-XhQ',
-    //     deviceId: uuid.v4(),
-    //     userAgent: 'MyAPI/0.0.1',);
-
-    _gwaSubreddit = _reddit.subreddit('gonewildaudio');
+    _redditClientService = await RedditClientService.createInitialService();
+    await _redditClientService.init();
 
     notifyListeners();
   }
@@ -85,7 +67,7 @@ class GlobalState with ChangeNotifier {
     _loadContent(
       limit: limit,
       stream: (overrideLimit) {
-        return _gwaSubreddit.search(
+        return _redditClientService.gwaSubreddit.search(
           query,
           timeFilter: timeFilter ?? TimeFilter.all,
           sort: sort,
@@ -95,7 +77,7 @@ class GlobalState with ChangeNotifier {
             'after': _lastSeenSubmission,
             'limit': overrideLimit.toString(),
             'count':
-                _searchResults.isEmpty ? '0' : _searchResults.length.toString(),
+            _searchResults.isEmpty ? '0' : _searchResults.length.toString(),
           },
         ).asBroadcastStream();
       },
@@ -113,7 +95,7 @@ class GlobalState with ChangeNotifier {
     _loadContent(
       limit: limit,
       stream: (overrideLimit) {
-        return _gwaSubreddit.top(
+        return _redditClientService.gwaSubreddit.top(
           timeFilter: timeFilter ?? TimeFilter.all,
           limit: overrideLimit,
           after: _lastSeenSubmission,
@@ -133,7 +115,7 @@ class GlobalState with ChangeNotifier {
     _loadContent(
       limit: limit,
       stream: (overrideLimit) {
-        return _gwaSubreddit.hot(
+        return _redditClientService.gwaSubreddit.hot(
           limit: overrideLimit,
           after: _lastSeenSubmission,
         ).asBroadcastStream();
@@ -152,11 +134,11 @@ class GlobalState with ChangeNotifier {
     _loadContent(
       limit: limit,
       stream: (overrideLimit) {
-        return _gwaSubreddit
+        return _redditClientService.gwaSubreddit
             .newest(
-              limit: overrideLimit,
-              after: _lastSeenSubmission,
-            )
+          limit: overrideLimit,
+          after: _lastSeenSubmission,
+        )
             .asBroadcastStream();
       },
     );
@@ -173,12 +155,12 @@ class GlobalState with ChangeNotifier {
     _loadContent(
         limit: limit,
         stream: (overrideLimit) {
-          return _gwaSubreddit
+          return _redditClientService.gwaSubreddit
               .controversial(
-                timeFilter: timeFilter ?? TimeFilter.all,
-                limit: limit,
-                after: _lastSeenSubmission,
-              )
+            timeFilter: timeFilter ?? TimeFilter.all,
+            limit: limit,
+            after: _lastSeenSubmission,
+          )
               .asBroadcastStream();
         });
   }
@@ -193,7 +175,7 @@ class GlobalState with ChangeNotifier {
   // TODO: Add a check to see if there's no more content to be loaded.
   _loadContent(
       {@required Stream<UserContent> Function(int overrideLimit) stream,
-      @required limit}) {
+        @required limit}) {
     /* Don't load content if we're already loading content or if there's no
     more content to load (based on current load)*/
     if (!this._isBusy && !this._outOfSearchData) {
@@ -233,12 +215,12 @@ class GlobalState with ChangeNotifier {
   /// Returns a Future<Submission> belonging to the submission of the ID given.
   /// [id] needs to be without the ID prefix (i.e. t3_).
   Future<Submission> populateSubmission({String id}) {
-    return _reddit.submission(id: id).populate();
+    return _redditClientService.reddit.submission(id: id).populate();
   }
 
   /// Returns a Future<Submission> belonging to the submission of the link given.
   Future<Submission> populateSubmissionUrl({String url}) {
-    return _reddit.submission(url: url).populate();
+    return _redditClientService.reddit.submission(url: url).populate();
   }
 
   /// Automatically set lastSeenSubmission as the last loaded submission in the
@@ -265,7 +247,7 @@ class GlobalState with ChangeNotifier {
 
       this._subscription.onData((submission) {
         GwaSubmissionPreview gwaSubmission =
-            new GwaSubmissionPreview(submission);
+        new GwaSubmissionPreview(submission);
         _searchResults.add(gwaSubmission);
         _requestsReceived++;
       });
@@ -286,27 +268,27 @@ class GlobalState with ChangeNotifier {
   }
 
   Stream<UserContent> getTopStream(TimeFilter timeFilter, int limit) {
-    return _gwaSubreddit
+    return _redditClientService.gwaSubreddit
         .top(
-          timeFilter: timeFilter,
-          limit: limit,
-        )
+      timeFilter: timeFilter,
+      limit: limit,
+    )
         .asBroadcastStream();
   }
 
   Stream<UserContent> getHotStream(int limit) {
-    return _gwaSubreddit
+    return _redditClientService.gwaSubreddit
         .hot(
-          limit: limit,
-        )
+      limit: limit,
+    )
         .asBroadcastStream();
   }
 
   Stream<UserContent> getNewestStream(int limit) {
-    return _gwaSubreddit
+    return _redditClientService.gwaSubreddit
         .newest(
-          limit: limit,
-        )
+      limit: limit,
+    )
         .asBroadcastStream();
   }
 }

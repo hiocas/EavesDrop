@@ -48,5 +48,6 @@ app.*.symbols
 app.*.map.json
 
 lib/assets/reddit.json
+lib/assets/draw.ini
 
 flutter_01.log
