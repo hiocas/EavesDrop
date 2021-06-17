@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
+import 'package:gwa_app/models/app_settings.dart';
 
 class HiveBoxes {
   static List<String> listTags = ['Favorites', 'Planned'];
@@ -11,8 +12,15 @@ class HiveBoxes {
     return Hive.openBox<LibraryGwaSubmission>('library');
   }
 
-  static LibraryGwaSubmission addLibrarySubmission(
-      String title, String fullname, String thumbnailUrl, List<String> lists) {
+  static Box<AppSettings> getAppSettingsBox() =>
+      Hive.box<AppSettings>('settings');
+
+  static Future<Box<AppSettings>> openAppSettingsBox() async {
+    return Hive.openBox<AppSettings>('settings');
+  }
+
+  static LibraryGwaSubmission addLibrarySubmission(String title,
+      String fullname, String thumbnailUrl, List<String> lists) {
     final LibraryGwaSubmission libraryGwaSubmission = LibraryGwaSubmission()
       ..title = title
       ..fullname = fullname
@@ -25,9 +33,9 @@ class HiveBoxes {
 
   static editLibrarySubmission(LibraryGwaSubmission submission,
       [String title,
-      String fullname,
-      String thumbnailUrl,
-      List<String> lists]) {
+        String fullname,
+        String thumbnailUrl,
+        List<String> lists]) {
     if (title != null && title.isNotEmpty) submission.title = title;
     if (fullname != null && fullname.isNotEmpty) submission.fullname = fullname;
     if (thumbnailUrl != null && thumbnailUrl.isNotEmpty)
@@ -36,4 +44,25 @@ class HiveBoxes {
 
     submission.save();
   }
+
+  static Future<AppSettings> addAppSettings({String credentials}) async {
+    final AppSettings settings = AppSettings(
+        credentials: credentials);
+    final box = getAppSettingsBox();
+    await box.add(settings);
+    return Future.value(settings);
+  }
+
+  static editAppSettings({String credentials}) async {
+    final box = getAppSettingsBox();
+    final AppSettings settings = box.getAt(0);
+    settings.credentials = credentials;
+    await settings.save();
+  }
+
+  static clearAppSettings() async {
+    final box = getAppSettingsBox();
+    await box.clear();
+  }
+
 }

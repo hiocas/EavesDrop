@@ -27,8 +27,7 @@ class _LoginState extends State<Login> {
           child: FutureBuilder<bool>(
             future: widget.redditClientService.eligiblePreferences(),
             builder: (context, futureEligible) {
-              if (!futureEligible.hasData)
-                return CircularProgressIndicator();
+              if (!futureEligible.hasData) return CircularProgressIndicator();
               bool eligible = futureEligible.data;
               if (widget.redditClientService.loggedIn) {
                 return Column(
@@ -40,8 +39,8 @@ class _LoginState extends State<Login> {
                     ),
                     ElevatedButton(
                       child: Text('Logout'),
-                      onPressed: () {
-                        widget.redditClientService.logout();
+                      onPressed: () async {
+                        await widget.redditClientService.logout();
                         popLogin(context, redirect: true);
                         Navigator.pop(context);
                       },
@@ -120,6 +119,20 @@ class _LoginState extends State<Login> {
                         }
                       });
                     },
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Remember me: '),
+                      Checkbox(
+                          tristate: false,
+                          value: widget.redditClientService.rememberClient,
+                          onChanged: (value) {
+                            setState(() {
+                              widget.redditClientService.rememberClient = value;
+                            });
+                          }),
+                    ],
                   ),
                   Text(
                     "Log in to see post preview thumbnails.\n\n"

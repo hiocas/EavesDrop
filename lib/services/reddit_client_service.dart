@@ -1,6 +1,8 @@
 import 'dart:convert';
-
+import 'package:hive/hive.dart';
+import 'package:gwa_app/models/app_settings.dart';
 import 'package:draw/draw.dart';
+import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:uni_links/uni_links.dart';
@@ -28,6 +30,12 @@ class _RedditCreators {
       clientId: this.clientID,
       userAgent: this.userAgent,
       redirectUri: this.redirectUri);
+
+  Reddit restoreInstalledFlow(String credentials) =>
+      Reddit.restoreInstalledAuthenticatedInstance(credentials,
+          clientId: this.clientID,
+          userAgent: this.userAgent,
+          redirectUri: this.redirectUri);
 
   Future<Reddit> createUntrustedReadOnlyInstance() =>
       Reddit.createUntrustedReadOnlyInstance(
@@ -73,21 +81,26 @@ class RedditClientService {
   /// If the user isn't logged in this is empty.
   String displayName = '';
 
+  /// Should the client's credentials be saved if he successfully logged-in
+  /// and allowed the app access. false by default.
+  bool rememberClient = false;
+
   /// Returns whether the user is logged in or not.
   bool get loggedIn => !reddit.readOnly;
 
   /// Updates [reddit] and [_gwaSubreddit].
   setReddit(Reddit newInstance) {
     this.reddit = newInstance;
-    if(!loggedIn) this.displayName = '';
+    if (!loggedIn) this.displayName = '';
     this.gwaSubreddit = this.reddit.subreddit('gonewildaudio');
   }
 
   /// Constructs the [RedditClientService] based on an initial [Reddit]
   /// instance.
   /// To start making service calls use [createInitialService] instead.
-  RedditClientService(Reddit initialInstance, this._redditCreators) {
-    this._untrustedReddit = initialInstance;
+  RedditClientService(this._redditCreators,
+      {Reddit initialInstance, Reddit untrustedInstance}) {
+    this._untrustedReddit = untrustedInstance;
     this.reddit = initialInstance;
     this.gwaSubreddit = this.reddit.subreddit('gonewildaudio');
   }
@@ -102,9 +115,28 @@ class RedditClientService {
   /// ```
   static Future<RedditClientService> createInitialService() async {
     _RedditCreators _redditCreators = await _RedditCreators.createInstance();
+    var credentials = await RedditClientService._getCredentials();
+    if (credentials != null && credentials.isNotEmpty) {
+      final Reddit initialRedditInstance =
+          _redditCreators.restoreInstalledFlow(credentials);
+      final Reddit untrustedRedditInstance =
+          await _redditCreators.createUntrustedReadOnlyInstance();
+      final RedditClientService redditClientService = RedditClientService(
+        _redditCreators,
+        initialInstance: initialRedditInstance,
+        untrustedInstance: untrustedRedditInstance,
+      );
+      var _me = await redditClientService.reddit.user.me();
+      redditClientService.displayName = _me.displayName;
+      return redditClientService;
+    }
     final Reddit initialRedditInstance =
         await _redditCreators.createUntrustedReadOnlyInstance();
-    return RedditClientService(initialRedditInstance, _redditCreators);
+    return RedditClientService(
+      _redditCreators,
+      initialInstance: initialRedditInstance,
+      untrustedInstance: initialRedditInstance,
+    );
   }
 
   /// Listens for uni links and either authorises the user client and sets
@@ -157,16 +189,23 @@ class RedditClientService {
     launch(_generateAuthUrl(_oauthReddit).toString());
   }
 
-  /// Authorises [reddit] with the received [authCode].
+  /// Authorises [reddit] with the received [authCode] and saves the user's
+  /// credentials if [rememberClient] is true.
   Future<void> _authorizeClient(String authCode) async {
     await reddit.auth.authorize(authCode);
     var _me = await reddit.user.me();
     this.displayName = _me.displayName;
+    if (this.rememberClient) {
+      this._saveCredentials();
+    }
   }
 
-  /// Logs the user out.
-  logout() {
+  /// Logs the user out and removes any saved credentials.
+  logout() async {
     setReddit(this._untrustedReddit);
+    await HiveBoxes.openAppSettingsBox();
+    await HiveBoxes.editAppSettings(credentials: '');
+    await Hive.close();
   }
 
   /// Returns an auth url relevant to [reddit], which must be an instance of
@@ -200,5 +239,32 @@ class RedditClientService {
       }
     }
     return Future.value(false);
+  }
+
+  /// Get credentials from the Hive settings box.
+  static Future<String> _getCredentials() async {
+    Box<AppSettings> box = await HiveBoxes.openAppSettingsBox();
+    String credentials;
+    if (box.isNotEmpty) {
+      AppSettings settings = box.getAt(0);
+      credentials = settings.credentials;
+    }
+    await Hive.close();
+    return Future.value(credentials);
+  }
+
+  /// Save credentials to the Hive settings box.
+  _saveCredentials() async {
+    if (loggedIn) {
+      Box<AppSettings> box = await HiveBoxes.openAppSettingsBox();
+      if (box.isEmpty) {
+        await HiveBoxes.addAppSettings(
+            credentials: reddit.auth.credentials.toJson());
+      } else {
+        await HiveBoxes.editAppSettings(
+            credentials: reddit.auth.credentials.toJson());
+      }
+      await Hive.close();
+    }
   }
 }

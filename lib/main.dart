@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'models/library_gwa_submission.dart';
+import 'models/app_settings.dart';
 import 'dart:core';
 
 Future main() async {
@@ -16,6 +17,8 @@ Future main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(LibraryGwaSubmissionAdapter());
+
+  Hive.registerAdapter(AppSettingsAdapter());
 
   GlobalState globalState = GlobalState();
 
@@ -111,8 +114,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           ExtractArgumentsSubmissionList.routeName: (context) =>
               ExtractArgumentsSubmissionList(),
-          RedirectToHome.routeName: (context) =>
-              RedirectToHome(),
+          RedirectToHome.routeName: (context) => RedirectToHome(),
           '/home': (context) => HomeScaffold(
                 initialIndex: 1,
               ),
