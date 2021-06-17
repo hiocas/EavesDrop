@@ -27,11 +27,17 @@ class _LoginState extends State<Login> {
           child: FutureBuilder<bool>(
             future: widget.redditClientService.eligiblePreferences(),
             builder: (context, futureEligible) {
+              if (!futureEligible.hasData)
+                return CircularProgressIndicator();
               bool eligible = futureEligible.data;
               if (widget.redditClientService.loggedIn) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text(
+                      'Log out from '
+                      'u/${widget.redditClientService.displayName}',
+                    ),
                     ElevatedButton(
                       child: Text('Logout'),
                       onPressed: () {
@@ -78,6 +84,9 @@ class _LoginState extends State<Login> {
                             builder: (BuildContext context) => AlertDialog(
                               title:
                                   const Text('Change Your Reddit Preferences'),
+                              /* TODO: Add a tutorial for changing the
+                                  preferences so that the user could see
+                                  submission preview thumbnails in GwaDrawer. */
                               content: const Text(
                                   "Your current reddit account preferences "
                                   "won't allow you to see post preview "

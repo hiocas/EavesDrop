@@ -171,22 +171,6 @@ void pushLogin(BuildContext context,
   }
 }
 
-/// Replaces current route and pushes [Login] with a [RedditClientService] so
-/// that later when it pops with [popLogin] the [HomeScaffold] will be updated.
-void pushReplacementLogin(BuildContext context,
-    {RedditClientService redditClientService}) async {
-  final redirect = await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Login(
-            redditClientService: redditClientService,
-          )));
-  if (redirect != null && redirect) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, RedirectToHome.routeName, (Route<dynamic> route) => false);
-  }
-}
-
 /// Pops [Login] and redirect [HomeScaffold] to [Home] based on [redirect].
 /// To use this make sure you pushed [Login] with [pushLogin].
 void popLogin(BuildContext context,

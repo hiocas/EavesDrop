@@ -27,7 +27,9 @@ class GwaDrawer extends StatelessWidget {
           children: [
             DrawerHeader(child: Text('GoneWildAudio App')),
             ListTile(
-              title: Text(_redditClientService.loggedIn ? 'Log out' : 'Log in'),
+              title: Text(_redditClientService.loggedIn
+                  ? 'Log out (u/${_redditClientService.displayName})'
+                  : 'Log in'),
               onTap: () =>
                   pushLogin(context, redditClientService: _redditClientService),
             ),

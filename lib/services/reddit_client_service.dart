@@ -69,12 +69,17 @@ class RedditClientService {
   /// It is passed as a parameter in [login];
   void Function() _onClientAllows;
 
+  /// The display name of the logged-in user [Reddit] instance in [reddit].
+  /// If the user isn't logged in this is empty.
+  String displayName = '';
+
   /// Returns whether the user is logged in or not.
   bool get loggedIn => !reddit.readOnly;
 
   /// Updates [reddit] and [_gwaSubreddit].
   setReddit(Reddit newInstance) {
     this.reddit = newInstance;
+    if(!loggedIn) this.displayName = '';
     this.gwaSubreddit = this.reddit.subreddit('gonewildaudio');
   }
 
@@ -155,6 +160,8 @@ class RedditClientService {
   /// Authorises [reddit] with the received [authCode].
   Future<void> _authorizeClient(String authCode) async {
     await reddit.auth.authorize(authCode);
+    var _me = await reddit.user.me();
+    this.displayName = _me.displayName;
   }
 
   /// Logs the user out.
@@ -165,9 +172,12 @@ class RedditClientService {
   /// Returns an auth url relevant to [reddit], which must be an instance of
   /// [Reddit] with a [WebAuthenticator].
   Uri _generateAuthUrl(Reddit reddit) {
-    return reddit.auth.url(['*'], 'gwa-app', compactLogin: true);
+    return reddit.auth
+        .url(['read', 'account', 'identity'], 'gwa-app', compactLogin: true);
   }
 
+  /// Returns whether the current user in [reddit] (if logged in) has eligible
+  /// preferences to see submission preview thumbnails (if 'media' is 'on').
   Future<bool> eligiblePreferences() async {
     if (loggedIn) {
       Map<String, dynamic> prefs =
@@ -177,6 +187,8 @@ class RedditClientService {
     return Future.value(false);
   }
 
+  /// If [reddit] houses a logged in instance of [Reddit] and in the user's
+  /// preferences 'media' isn't 'on, sets 'media' to be 'on'.
   Future<bool> setEligiblePreferences() async {
     if (loggedIn) {
       bool eligible = await eligiblePreferences();
