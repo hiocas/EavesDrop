@@ -64,6 +64,11 @@ class RedditClientService {
   /// to generate auth urls here.
   Reddit _oauthReddit;
 
+  /// Gets called in [init] after the user either allows access (and gets
+  /// redirected back to the app).
+  /// It is passed as a parameter in [login];
+  void Function() _onClientAllows;
+
   /// Returns whether the user is logged in or not.
   bool get loggedIn => !reddit.readOnly;
 
@@ -113,6 +118,7 @@ class RedditClientService {
           /// in [_authorizeClient].
           setReddit(_oauthReddit);
           await _authorizeClient(authCode);
+          if (_onClientAllows != null) _onClientAllows.call();
         } else {
           setReddit(this._untrustedReddit);
         }
@@ -124,9 +130,15 @@ class RedditClientService {
 
   /// Launches the browser with the authorise link for the user to permit access
   /// in.
-  login() {
+  /// [onClientAllows] will get called after the user allows access (and gets
+  /// redirected back to the app). This can be used as a way to pop a login
+  /// window when the client returns.
+  login({void Function() onClientAllows}) {
     /// Create an installed instance of [Reddit], which is unauthenticated...
     _oauthReddit = _redditCreators.createInstalledFlow();
+
+    /// Set [_onClientReturns] to be called in [init].
+    _onClientAllows = onClientAllows;
 
     /// Generate an auth url and launch it. We then proceed to the
     /// [uriLinkStream] event listener in [init] if the user accepts or

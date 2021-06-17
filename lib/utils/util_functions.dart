@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:gwa_app/screens/login/login.dart';
 import 'package:gwa_app/screens/submission_page/submission_page.dart';
+import 'package:gwa_app/services/reddit_client_service.dart';
 
 import '../main.dart';
 
@@ -104,17 +106,20 @@ String getUrlTitle(String url) {
 
 /// Use this function when you want to push a SubmissionPage. It'll handle
 /// returning the query data from it (if it exists).
-void pushSubmissionPageWithReturnData(
-    BuildContext context, String submissionFullname, bool fromLibrary) async {
+void pushSubmissionPageWithReturnData(BuildContext context,
+    String submissionFullname, bool fromLibrary) async {
   final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SubmissionPage(
-              submissionFullname: submissionFullname,
-              fromLibrary: fromLibrary)));
+          builder: (context) =>
+              SubmissionPage(
+                  submissionFullname: submissionFullname,
+                  fromLibrary: fromLibrary)));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
-        context, ExtractArgumentsSubmissionList.routeName, (Route<dynamic> route) => false,
+        context,
+        ExtractArgumentsSubmissionList.routeName,
+            (Route<dynamic> route) => false,
         arguments: SubmissionListArguments(
             result['query'], result['sort'], result['timeFilter']));
   }
@@ -123,17 +128,20 @@ void pushSubmissionPageWithReturnData(
 /// Use this function when you want to replace the current rout and push a
 /// SubmissionPage. It'll handle returning the query data from it
 /// (if it exists).
-void pushReplacementSubmissionPageWithReturnData(
-    BuildContext context, String submissionFullname, bool fromLibrary) async {
+void pushReplacementSubmissionPageWithReturnData(BuildContext context,
+    String submissionFullname, bool fromLibrary) async {
   final result = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) => SubmissionPage(
-              submissionFullname: submissionFullname,
-              fromLibrary: fromLibrary)));
+          builder: (context) =>
+              SubmissionPage(
+                  submissionFullname: submissionFullname,
+                  fromLibrary: fromLibrary)));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
-        context, ExtractArgumentsSubmissionList.routeName, (Route<dynamic> route) => false,
+        context,
+        ExtractArgumentsSubmissionList.routeName,
+            (Route<dynamic> route) => false,
         arguments: SubmissionListArguments(
             result['query'], result['sort'], result['timeFilter']));
   }
@@ -145,4 +153,28 @@ void popSubmissionPageWithData(BuildContext context,
     {String query, Sort sort, TimeFilter timeFilter}) {
   Navigator.pop(
       context, {'query': query, 'sort': sort, 'timeFilter': timeFilter});
+}
+
+/// Pushes [Login] with a [RedditClientService] so that later when it pops with
+/// [popLogin] the [HomeScaffold] will be updated.
+void pushLogin(BuildContext context,
+    {RedditClientService redditClientService}) async {
+  final redirect = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => Login(
+            redditClientService: redditClientService,
+          )));
+  if (redirect != null && redirect) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, RedirectToHome.routeName, (Route<dynamic> route) => false);
+  }
+}
+
+/// Pops [Login] and redirect [HomeScaffold] to [Home] based on [redirect].
+/// To use this make sure you pushed [Login] with [pushLogin].
+void popLogin(BuildContext context,
+    {bool redirect}) {
+  Navigator.pop(context,
+      redirect);
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/screens/gwa_drawer/local_widgets/open_submission_screen.dart';
+import 'package:gwa_app/services/reddit_client_service.dart';
+import 'package:gwa_app/utils/util_functions.dart';
+import 'local_widgets/open_submission_screen.dart';
+import 'package:gwa_app/states/global_state.dart';
+import 'package:provider/provider.dart';
 
 class GwaDrawer extends StatelessWidget {
   const GwaDrawer({
@@ -13,6 +17,8 @@ class GwaDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RedditClientService _redditClientService =
+        Provider.of<GlobalState>(context, listen: false).redditClientService;
     return Drawer(
       child: Material(
         color: Theme.of(context).primaryColor,
@@ -21,6 +27,11 @@ class GwaDrawer extends StatelessWidget {
           children: [
             DrawerHeader(child: Text('GoneWildAudio App')),
             ListTile(
+              title: Text(_redditClientService.loggedIn ? 'Log out' : 'Log in'),
+              onTap: () =>
+                  pushLogin(context, redditClientService: _redditClientService),
+            ),
+            ListTile(
               title: Text('Settings'),
             ),
             ListTile(
@@ -28,7 +39,9 @@ class GwaDrawer extends StatelessWidget {
               onTap: () => Navigator.push(
                   context,
                   CupertinoPageRoute(
-                    builder: (context) => OpenSubmissionScreen(fromLibrary: fromLibrary,),
+                    builder: (context) => OpenSubmissionScreen(
+                      fromLibrary: fromLibrary,
+                    ),
                   )),
             ),
             ListTile(

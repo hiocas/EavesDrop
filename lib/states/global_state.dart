@@ -78,6 +78,7 @@ class GlobalState with ChangeNotifier {
             'limit': overrideLimit.toString(),
             'count':
             _searchResults.isEmpty ? '0' : _searchResults.length.toString(),
+            'include_over_18': 'on'
           },
         ).asBroadcastStream();
       },

@@ -46,47 +46,46 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return
-        // MaterialApp(home: Scaffold(body: Login(),),);
-        MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                child: Text('Login'),
-                onPressed: () {
-                    widget.globalState.redditClientService.login();
-                },
-              ),
-              ElevatedButton(
-                child: Text('Logout'),
-                onPressed: () {
-                    widget.globalState.redditClientService.logout();
-                },
-              ),
-              ElevatedButton(
-                child: Text('Get'),
-                onPressed: () async {
-                    widget.globalState
-                        .getTopStream(TimeFilter.all, 2)
-                        .listen((event) {
-                      Submission submission = event;
-                      print('Title: ${submission.title}');
-                      if (submission.preview != null){
-                        for (SubmissionPreview preview in submission.preview) {
-                          print('Preview: ${preview.source.url}');
-                        }
-                      }
-                    });
-                },
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-    MultiProvider(
+        //   MaterialApp(
+        //   home: Scaffold(
+        //     body: Center(
+        //       child: Column(
+        //         mainAxisSize: MainAxisSize.min,
+        //         children: [
+        //           ElevatedButton(
+        //             child: Text('Login'),
+        //             onPressed: () {
+        //               widget.globalState.redditClientService.login();
+        //             },
+        //           ),
+        //           ElevatedButton(
+        //             child: Text('Logout'),
+        //             onPressed: () {
+        //               widget.globalState.redditClientService.logout();
+        //             },
+        //           ),
+        //           ElevatedButton(
+        //             child: Text('Get'),
+        //             onPressed: () async {
+        //               widget.globalState
+        //                   .getTopStream(TimeFilter.all, 2)
+        //                   .listen((event) {
+        //                 Submission submission = event;
+        //                 print('Title: ${submission.title}');
+        //                 if (submission.preview != null) {
+        //                   for (SubmissionPreview preview in submission.preview) {
+        //                     print('Preview: ${preview.source.url}');
+        //                   }
+        //                 }
+        //               });
+        //             },
+        //           )
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // );
+        MultiProvider(
       providers: [
         ChangeNotifierProvider<GlobalState>.value(value: widget.globalState)
       ],
@@ -112,6 +111,8 @@ class _MyAppState extends State<MyApp> {
         routes: {
           ExtractArgumentsSubmissionList.routeName: (context) =>
               ExtractArgumentsSubmissionList(),
+          RedirectToHome.routeName: (context) =>
+              RedirectToHome(),
           '/home': (context) => HomeScaffold(
                 initialIndex: 1,
               ),
@@ -230,6 +231,18 @@ class ExtractArgumentsSubmissionList extends StatelessWidget {
       initialSearchQuery: args.initialSearchQuery,
       initialSort: args.initialSort,
       initialTimeFilter: args.initialTimeFilter,
+    );
+  }
+}
+
+class RedirectToHome extends StatelessWidget {
+  static const routeName = '/redirectToHome';
+
+  @override
+  Widget build(BuildContext context) {
+    print('pushed');
+    return HomeScaffold(
+      initialIndex: 1,
     );
   }
 }
