@@ -155,20 +155,6 @@ class RedditClientService {
   /// Authorises [reddit] with the received [authCode].
   Future<void> _authorizeClient(String authCode) async {
     await reddit.auth.authorize(authCode);
-    Map<String, dynamic> prefs =
-        await reddit.get('api/v1/me/prefs', objectify: false);
-    var media = prefs['media'];
-    var me = await reddit.user.me();
-    print('Me: ${me.displayName}');
-    print('Media: $media');
-    if (media != 'on') {
-      var response = await reddit.patch('api/v1/me/prefs', body: {
-        'json': jsonEncode({'media': 'on'})
-      });
-      var json = jsonDecode(response.toString());
-      print('Media: ${json['media']}');
-      print('Response: $response');
-    }
   }
 
   /// Logs the user out.
@@ -180,5 +166,27 @@ class RedditClientService {
   /// [Reddit] with a [WebAuthenticator].
   Uri _generateAuthUrl(Reddit reddit) {
     return reddit.auth.url(['*'], 'gwa-app', compactLogin: true);
+  }
+
+  Future<bool> eligiblePreferences() async {
+    if (loggedIn) {
+      Map<String, dynamic> prefs =
+          await reddit.get('api/v1/me/prefs', objectify: false);
+      return Future.value(prefs['media'] == 'on');
+    }
+    return Future.value(false);
+  }
+
+  Future<bool> setEligiblePreferences() async {
+    if (loggedIn) {
+      bool eligible = await eligiblePreferences();
+      if (!eligible) {
+        await reddit.patch('api/v1/me/prefs', body: {
+          'json': jsonEncode({'media': 'on'})
+        });
+        return await eligiblePreferences();
+      }
+    }
+    return Future.value(false);
   }
 }
