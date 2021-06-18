@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
+import 'package:gwa_app/widgets/gradient_title_appbar.dart';
 import 'package:gwa_app/widgets/gwa_scrollbar.dart';
 import 'local_widgets/dummy_widgets.dart';
 import 'local_widgets/home_section_page_submission_list.dart';
@@ -65,36 +66,7 @@ class _HomeSectionPageState extends State<HomeSectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(24.0),
-                bottomRight: Radius.circular(24.0))),
-        titleSpacing: 0.0,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(24.0),
-                  bottomRight: Radius.circular(24.0))),
-        ),
-        title: ShaderMask(
-          shaderCallback: (bounds) => LinearGradient(
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).accentColor,
-            ],
-          ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-          child: Text(
-            widget.sectionTitle,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 26.0),
-          ),
-        ),
-      ),
+      appBar: GradientTitleAppBar(context, title: widget.sectionTitle),
       extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).backgroundColor,
       body: StreamBuilder(

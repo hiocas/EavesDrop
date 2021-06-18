@@ -28,16 +28,13 @@ class GwaDrawer extends StatelessWidget {
             DrawerHeader(child: Text('GoneWildAudio App')),
             ListTile(
               title: Text(_redditClientService.loggedIn
-                  ? 'Log out (u/${_redditClientService.displayName})'
+                  ? 'Account (u/${_redditClientService.displayName})'
                   : 'Log in'),
               onTap: () =>
                   pushLogin(context, redditClientService: _redditClientService),
             ),
             ListTile(
-              title: Text('Settings'),
-            ),
-            ListTile(
-              title: Text('Open Post'),
+              title: Text('Open Post (Link or ID)'),
               onTap: () => Navigator.push(
                   context,
                   CupertinoPageRoute(
@@ -47,8 +44,14 @@ class GwaDrawer extends StatelessWidget {
                   )),
             ),
             ListTile(
+              title: Text('Settings'),
+            ),
+            ListTile(
               title: Text('About'),
             ),
+            ListTile(
+              title: Text('Help'),
+            )
           ],
         ),
       ),

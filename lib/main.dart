@@ -48,47 +48,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        //   MaterialApp(
-        //   home: Scaffold(
-        //     body: Center(
-        //       child: Column(
-        //         mainAxisSize: MainAxisSize.min,
-        //         children: [
-        //           ElevatedButton(
-        //             child: Text('Login'),
-        //             onPressed: () {
-        //               widget.globalState.redditClientService.login();
-        //             },
-        //           ),
-        //           ElevatedButton(
-        //             child: Text('Logout'),
-        //             onPressed: () {
-        //               widget.globalState.redditClientService.logout();
-        //             },
-        //           ),
-        //           ElevatedButton(
-        //             child: Text('Get'),
-        //             onPressed: () async {
-        //               widget.globalState
-        //                   .getTopStream(TimeFilter.all, 2)
-        //                   .listen((event) {
-        //                 Submission submission = event;
-        //                 print('Title: ${submission.title}');
-        //                 if (submission.preview != null) {
-        //                   for (SubmissionPreview preview in submission.preview) {
-        //                     print('Preview: ${preview.source.url}');
-        //                   }
-        //                 }
-        //               });
-        //             },
-        //           )
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // );
-        MultiProvider(
+    return MultiProvider(
       providers: [
         ChangeNotifierProvider<GlobalState>.value(value: widget.globalState)
       ],
