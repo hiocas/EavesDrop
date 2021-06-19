@@ -48,6 +48,8 @@ class GlobalState with ChangeNotifier {
 
   RedditClientService get redditClientService => _redditClientService;
 
+  bool get eligiblePrefs => _redditClientService.eligiblePrefs;
+
   /// Constructs [_redditClientService] and initialises it.
   Future<void> initApp() async {
     _redditClientService = await RedditClientService.createInitialService();

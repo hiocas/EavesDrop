@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gwa_app/states/global_state.dart';
 
 import 'package:gwa_app/utils/util_functions.dart';
+import 'package:gwa_app/widgets/gradient_title_appbar.dart';
 import 'package:provider/provider.dart';
 
 class OpenSubmissionScreen extends StatelessWidget {
@@ -16,9 +17,7 @@ class OpenSubmissionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Text('Open Post'),
-      ),
+      appBar: GradientTitleAppBar(context, title: 'Open Post'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -117,11 +116,16 @@ class _OpenSubmissionSection extends StatelessWidget {
         ElevatedButton.icon(
           icon: Icon(Icons.open_in_new),
           label: Text(title),
+          style: ButtonStyle(
+              elevation: MaterialStateProperty.all(15.0),
+              backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).primaryColor)),
           onPressed: () async {
             if (data != null && data.isNotEmpty) {
               var fullname = await getFullname.call(data);
               if (fullname.isNotEmpty) {
-                pushSubmissionPageWithReturnData(context, fullname, fromLibrary);
+                pushSubmissionPageWithReturnData(
+                    context, fullname, fromLibrary);
               }
             } else {
               ScaffoldMessenger.of(context)

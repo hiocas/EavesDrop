@@ -1,11 +1,15 @@
+import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_add_card_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_tags_card_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/submission_details.dart';
-import 'package:gwa_app/utils/util_functions.dart' show UtilFunctions, getTagName;
+import 'package:gwa_app/states/global_state.dart';
+import 'package:gwa_app/utils/util_functions.dart'
+    show UtilFunctions, getTagName;
 import 'package:gwa_app/widgets/particles_icon_text_button.dart';
 import 'package:gwa_app/widgets/popup_card_button.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' show launch;
 
 /*TODO: Should probably break this widget into two (stateless buttons and
@@ -14,10 +18,12 @@ class SubmissionPageButtonsAndTags extends StatefulWidget {
   const SubmissionPageButtonsAndTags({
     Key key,
     @required this.submission,
+    @required this.redditSubmission,
     @required this.fromLibrary,
   }) : super(key: key);
 
   final GwaSubmission submission;
+  final Submission redditSubmission;
   final bool fromLibrary;
 
   @override
@@ -36,6 +42,45 @@ class _SubmissionPageButtonsAndTagsState
       (index) => false,
     );
     super.initState();
+  }
+
+  Widget _makeSupportButton(BuildContext context) {
+    if (Provider.of<GlobalState>(context, listen: false).eligiblePrefs) {
+      return ParticlesIconTextToggleButton(
+        icon: Icons.favorite_border,
+        iconPressed: Icons.favorite,
+        label: 'Upvote',
+        subtext: 'Upvote this and show your support!',
+        color: Theme.of(context).primaryColor,
+        initialPressed: _voted(),
+        millisecondsBeforeOnPressed: 0,
+        onPressed: () async {
+          // TODO: Display a snackbar if action failed.
+          if (_voted()) {
+            await widget.redditSubmission.clearVote(waitForResponse: true);
+          } else {
+            await widget.redditSubmission.upvote(waitForResponse: true);
+          }
+        },
+        confettiDuration: Duration(milliseconds: 300),
+      );
+    }
+    return ParticlesIconTextButton(
+      icon: Icons.favorite_border,
+      iconPressed: Icons.favorite,
+      label: 'Open',
+      subtext: 'Upvote this and show your support!',
+      color: Theme.of(context).primaryColor,
+      onPressed: () {
+        launch(widget.submission.shortlink.toString());
+      },
+      confettiDuration: Duration(milliseconds: 300),
+    );
+  }
+
+  bool _voted() {
+    if (widget.redditSubmission.vote == VoteState.upvoted) return true;
+    return false;
   }
 
   @override
@@ -64,17 +109,7 @@ class _SubmissionPageButtonsAndTagsState
                   usePlaceholder: true,
                   fromLibrary: widget.fromLibrary,
                 ),
-                ParticlesIconTextButton(
-                  icon: Icons.favorite_border,
-                  iconPressed: Icons.favorite,
-                  label: 'Open',
-                  subtext: 'Upvote this and show your support!',
-                  color: Theme.of(context).primaryColor,
-                  onPressed: () {
-                    launch(widget.submission.shortlink.toString());
-                  },
-                  confettiDuration: Duration(milliseconds: 300),
-                ),
+                _makeSupportButton(context),
                 PopupCardButton(
                   icon: Icons.expand,
                   label: 'Details',

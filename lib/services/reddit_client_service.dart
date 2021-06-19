@@ -88,7 +88,13 @@ class RedditClientService {
   /// Returns whether the user is logged in or not.
   bool get loggedIn => !reddit.readOnly;
 
+  /// Are the preferences of [reddit] (if it has a [Reddit] instance with an
+  /// authenticated user) allow them to see submission preview thumbnails?
+  bool eligiblePrefs = false;
+
   /// Updates [reddit] and [_gwaSubreddit].
+  /// Make sure to set [eligiblePrefs] after the client has been authorised
+  /// (if they didn't log out) afterwards.
   setReddit(Reddit newInstance) {
     this.reddit = newInstance;
     if (!loggedIn) this.displayName = '';
@@ -128,6 +134,7 @@ class RedditClientService {
       );
       var _me = await redditClientService.reddit.user.me();
       redditClientService.displayName = _me.displayName;
+      await redditClientService.eligiblePreferences();
       return redditClientService;
     }
     final Reddit initialRedditInstance =
@@ -158,6 +165,7 @@ class RedditClientService {
           if (_onClientAllows != null) _onClientAllows.call();
         } else {
           setReddit(this._untrustedReddit);
+          this.eligiblePrefs = false;
         }
       });
     } catch (e) {
@@ -198,11 +206,13 @@ class RedditClientService {
     if (this.rememberClient) {
       this._saveCredentials();
     }
+    this.eligiblePrefs = await this.eligiblePreferences();
   }
 
   /// Logs the user out and removes any saved credentials.
   logout() async {
     setReddit(this._untrustedReddit);
+    this.eligiblePrefs = false;
     await HiveBoxes.openAppSettingsBox();
     await HiveBoxes.editAppSettings(credentials: '');
     await Hive.close();
@@ -212,7 +222,7 @@ class RedditClientService {
   /// [Reddit] with a [WebAuthenticator].
   Uri _generateAuthUrl(Reddit reddit) {
     return reddit.auth
-        .url(['read', 'account', 'identity'], 'gwa-app', compactLogin: true);
+        .url(['read', 'account', 'identity', 'vote'], 'gwa-app', compactLogin: true);
   }
 
   /// Returns whether the current user in [reddit] (if logged in) has eligible
@@ -221,8 +231,11 @@ class RedditClientService {
     if (loggedIn) {
       Map<String, dynamic> prefs =
           await reddit.get('api/v1/me/prefs', objectify: false);
-      return Future.value(prefs['media'] == 'on');
+      var result = prefs['media'] == 'on';
+      this.eligiblePrefs = result;
+      return Future.value(result);
     }
+    this.eligiblePrefs = false;
     return Future.value(false);
   }
 
@@ -267,4 +280,5 @@ class RedditClientService {
       await Hive.close();
     }
   }
+
 }

@@ -161,7 +161,7 @@ void pushLogin(BuildContext context,
     {RedditClientService redditClientService}) async {
   final redirect = await Navigator.push(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
           builder: (context) => Login(
             redditClientService: redditClientService,
           )));

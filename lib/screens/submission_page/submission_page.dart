@@ -92,6 +92,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                     //Buttons and Tags
                     SubmissionPageButtonsAndTags(
                         submission: _submission,
+                        redditSubmission: snapshot.data,
                         fromLibrary: widget.fromLibrary),
                     //MarkdownViewer
                     SliverPadding(
