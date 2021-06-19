@@ -66,6 +66,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - lib/assets/images/
+    - lib/assets/images/help/
     - lib/assets/reddit.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
