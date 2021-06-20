@@ -113,6 +113,7 @@ class _OpenSubmissionSection extends StatelessWidget {
             data = newData;
           },
         ),
+        SizedBox(height: 15.0,),
         ElevatedButton.icon(
           icon: Icon(Icons.open_in_new),
           label: Text(title),

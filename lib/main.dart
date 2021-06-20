@@ -48,10 +48,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<GlobalState>.value(value: widget.globalState)
-      ],
+    return ChangeNotifierProvider<GlobalState>.value(
+      value: widget.globalState,
       child: MaterialApp(
         title: 'GoneWildAudio App',
         themeMode: ThemeMode.dark,
