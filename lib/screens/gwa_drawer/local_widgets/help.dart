@@ -76,7 +76,7 @@ class Help extends StatelessWidget {
                 child: const Image(
                     image: AssetImage(
                         'lib/assets/images/help/old reddit prefs media thumbnails '
-                            'setting.png')),
+                        'setting.png')),
               ),
             ),
           ),
@@ -88,7 +88,8 @@ class Help extends StatelessWidget {
       appBar: GradientTitleAppBar(context, title: 'Help'),
       backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.separated(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return children.elementAt(index);
           },
@@ -99,4 +100,30 @@ class Help extends StatelessWidget {
           itemCount: children.length),
     );
   }
+}
+
+class _HelpSectionTextOnly extends ExpansionTile {
+  _HelpSectionTextOnly({TextStyle textStyle})
+      : super(
+          iconColor: Colors.white,
+          collapsedIconColor: Colors.white,
+          title: Text(
+            "I can't see post preview thumbnails",
+            style: textStyle.copyWith(fontWeight: FontWeight.bold),
+          ),
+          children: [
+            ListTile(
+              title: Text(
+                "To see post preview thumbnails, you must be logged in AND "
+                "have  \"media - Thumbnails\" set to \"Show thumbnails next "
+                "to links\" in your Reddit account preferences.\n\n"
+                "This can be done automatically by logging in, going to "
+                "\"Account\" and clicking on \"Change Account Settings\".\n\n"
+                "It can also be done manually. See how in \"How do I "
+                "manually set my Reddit account preferences?\" in this page.",
+                style: textStyle,
+              ),
+            )
+          ],
+        );
 }

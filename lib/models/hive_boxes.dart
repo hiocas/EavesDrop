@@ -55,9 +55,11 @@ class HiveBoxes {
 
   static editAppSettings({String credentials}) async {
     final box = getAppSettingsBox();
-    final AppSettings settings = box.getAt(0);
-    settings.credentials = credentials;
-    await settings.save();
+    if (box.isNotEmpty){
+      final AppSettings settings = box.getAt(0);
+      settings.credentials = credentials;
+      await settings.save();
+    }
   }
 
   static clearAppSettings() async {
