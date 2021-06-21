@@ -1,3 +1,4 @@
+import 'package:gwa_app/models/audio_launch_options.dart';
 import 'package:hive/hive.dart';
 
 part 'app_settings.g.dart';
@@ -9,6 +10,10 @@ class AppSettings extends HiveObject {
   @HiveField(0)
   String credentials;
 
-  AppSettings({this.credentials});
+  /// The saved user's audio launch options.
+  @HiveField(1)
+  AudioLaunchOptions audioLaunchOptions;
+
+  AppSettings({this.credentials, this.audioLaunchOptions});
 
 }

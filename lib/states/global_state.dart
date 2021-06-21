@@ -1,6 +1,7 @@
 import 'package:draw/draw.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:gwa_app/models/audio_launch_options.dart';
 import 'package:gwa_app/services/reddit_client_service.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 
@@ -49,6 +50,8 @@ class GlobalState with ChangeNotifier {
   RedditClientService get redditClientService => _redditClientService;
 
   bool get eligiblePrefs => _redditClientService.eligiblePrefs;
+
+  AudioLaunchOptions audioLaunchOptions = AudioLaunchOptions.ChromeCustomTabs;
 
   /// Constructs [_redditClientService] and initialises it.
   Future<void> initApp() async {

@@ -1,5 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
+import 'package:gwa_app/models/audio_launch_options.dart';
 import 'package:gwa_app/screens/home/home.dart';
 import 'package:gwa_app/screens/library/library.dart';
 import 'package:gwa_app/screens/submission_list/submission_list.dart';
@@ -19,6 +20,8 @@ Future main() async {
   Hive.registerAdapter(LibraryGwaSubmissionAdapter());
 
   Hive.registerAdapter(AppSettingsAdapter());
+
+  Hive.registerAdapter(AudioLaunchOptionsAdapter());
 
   GlobalState globalState = GlobalState();
 

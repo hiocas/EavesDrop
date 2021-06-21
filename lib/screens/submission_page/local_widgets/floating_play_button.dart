@@ -1,13 +1,37 @@
 import 'package:draw/draw.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
+import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/widgets/navigator_routes/hero_dialog_route.dart';
 import 'package:gwa_app/widgets/rect_tweens/calm_rect_tween.dart';
 import 'package:gwa_app/widgets/website_viewer.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart'
+    show
+        ChromeSafariBrowser,
+        ChromeSafariBrowserClassOptions,
+        AndroidChromeCustomTabsOptions,
+        IOSSafariOptions;
+import 'package:gwa_app/models/audio_launch_options.dart';
 import 'dart:math' as Math;
+
+class MyChromeSafariBrowser extends ChromeSafariBrowser {
+  @override
+  void onOpened() {
+    print("ChromeSafari browser opened");
+  }
+
+  @override
+  void onCompletedInitialLoad() {
+    print("ChromeSafari browser initial load completed");
+  }
+
+  @override
+  void onClosed() {
+    print("ChromeSafari browser closed");
+  }
+}
 
 class FloatingPlayButton extends StatefulWidget {
   const FloatingPlayButton({
@@ -151,6 +175,8 @@ class _PopupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ChromeSafariBrowser browser = new MyChromeSafariBrowser();
+    AudioLaunchOptions _audioLaunchOptions;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -218,16 +244,32 @@ class _PopupCard extends StatelessWidget {
                     return Container(
                       // decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black, width: 3.0))),
                       child: ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WebsiteViewer(
-                                title: submission.title,
-                                url: submission.audioUrls[index],
-                              ),
-                            ),
-                          );
+                        onTap: () async {
+                          final appSettings = await HiveBoxes.getAppSettings();
+                          _audioLaunchOptions = appSettings.audioLaunchOptions;
+                          switch (_audioLaunchOptions) {
+                            case AudioLaunchOptions.ChromeCustomTabs:
+                              browser.open(
+                                  url: Uri.parse(submission.audioUrls[index]),
+                                  options: ChromeSafariBrowserClassOptions(
+                                      android: AndroidChromeCustomTabsOptions(
+                                          addDefaultShareMenuItem: true),
+                                      ios: IOSSafariOptions(
+                                          barCollapsingEnabled: true)));
+                              break;
+                            case AudioLaunchOptions.WebView:
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => WebsiteViewer(
+                                      title: submission.title,
+                                      url: submission.audioUrls[index]
+                                      // submission.audioUrls[index],
+                                      ),
+                                ),
+                              );
+                              break;
+                          }
                         },
                         title: Text(
                           getUrlTitle(submission.audioUrls[index]),

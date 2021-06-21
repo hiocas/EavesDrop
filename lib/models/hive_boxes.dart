@@ -1,3 +1,4 @@
+import 'package:gwa_app/models/audio_launch_options.dart';
 import 'package:hive/hive.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
 import 'package:gwa_app/models/app_settings.dart';
@@ -19,8 +20,15 @@ class HiveBoxes {
     return Hive.openBox<AppSettings>('settings');
   }
 
-  static LibraryGwaSubmission addLibrarySubmission(String title,
-      String fullname, String thumbnailUrl, List<String> lists) {
+  static Future<AppSettings> getAppSettings() async {
+    final settingsBox = await HiveBoxes.openAppSettingsBox();
+    final AppSettings appSettings = settingsBox.getAt(0);
+    settingsBox.close();
+    return appSettings;
+  }
+
+  static LibraryGwaSubmission addLibrarySubmission(
+      String title, String fullname, String thumbnailUrl, List<String> lists) {
     final LibraryGwaSubmission libraryGwaSubmission = LibraryGwaSubmission()
       ..title = title
       ..fullname = fullname
@@ -33,9 +41,9 @@ class HiveBoxes {
 
   static editLibrarySubmission(LibraryGwaSubmission submission,
       [String title,
-        String fullname,
-        String thumbnailUrl,
-        List<String> lists]) {
+      String fullname,
+      String thumbnailUrl,
+      List<String> lists]) {
     if (title != null && title.isNotEmpty) submission.title = title;
     if (fullname != null && fullname.isNotEmpty) submission.fullname = fullname;
     if (thumbnailUrl != null && thumbnailUrl.isNotEmpty)
@@ -45,19 +53,28 @@ class HiveBoxes {
     submission.save();
   }
 
-  static Future<AppSettings> addAppSettings({String credentials}) async {
+  static Future<AppSettings> addAppSettings(
+      {String credentials,
+      AudioLaunchOptions audioLaunchOptions =
+          AudioLaunchOptions.ChromeCustomTabs}) async {
     final AppSettings settings = AppSettings(
-        credentials: credentials);
+        credentials: credentials, audioLaunchOptions: audioLaunchOptions);
     final box = getAppSettingsBox();
     await box.add(settings);
     return Future.value(settings);
   }
 
-  static editAppSettings({String credentials}) async {
+  static editAppSettings(
+      {String credentials, AudioLaunchOptions audioLaunchOptions}) async {
     final box = getAppSettingsBox();
-    if (box.isNotEmpty){
+    if (box.isNotEmpty) {
       final AppSettings settings = box.getAt(0);
-      settings.credentials = credentials;
+      if (credentials != null) {
+        settings.credentials = credentials;
+      }
+      if (audioLaunchOptions != null) {
+        settings.audioLaunchOptions = audioLaunchOptions;
+      }
       await settings.save();
     }
   }
@@ -66,5 +83,4 @@ class HiveBoxes {
     final box = getAppSettingsBox();
     await box.clear();
   }
-
 }

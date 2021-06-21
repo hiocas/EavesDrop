@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/screens/gwa_drawer/local_widgets/help.dart';
 import 'package:gwa_app/services/reddit_client_service.dart';
 import 'package:gwa_app/utils/util_functions.dart';
-import 'local_widgets/open_submission_screen.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
+import 'local_widgets/all_local_widgets.dart';
 
 class GwaDrawer extends StatelessWidget {
   const GwaDrawer({
@@ -46,6 +45,11 @@ class GwaDrawer extends StatelessWidget {
             ),
             ListTile(
               title: Text('Settings'),
+              onTap: () => Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => Settings(),
+                  )),
             ),
             ListTile(
               title: Text('About'),
