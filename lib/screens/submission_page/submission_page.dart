@@ -32,6 +32,8 @@ class SubmissionPageState extends State<SubmissionPage> {
   String _fullname;
   GwaSubmission _submission;
   ScrollController _scrollController;
+  GlobalKey<FloatingPlayButtonState> _floatingPlayButtonKey =
+      new GlobalKey<FloatingPlayButtonState>();
 
   @override
   void initState() {
@@ -78,57 +80,65 @@ class SubmissionPageState extends State<SubmissionPage> {
             child: Scaffold(
               backgroundColor: Theme.of(context).backgroundColor,
               body: SafeArea(
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  slivers: [
-                    //App Bar
-                    SubmissionPageAppBar(
-                      submission: _submission,
-                      maxTitleTop: 120,
-                      maxTitleAlignTop: 200,
-                    ),
-                    //Buttons and Tags
-                    SubmissionPageButtonsAndTags(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.deferToChild,
+                  onTap: () {
+                    print('Hide button');
+                    _floatingPlayButtonKey.currentState.animateButton();
+                  },
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    slivers: [
+                      //App Bar
+                      SubmissionPageAppBar(
                         submission: _submission,
-                        redditSubmission: snapshot.data,
-                        fromLibrary: widget.fromLibrary),
-                    //MarkdownViewer
-                    SliverPadding(
-                      padding: const EdgeInsets.all(10.0),
-                      sliver: SliverToBoxAdapter(
-                          child: Material(
-                        color: Theme.of(context).backgroundColor,
-                        elevation: 15.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: MarkdownViewer(
-                            text: _submission.selftext,
-                            fromLibrary: widget.fromLibrary,
-                            inPopupCard: false,
-                            bodyTextFontSize: 14.0,
-                          ),
-                        ),
-                      )),
-                    ),
-                    /*FIXME(Design): This makes sure the SelfTextViewer (now the
-                        MarkdownViewer) can be fully read without the floating
-                        action button blocking the text at the end of the
-                        CustomScrollView. Find a better solution or redesign
-                        the ui. */
-                    SliverToBoxAdapter(
-                      child: Container(
-                        height: 70,
+                        maxTitleTop: 120,
+                        maxTitleAlignTop: 200,
                       ),
-                    )
-                  ],
+                      //Buttons and Tags
+                      SubmissionPageButtonsAndTags(
+                          submission: _submission,
+                          redditSubmission: snapshot.data,
+                          fromLibrary: widget.fromLibrary),
+                      //MarkdownViewer
+                      SliverPadding(
+                        padding: const EdgeInsets.all(10.0),
+                        sliver: SliverToBoxAdapter(
+                            child: Material(
+                          color: Theme.of(context).backgroundColor,
+                          elevation: 15.0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(32.0))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(14.0),
+                            child: MarkdownViewer(
+                              text: _submission.selftext,
+                              fromLibrary: widget.fromLibrary,
+                              inPopupCard: false,
+                              bodyTextFontSize: 14.0,
+                            ),
+                          ),
+                        )),
+                      ),
+                      /*FIXME(Design): This makes sure the SelfTextViewer (now the
+                          MarkdownViewer) can be fully read without the floating
+                          action button blocking the text at the end of the
+                          CustomScrollView. Find a better solution or redesign
+                          the ui. */
+                      SliverToBoxAdapter(
+                        child: Container(
+                          height: 70,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               floatingActionButton: FloatingPlayButton(
+                key: _floatingPlayButtonKey,
                 heroTag: 'floating-play-button-popup',
                 submission: _submission,
                 scrollController: _scrollController,
