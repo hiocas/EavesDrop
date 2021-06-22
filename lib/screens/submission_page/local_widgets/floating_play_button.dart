@@ -63,8 +63,6 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
   void initState() {
     super.initState();
     double alwaysShowFABAt;
-    ScrollDirection showDirection = ScrollDirection.forward;
-    ScrollDirection hideDirection = ScrollDirection.reverse;
     bool canHideFAB = true;
     _isFABVisible = true;
     _animationController = new AnimationController(
@@ -72,13 +70,16 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
     widget.scrollController.addListener(() {
       // To avoid a null error.
       if (widget.scrollController.position.hasContentDimensions) {
-        // TODO: Make this less messy...
+        // TODO: Find a way to calculate this once.
+        /* TODO: Add a min extent for animation (if bellow the button won't hide
+            when scrolling down. */
         alwaysShowFABAt =
-            Math.max(widget.scrollController.position.maxScrollExtent - 250, 0);
+            Math.max(widget.scrollController.position.maxScrollExtent - 200, 0);
+        // TODO: Make this less messy...
         canHideFAB = widget.scrollController.offset < alwaysShowFABAt;
         if (canHideFAB &&
             widget.scrollController.position.userScrollDirection ==
-                hideDirection) {
+                ScrollDirection.reverse) {
           if (_isFABVisible) {
             setState(() {
               _isFABVisible = false;
@@ -86,29 +87,18 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
             });
           }
         } else if (widget.scrollController.position.userScrollDirection ==
-            showDirection) {
+            ScrollDirection.forward) {
           if (!_isFABVisible) {
             setState(() {
               _isFABVisible = true;
               _animationController.reverse();
             });
           }
-        } else if (!canHideFAB) {
+        } else if (!canHideFAB & !_isFABVisible) {
           setState(() {
             _isFABVisible = true;
             _animationController.reverse();
           });
-        }
-
-        // Switch directions.
-        if (widget.scrollController.offset >=
-            widget.scrollController.position.maxScrollExtent) {
-          hideDirection = ScrollDirection.forward;
-          showDirection = ScrollDirection.reverse;
-        } else if (widget.scrollController.offset <=
-            widget.scrollController.position.minScrollExtent) {
-          showDirection = ScrollDirection.forward;
-          hideDirection = ScrollDirection.reverse;
         }
       }
     });

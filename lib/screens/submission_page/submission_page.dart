@@ -80,33 +80,33 @@ class SubmissionPageState extends State<SubmissionPage> {
             child: Scaffold(
               backgroundColor: Theme.of(context).backgroundColor,
               body: SafeArea(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.deferToChild,
-                  onTap: () {
-                    print('Hide button');
-                    _floatingPlayButtonKey.currentState.animateButton();
-                  },
-                  child: CustomScrollView(
-                    controller: _scrollController,
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    slivers: [
-                      //App Bar
-                      SubmissionPageAppBar(
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  slivers: [
+                    //App Bar
+                    SubmissionPageAppBar(
+                      submission: _submission,
+                      maxTitleTop: 120,
+                      maxTitleAlignTop: 200,
+                    ),
+                    //Buttons and Tags
+                    SubmissionPageButtonsAndTags(
                         submission: _submission,
-                        maxTitleTop: 120,
-                        maxTitleAlignTop: 200,
-                      ),
-                      //Buttons and Tags
-                      SubmissionPageButtonsAndTags(
-                          submission: _submission,
-                          redditSubmission: snapshot.data,
-                          fromLibrary: widget.fromLibrary),
-                      //MarkdownViewer
-                      SliverPadding(
-                        padding: const EdgeInsets.all(10.0),
-                        sliver: SliverToBoxAdapter(
-                            child: Material(
+                        redditSubmission: snapshot.data,
+                        fromLibrary: widget.fromLibrary),
+                    //MarkdownViewer
+                    SliverPadding(
+                      padding: const EdgeInsets.all(10.0),
+                      sliver: SliverToBoxAdapter(
+                          child: GestureDetector(
+                        behavior: HitTestBehavior.deferToChild,
+                        onTap: () {
+                          print('Hide button');
+                          _floatingPlayButtonKey.currentState.animateButton();
+                        },
+                        child: Material(
                           color: Theme.of(context).backgroundColor,
                           elevation: 15.0,
                           shape: RoundedRectangleBorder(
@@ -121,20 +121,20 @@ class SubmissionPageState extends State<SubmissionPage> {
                               bodyTextFontSize: 14.0,
                             ),
                           ),
-                        )),
-                      ),
-                      /*FIXME(Design): This makes sure the SelfTextViewer (now the
-                          MarkdownViewer) can be fully read without the floating
-                          action button blocking the text at the end of the
-                          CustomScrollView. Find a better solution or redesign
-                          the ui. */
-                      SliverToBoxAdapter(
-                        child: Container(
-                          height: 70,
                         ),
-                      )
-                    ],
-                  ),
+                      )),
+                    ),
+                    /*FIXME(Design): This makes sure the SelfTextViewer (now the
+                        MarkdownViewer) can be fully read without the floating
+                        action button blocking the text at the end of the
+                        CustomScrollView. Find a better solution or redesign
+                        the ui. */
+                    SliverToBoxAdapter(
+                      child: Container(
+                        height: 70,
+                      ),
+                    )
+                  ],
                 ),
               ),
               floatingActionButton: FloatingPlayButton(
