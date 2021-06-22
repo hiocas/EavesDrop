@@ -22,8 +22,7 @@ class SubmissionPageAppBar extends StatelessWidget {
     double top;
     int authorNameTapCounts = 0;
     return SliverAppBar(
-      /*TODO(Design): Decide whether the app bar should be
-                         pinned or not. */
+      // TODO(Design): Decide whether the app bar should be pinned or not.
       pinned: true,
       elevation: 15.0,
       shape: RoundedRectangleBorder(
@@ -73,15 +72,19 @@ class SubmissionPageAppBar extends StatelessWidget {
                     children: [
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                            maxWidth: top >= maxTitleAlignTop ? 2000 : 330),
+                            maxWidth: top >= maxTitleAlignTop ? 2000 : 310),
                         child: PopupTextButton(
                           heroTag: 'popup-fulltitle-card',
                           fullText: submission.fullTitle,
                           text: Text(
                             submission.title,
-                            overflow: top >= maxTitleTop
-                                ? TextOverflow.visible
-                                : TextOverflow.ellipsis,
+                            maxLines: top >= maxTitleTop
+                                ? (top >= maxTitleAlignTop ? 4 : 2)
+                                : 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: top >= maxTitleAlignTop
+                                ? TextAlign.start
+                                : TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           ),
                         ),

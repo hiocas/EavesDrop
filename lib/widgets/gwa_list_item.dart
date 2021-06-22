@@ -46,6 +46,8 @@ class GwaListItem extends StatelessWidget {
           alignment: Alignment.bottomLeft,
           child: Text(
             submission.title,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 14,
               color: Colors.white,
@@ -118,6 +120,8 @@ class GwaLibraryListItem extends StatelessWidget {
           alignment: Alignment.bottomLeft,
           child: Text(
             title,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 14,
               color: Colors.white,
