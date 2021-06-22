@@ -46,6 +46,7 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   bool _isFABVisible;
+  void Function() _waitForNotNull;
 
   animateButton() {
     if (_animationController != null) {
@@ -67,41 +68,55 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
     _isFABVisible = true;
     _animationController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 500));
-    widget.scrollController.addListener(() {
-      // To avoid a null error.
-      if (widget.scrollController.position.hasContentDimensions) {
-        // TODO: Find a way to calculate this once.
-        /* TODO: Add a min extent for animation (if bellow the button won't hide
-            when scrolling down. */
-        alwaysShowFABAt =
-            Math.max(widget.scrollController.position.maxScrollExtent - 200, 0);
-        // TODO: Make this less messy...
-        canHideFAB = widget.scrollController.offset < alwaysShowFABAt;
-        if (canHideFAB &&
-            widget.scrollController.position.userScrollDirection ==
-                ScrollDirection.reverse) {
-          if (_isFABVisible) {
-            setState(() {
-              _isFABVisible = false;
-              _animationController.forward();
-            });
-          }
-        } else if (widget.scrollController.position.userScrollDirection ==
-            ScrollDirection.forward) {
-          if (!_isFABVisible) {
-            setState(() {
-              _isFABVisible = true;
-              _animationController.reverse();
-            });
-          }
-        } else if (!canHideFAB & !_isFABVisible) {
+    void Function() animateButton = () {
+      // TODO: Find a way to calculate this once.
+      alwaysShowFABAt =
+          Math.max(widget.scrollController.position.maxScrollExtent - 200, 0);
+      // TODO: Make this less messy...
+      canHideFAB = widget.scrollController.offset < alwaysShowFABAt;
+      if (canHideFAB &&
+          widget.scrollController.position.userScrollDirection ==
+              ScrollDirection.reverse) {
+        if (_isFABVisible) {
+          setState(() {
+            _isFABVisible = false;
+            _animationController.forward();
+          });
+        }
+      } else if (widget.scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_isFABVisible) {
           setState(() {
             _isFABVisible = true;
             _animationController.reverse();
           });
         }
+      } else if (!canHideFAB & !_isFABVisible) {
+        setState(() {
+          _isFABVisible = true;
+          _animationController.reverse();
+        });
       }
-    });
+    };
+    _waitForNotNull = () {
+      if (widget.scrollController.position.hasContentDimensions) {
+        /* If maxScrollController is smaller than 450, don't animate the button
+         based on the user scrolling. */
+        if (widget.scrollController.position.maxScrollExtent <= 450) {
+          _removeWaitForNotNull();
+        } else {
+          alwaysShowFABAt = Math.max(
+              widget.scrollController.position.maxScrollExtent - 200, 0);
+          _removeWaitForNotNull();
+          widget.scrollController.addListener(animateButton);
+        }
+      }
+    };
+    widget.scrollController.addListener(_waitForNotNull);
+  }
+
+  _removeWaitForNotNull() {
+    widget.scrollController.removeListener(_waitForNotNull);
   }
 
   @override
