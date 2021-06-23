@@ -27,7 +27,7 @@ class _SettingsState extends State<Settings> {
     super.dispose();
   }
 
-  _SettingOption<AudioLaunchOptions> _makeAudioLaunchOptionRadioListTile(
+  _SettingOption<AudioLaunchOptions> _makeAudioLaunchOptionSettingOption(
       BuildContext context,
       {AudioLaunchOptions value,
       String subtitle}) {
@@ -79,13 +79,13 @@ class _SettingsState extends State<Settings> {
                           'links:',
                       spaceHead: false,
                       options: [
-                        _makeAudioLaunchOptionRadioListTile(context,
+                        _makeAudioLaunchOptionSettingOption(context,
                             value: AudioLaunchOptions.ChromeCustomTabs,
                             subtitle:
                                 "Allows you to play audio while your phone is "
                                 "locked but, since it's Chrome, your activity "
                                 "will be saved in your Chrome history."),
-                        _makeAudioLaunchOptionRadioListTile(context,
+                        _makeAudioLaunchOptionSettingOption(context,
                             value: AudioLaunchOptions.WebView,
                             subtitle: "Your activity will not be saved in your "
                                 "Chrome history but audio played while your "
@@ -118,11 +118,6 @@ class _SettingsState extends State<Settings> {
                         ],
                       ),
                     ),
-                    // Default Library crossAxisCount setting
-                    _Setting(
-                        icon: Icons.grid_view_outlined,
-                        settingName: 'Choose your default library post size:',
-                        options: [])
                   ],
                 ),
               ));
@@ -173,9 +168,9 @@ class _Setting extends StatelessWidget {
           ),
         ),
         SizedBox(height: spacing),
-        ListView(
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: options,
-          shrinkWrap: true,
         ),
         explanation ??
             SizedBox(
