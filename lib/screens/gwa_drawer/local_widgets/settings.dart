@@ -27,7 +27,7 @@ class _SettingsState extends State<Settings> {
     super.dispose();
   }
 
-  RadioListTile<AudioLaunchOptions> _makeAudioLaunchOptionRadioListTile(
+  _SettingOption<AudioLaunchOptions> _makeAudioLaunchOptionRadioListTile(
       BuildContext context,
       {AudioLaunchOptions value,
       String subtitle}) {
@@ -147,7 +147,7 @@ class _Setting extends StatelessWidget {
   final IconData icon;
   final String settingName;
   final double spacing;
-  final List<RadioListTile> options;
+  final List<_SettingOption> options;
   final Widget explanation;
   final bool spaceHead;
 
