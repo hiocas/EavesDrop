@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
+import 'package:gwa_app/screens/submission_page/local_widgets/gwa_tag.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/widgets/custom_popup_widget_button.dart';
 
@@ -73,66 +74,23 @@ class PopupStatefulTagsCard extends StatefulWidget {
 }
 
 class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
-  /*TODO: Find a way to make this one function that would work also on
-     submission_page instead of two different ones... */
   List<Widget> _getChipList() {
     List<Widget> chips = [];
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
-      var avatarCreator =
-          UtilFunctions.tagChipAvatar(widget.gwaSubmission.tags[i]);
-      Widget avatar = avatarCreator[0];
-      int chars = avatarCreator[1];
-      switch (chars) {
-        case 1:
-          chips.add(
-            FilterChip(
-              selected: widget.selectedTags[i],
-              label: Text(getTagName(widget.gwaSubmission.tags[i])),
-              backgroundColor: Theme.of(context).primaryColor,
-              labelPadding: const EdgeInsets.only(left: 3.0, right: 6.0),
-              selectedColor: Theme.of(context).accentColor,
-              side: BorderSide(width: 0.0),
-              avatar: avatar,
-              onSelected: (bool value) {
-                /*Update the tags on the submission page, this is also where the
-            * selected bool list is so update it also.*/
-                widget.onSelected.call(value, i);
-                /*Update the tags on this card (the selected list which is in the
-            * submission page widget is used here, it is updated a line above
-            * this one so all we need to do is call setState since the list's
-            * values have changed.*/
-                setState(() {});
-              },
-            ),
-          );
-          break;
-        case 2:
-          chips.add(
-            /*FIXME: Some tags are too long to display on this widget and can't
-                be seen fully. */
-            FilterChip(
-              selected: widget.selectedTags[i],
-              label: Text(getTagName(widget.gwaSubmission.tags[i])),
-              backgroundColor: Theme.of(context).primaryColor,
-              labelPadding: const EdgeInsets.only(left: 3.0, right: 6.0),
-              padding: const EdgeInsets.only(left: 4.0),
-              selectedColor: Theme.of(context).accentColor,
-              side: BorderSide(width: 0.0),
-              avatar: avatar,
-              onSelected: (bool value) {
-                /*Update the tags on the submission page, this is also where the
-            * selected bool list is so update it also.*/
-                widget.onSelected.call(value, i);
-                /*Update the tags on this card (the selected list which is in the
-            * submission page widget is used here, it is updated a line above
-            * this one so all we need to do is call setState since the list's
-            * values have changed.*/
-                setState(() {});
-              },
-            ),
-          );
-          break;
-      }
+      chips.add(GwaTag(
+        tag: widget.gwaSubmission.tags[i],
+        selected: widget.selectedTags[i],
+        onSelected: (bool value) {
+          /*Update the tags on the submission page, this is also where the
+                  * selected bool list is so update it also.*/
+          widget.onSelected.call(value, i);
+          /*Update the tags on this card (the selected list which is in the
+           * submission page widget is used here, it is updated a line above
+           * this one so all we need to do is call setState since the list's
+           * values have changed.*/
+          setState(() {});
+        },
+      ));
     }
     return chips;
   }

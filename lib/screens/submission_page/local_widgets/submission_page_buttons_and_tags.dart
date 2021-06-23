@@ -1,12 +1,11 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
+import 'package:gwa_app/screens/submission_page/local_widgets/gwa_tag.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_add_card_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_tags_card_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/submission_details.dart';
 import 'package:gwa_app/states/global_state.dart';
-import 'package:gwa_app/utils/util_functions.dart'
-    show UtilFunctions, getTagName;
 import 'package:gwa_app/widgets/particles_icon_text_button.dart';
 import 'package:gwa_app/widgets/popup_card_button.dart';
 import 'package:provider/provider.dart';
@@ -149,60 +148,19 @@ class _SubmissionPageButtonsAndTagsState
                   margin:
                       const EdgeInsets.only(left: 10.0, top: 4.0, bottom: 4.0),
                   height: 35,
-                  child: ListView.builder(
+                  child:
+                      ListView.builder(
                     itemBuilder: (BuildContext context, int index) {
-                      var tagList = widget.submission.tags;
-                      var avatarCreator =
-                          UtilFunctions.tagChipAvatar(tagList[index]);
-                      Widget avatar = avatarCreator[0];
-                      int chars = avatarCreator[1];
-                      //If there are 2 chars as an avatar.
-                      if (chars == 2)
-                        return Container(
-                          padding: const EdgeInsets.only(right: 4.0),
-                          child: FilterChip(
-                            labelPadding:
-                                const EdgeInsets.only(left: 2.0, right: 10.0),
-                            padding: const EdgeInsets.only(left: 4.0),
-                            visualDensity: VisualDensity.compact,
-                            selected: _selectedTags[index],
-                            label: Text(getTagName(tagList[index])),
-                            backgroundColor: Theme.of(context).primaryColor,
-                            selectedColor: Theme.of(context).accentColor,
-                            side: BorderSide(width: 0.0),
-                            avatar: avatar,
-                            onSelected: (bool value) {
-                              print(tagList[index]);
-                              setState(() {
-                                _selectedTags[index] = value;
-                                print(_selectedTags[index]);
-                              });
-                            },
-                          ),
-                        );
-                      //If there is any other number of chars as an avatar.
-                      else
-                        return Container(
-                          padding: const EdgeInsets.only(right: 4.0),
-                          child: FilterChip(
-                            labelPadding:
-                                const EdgeInsets.only(left: 3.0, right: 6.0),
-                            visualDensity: VisualDensity.compact,
-                            selected: _selectedTags[index],
-                            label: Text(getTagName(tagList[index])),
-                            backgroundColor: Theme.of(context).primaryColor,
-                            selectedColor: Theme.of(context).accentColor,
-                            side: BorderSide(width: 0.0),
-                            avatar: avatar,
-                            onSelected: (bool value) {
-                              print(tagList[index]);
-                              setState(() {
-                                _selectedTags[index] = value;
-                                print(_selectedTags[index]);
-                              });
-                            },
-                          ),
-                        );
+                      return GwaTag(
+                        tag: widget.submission.tags[index],
+                        selected: _selectedTags[index],
+                        onSelected: (value) {
+                          setState(() {
+                            _selectedTags[index] = value;
+                            print(_selectedTags[index]);
+                          });
+                        },
+                      );
                     },
                     itemCount: widget.submission.tags.length,
                     shrinkWrap: true,
