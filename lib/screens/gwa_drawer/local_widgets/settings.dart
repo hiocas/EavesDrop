@@ -18,7 +18,6 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   AudioLaunchOptions _audioLaunchOptions;
   Box<AppSettings> _box;
-  double _spacing = 15.0;
 
   @override
   void dispose() {
@@ -31,7 +30,9 @@ class _SettingsState extends State<Settings> {
   RadioListTile<AudioLaunchOptions> _makeAudioLaunchOptionRadioListTile(
       {AudioLaunchOptions value, String subtitle}) {
     return RadioListTile<AudioLaunchOptions>(
-        activeColor: Theme.of(context).primaryColor,
+        activeColor: Theme
+            .of(context)
+            .primaryColor,
         value: value,
         title: Text(
           audioLaunchOptionToString(value),
@@ -56,7 +57,9 @@ class _SettingsState extends State<Settings> {
         context,
         title: 'Settings',
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
       body: FutureBuilder<Box<AppSettings>>(
           future: HiveBoxes.openAppSettingsBox(),
           builder: (context, futureBox) {
@@ -74,73 +77,160 @@ class _SettingsState extends State<Settings> {
               }
               return Center(
                   child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                  children: [
-                    ListTile(
-                      leading: Icon(
-                        Icons.play_circle_filled_outlined,
-                        color: Colors.white,
-                        size: 35.0,
-                      ),
-                      title: Text(
-                        'Choose your preferred web launcher for detected audio '
-                        'links:',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0),
-                      ),
-                    ),
-                    SizedBox(height: _spacing),
-                    _makeAudioLaunchOptionRadioListTile(
-                        value: AudioLaunchOptions.ChromeCustomTabs,
-                        subtitle:
-                            "Allows you to play audio while your phone is locked "
-                            "but, since it's Chrome, your activity will be saved "
-                            "in your Chrome history."),
-                    _makeAudioLaunchOptionRadioListTile(
-                        value: AudioLaunchOptions.WebView,
-                        subtitle:
-                            "Your activity will not be saved in your Chrome "
-                            "history but audio played while your phone is locked "
-                            "will be choppy and laggy (not a very pleasant "
-                            "experience)."),
-                    ExpansionTile(
-                      title: Text('What is this?'),
-                      textColor: Colors.white,
-                      iconColor: Colors.white,
-                      collapsedTextColor: Colors.grey[400],
-                      collapsedIconColor: Colors.grey[400],
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView(
                       children: [
-                        ListTile(
-                          title: MarkdownViewer(
-                            fromLibrary: false,
-                            inPopupCard: false,
-                            text:
-                                "When you click on the large play button after opening a post, this setting tells the app which browser to open the audio link with.\n\n"
-                                "**Chrome Custom Tabs** is the default option. It's downside is that your browsing history in it is automatically saved to your Chrome history.\n\n"
-                                "**WebView** is the other option. It won't save your history to your chrome history but if you lock your phone while listening to the audio it will be choppy (this is because WebView uses an older method to handle background audio tasks. If you're using an older version of Android, it may not be choppy and actually be usable).\n"
-                                "This is the reason the WakeLock button exists on there. I know it's a very invasive solution but it's genuinely the only solution I've managed to find and implement in time.\n\n"
-                                "Unfortunately, these are the only ways I managed to find to launch web content.\n\n"
-                                "In the future, I'd like to have a custom made player for posts built into the app. This would hopefully solve most of these issues.\n\n"
-                                "Also, if you know of a better way we can do this where both downsides are nonexistent, please contribute to this project on GitHub!",
-                            bodyTextFontSize: 14.0,
-                            bodyTextColor: Colors.grey[400],
-                          ),
-                        )
+                        _Setting(icon: Icons.play_circle_filled_outlined,
+                          settingName: 'Choose your preferred web launcher for detected audio '
+                              'links:',
+                          options: [_makeAudioLaunchOptionRadioListTile(
+                              value: AudioLaunchOptions.ChromeCustomTabs,
+                              subtitle:
+                              "Allows you to play audio while your phone is locked "
+                                  "but, since it's Chrome, your activity will be saved "
+                                  "in your Chrome history."),
+                            _makeAudioLaunchOptionRadioListTile(
+                                value: AudioLaunchOptions.WebView,
+                                subtitle:
+                                "Your activity will not be saved in your Chrome "
+                                    "history but audio played while your phone is locked "
+                                    "will be choppy and laggy (not a very pleasant "
+                                    "experience).")
+                          ], explanation: ExpansionTile(
+                            title: Text('What is this?'),
+                            textColor: Colors.white,
+                            iconColor: Colors.white,
+                            collapsedTextColor: Colors.grey[400],
+                            collapsedIconColor: Colors.grey[400],
+                            children: [
+                              ListTile(
+                                title: MarkdownViewer(
+                                  fromLibrary: false,
+                                  inPopupCard: false,
+                                  text:
+                                  "When you click on the large play button after opening a post, this setting tells the app which browser to open the audio link with.\n\n"
+                                      "**Chrome Custom Tabs** is the default option. It's downside is that your browsing history in it is automatically saved to your Chrome history.\n\n"
+                                      "**WebView** is the other option. It won't save your history to your chrome history but if you lock your phone while listening to the audio it will be choppy (this is because WebView uses an older method to handle background audio tasks. If you're using an older version of Android, it may not be choppy and actually be usable).\n"
+                                      "This is the reason the WakeLock button exists on there. I know it's a very invasive solution but it's genuinely the only solution I've managed to find and implement in time.\n\n"
+                                      "Unfortunately, these are the only ways I managed to find to launch web content.\n\n"
+                                      "In the future, I'd like to have a custom made player for posts built into the app. This would hopefully solve most of these issues.\n\n"
+                                      "Also, if you know of a better way we can do this where both downsides are nonexistent, please contribute to this project on GitHub!",
+                                  bodyTextFontSize: 14.0,
+                                  bodyTextColor: Colors.grey[400],
+                                ),
+                              )
+                            ],
+                          ),),
+                        // ListTile(
+                        //   leading: Icon(
+                        //     Icons.play_circle_filled_outlined,
+                        //     color: Colors.white,
+                        //     size: 35.0,
+                        //   ),
+                        //   title: Text(
+                        //     'Choose your preferred web launcher for detected audio '
+                        //         'links:',
+                        //     style: TextStyle(
+                        //         color: Colors.white,
+                        //         fontWeight: FontWeight.bold,
+                        //         fontSize: 18.0),
+                        //   ),
+                        // ),
+                        // SizedBox(height: _spacing),
+                        // _makeAudioLaunchOptionRadioListTile(
+                        //     value: AudioLaunchOptions.ChromeCustomTabs,
+                        //     subtitle:
+                        //     "Allows you to play audio while your phone is locked "
+                        //         "but, since it's Chrome, your activity will be saved "
+                        //         "in your Chrome history."),
+                        // _makeAudioLaunchOptionRadioListTile(
+                        //     value: AudioLaunchOptions.WebView,
+                        //     subtitle:
+                        //     "Your activity will not be saved in your Chrome "
+                        //         "history but audio played while your phone is locked "
+                        //         "will be choppy and laggy (not a very pleasant "
+                        //         "experience)."),
+                        // ExpansionTile(
+                        //   title: Text('What is this?'),
+                        //   textColor: Colors.white,
+                        //   iconColor: Colors.white,
+                        //   collapsedTextColor: Colors.grey[400],
+                        //   collapsedIconColor: Colors.grey[400],
+                        //   children: [
+                        //     ListTile(
+                        //       title: MarkdownViewer(
+                        //         fromLibrary: false,
+                        //         inPopupCard: false,
+                        //         text:
+                        //         "When you click on the large play button after opening a post, this setting tells the app which browser to open the audio link with.\n\n"
+                        //             "**Chrome Custom Tabs** is the default option. It's downside is that your browsing history in it is automatically saved to your Chrome history.\n\n"
+                        //             "**WebView** is the other option. It won't save your history to your chrome history but if you lock your phone while listening to the audio it will be choppy (this is because WebView uses an older method to handle background audio tasks. If you're using an older version of Android, it may not be choppy and actually be usable).\n"
+                        //             "This is the reason the WakeLock button exists on there. I know it's a very invasive solution but it's genuinely the only solution I've managed to find and implement in time.\n\n"
+                        //             "Unfortunately, these are the only ways I managed to find to launch web content.\n\n"
+                        //             "In the future, I'd like to have a custom made player for posts built into the app. This would hopefully solve most of these issues.\n\n"
+                        //             "Also, if you know of a better way we can do this where both downsides are nonexistent, please contribute to this project on GitHub!",
+                        //         bodyTextFontSize: 14.0,
+                        //         bodyTextColor: Colors.grey[400],
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        // Divider(
+                        //   thickness: 1.0,
+                        //   color: Colors.black26,
+                        // )
                       ],
                     ),
-                    Divider(
-                      thickness: 1.0,
-                      color: Colors.black26,
-                    )
-                  ],
-                ),
-              ));
+                  ));
             }
             return CircularProgressIndicator();
           }),
+    );
+  }
+}
+
+class _Setting extends StatelessWidget {
+  const _Setting({
+    Key key,
+    @required this.icon,
+    @required this.settingName,
+    this.spacing = 15.0,
+    @required this.options,
+    this.explanation,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String settingName;
+  final double spacing;
+  final List<Widget> options;
+  final Widget explanation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(
+            icon,
+            color: Colors.white,
+            size: 35.0,
+          ),
+          title: Text(
+            settingName,
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0),
+          ),
+        ),
+        SizedBox(height: spacing),
+        ListView(children: options, shrinkWrap: true,),
+        explanation ?? Container(),
+        Divider(
+          thickness: 1.0,
+          color: Colors.black26,
+        )
+      ],
     );
   }
 }

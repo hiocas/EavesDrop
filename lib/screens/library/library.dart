@@ -18,6 +18,7 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _smallSubmissions = false;
 
   /// Returns a list of [Tab] widgets from [HiveBoxes.listTags].
   List<Widget> _makeListTabs() {
@@ -64,7 +65,7 @@ class _LibraryState extends State<Library> {
               padding: const EdgeInsets.all(8.0),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: _smallSubmissions ? 3 : 2,
                   mainAxisSpacing: 5,
                   crossAxisSpacing: 5,
                 ),
@@ -127,6 +128,20 @@ class _LibraryState extends State<Library> {
                         },
                       ),
                       actions: [
+                        // Submission Cross Axis Count
+                        IconButton(
+                            icon: Icon(_smallSubmissions
+                                ? Icons.grid_view_outlined
+                                : Icons.grid_on_outlined),
+                            tooltip: _smallSubmissions
+                                ? 'Display less posts'
+                                : 'Display more posts',
+                            onPressed: () {
+                              setState(() {
+                                _smallSubmissions = !_smallSubmissions;
+                              });
+                            }),
+                        // Clear Library
                         IconButton(
                           icon: Icon(Icons.close),
                           tooltip: 'Clear your library',
