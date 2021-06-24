@@ -52,7 +52,7 @@ class _HomeSectionPageViewState extends State<HomeSectionPageView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 240.0,
+      height: 230.0,
       child: PageView.builder(
         controller: this._pageController,
         itemCount: widget.previews.length,

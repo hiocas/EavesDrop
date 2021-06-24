@@ -88,7 +88,7 @@ class _DummyHomeSectionPageViewState extends State<DummyHomeSectionPageView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200.0,
+      height: 230.0,
       child: PageView.builder(
         controller: _pageController,
         itemCount: 2,

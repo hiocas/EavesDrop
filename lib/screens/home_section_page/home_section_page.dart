@@ -21,13 +21,13 @@ class HomeSectionPage extends StatefulWidget {
   final String sectionTitle;
   final Stream<UserContent> contentStream;
 
-  /// If true, [_HomeSectionPageView] will show only submissions with
+  /// If true, [HomeSectionPageView] will show only submissions with
   /// a thumbnail picture that isn't the default one.
-  /// If false, [_HomeSectionPageView] will show randomly selected submissions
+  /// If false, [HomeSectionPageView] will show randomly selected submissions
   /// from the contentStream.
   final bool pageShowOnlyPictures;
 
-  /// If true, [_HomeSectionPageView] will display a shuffled list based on
+  /// If true, [HomeSectionPageView] will display a shuffled list based on
   /// [contentStream].
   /// If false, the order of the pages will remain as the order of [contentStream].
   final bool shufflePages;
