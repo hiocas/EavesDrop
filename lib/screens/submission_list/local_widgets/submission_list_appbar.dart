@@ -232,8 +232,12 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   @override
   void initState() {
     _isSearching = widget.initialIsSearching;
-    _sort = widget.initialSort;
-    _timeFilter = widget.initialTimeFilter;
+    if (widget.initialSort != null){
+      _sort = widget.initialSort;
+    }
+    if (widget.initialTimeFilter != null){
+      _timeFilter = widget.initialTimeFilter;
+    }
     _textFieldController =
         TextEditingController(text: widget.initialQuery ?? null);
     super.initState();
