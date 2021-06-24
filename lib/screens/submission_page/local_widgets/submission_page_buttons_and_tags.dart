@@ -50,17 +50,19 @@ class _SubmissionPageButtonsAndTagsState
         iconPressed: Icons.favorite,
         label: 'Upvote',
         subtext: 'Upvote this and show your support!',
+        disabledSubtext: 'This post is archived',
         color: Theme.of(context).primaryColor,
         initialPressed: _voted(),
         millisecondsBeforeOnPressed: 0,
-        onPressed: () async {
-          // TODO: Display a snackbar if action failed.
-          if (_voted()) {
-            await widget.redditSubmission.clearVote(waitForResponse: true);
-          } else {
-            await widget.redditSubmission.upvote(waitForResponse: true);
-          }
-        },
+        onPressed: widget.redditSubmission.archived ? null : () async {
+                // TODO: Display a snackbar if action failed.
+                if (_voted()) {
+                  await widget.redditSubmission
+                      .clearVote(waitForResponse: true);
+                } else {
+                  await widget.redditSubmission.upvote(waitForResponse: true);
+                }
+              },
         confettiDuration: Duration(milliseconds: 300),
       );
     }

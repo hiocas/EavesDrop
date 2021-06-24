@@ -122,6 +122,7 @@ class _ParticlesIconTextButtonState extends State<ParticlesIconTextButton> {
 class ParticlesIconTextToggleButton extends StatefulWidget {
   final String label;
   final String subtext;
+  final String disabledSubtext;
   final IconData icon;
   final IconData iconPressed;
   final Color color;
@@ -143,6 +144,7 @@ class ParticlesIconTextToggleButton extends StatefulWidget {
     Key key,
     @required this.label,
     this.subtext,
+    this.disabledSubtext,
     @required this.icon,
     @required this.iconPressed,
     this.color,
@@ -194,33 +196,40 @@ class _ParticlesIconTextToggleButtonState
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            Feedback.forTap(context);
-            _confettiController.play();
-            /* For some reason for the confetti to not get stuck I need to
+          onTap: widget.onPressed == null
+              ? null
+              : () {
+                  Feedback.forTap(context);
+                  if (!_toggled) {
+                    _confettiController.play();
+                  }
+                  /* For some reason for the confetti to not get stuck I need to
             update the UI. */
-            setState(() {
-              _toggled = !_toggled;
-              _icon = _toggled
-                  ? (widget.iconPressed ?? widget.icon)
-                  : widget.icon;
-            });
-            _timer = new Timer(
-                Duration(
-                    milliseconds: (widget.millisecondsBeforeOnPressed ?? 2000) +
-                        (widget.confettiDuration.inMilliseconds > 1
-                            ? widget.confettiDuration.inMilliseconds
-                            : 300)), () {
-              widget.onPressed.call();
-            });
-          },
+                  setState(() {
+                    _toggled = !_toggled;
+                    _icon = _toggled
+                        ? (widget.iconPressed ?? widget.icon)
+                        : widget.icon;
+                  });
+                  _timer = new Timer(
+                      Duration(
+                          milliseconds:
+                              (widget.millisecondsBeforeOnPressed ?? 2000) +
+                                  (widget.confettiDuration.inMilliseconds > 1
+                                      ? widget.confettiDuration.inMilliseconds
+                                      : 300)), () {
+                    widget.onPressed.call();
+                  });
+                },
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
               IconTextButtonElement(
                 label: this.widget.label,
                 icon: _icon,
-                color: this.widget.color,
+                color: widget.onPressed == null
+                    ? widget.color.withOpacity(0.4)
+                    : this.widget.color,
                 backgroundColor: this.widget.backgroundColor,
               ),
               ConfettiWidget(
@@ -241,8 +250,14 @@ class _ParticlesIconTextToggleButtonState
           ),
         ),
         IconTextButtonSubtext(
-          subtext: this.widget.subtext ?? '',
-          subtextColor: this.widget.subtextColor,
+          subtext: widget.onPressed == null
+              ? (this.widget.disabledSubtext ?? (this.widget.subtext ?? ''))
+              : (this.widget.subtext ?? ''),
+          subtextColor: widget.onPressed == null
+              ? this.widget.subtextColor == null
+                  ? Colors.grey.withOpacity(0.6)
+                  : (this.widget.subtextColor.withOpacity(0.6))
+              : this.widget.subtextColor,
         )
       ],
     );
