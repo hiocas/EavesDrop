@@ -57,15 +57,7 @@ class _SettingsState extends State<Settings> {
             if (futureBox.hasData) {
               _box = futureBox.data;
               AppSettings _appSettings = futureBox.data.getAt(0);
-              /* TODO: Create this when the app is first opened so we won't
-                  have to check for null values. */
-              if (_appSettings.audioLaunchOptions != null) {
                 _audioLaunchOptions = _appSettings.audioLaunchOptions;
-              } else {
-                HiveBoxes.editAppSettings(
-                    audioLaunchOptions: AudioLaunchOptions.ChromeCustomTabs);
-                _audioLaunchOptions = AudioLaunchOptions.ChromeCustomTabs;
-              }
               return Center(
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -270,13 +270,8 @@ class RedditClientService {
   _saveCredentials() async {
     if (loggedIn) {
       Box<AppSettings> box = await HiveBoxes.openAppSettingsBox();
-      if (box.isEmpty) {
-        await HiveBoxes.addAppSettings(
-            credentials: reddit.auth.credentials.toJson());
-      } else {
         await HiveBoxes.editAppSettings(
             credentials: reddit.auth.credentials.toJson());
-      }
       await Hive.close();
     }
   }

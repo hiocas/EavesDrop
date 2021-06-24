@@ -1,6 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/audio_launch_options.dart';
+import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/screens/home/home.dart';
 import 'package:gwa_app/screens/library/library.dart';
 import 'package:gwa_app/screens/submission_list/submission_list.dart';
@@ -8,8 +8,6 @@ import 'package:gwa_app/states/global_state.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'models/library_gwa_submission.dart';
-import 'models/app_settings.dart';
 import 'dart:core';
 
 Future main() async {
@@ -17,11 +15,7 @@ Future main() async {
 
   await Hive.initFlutter();
 
-  Hive.registerAdapter(LibraryGwaSubmissionAdapter());
-
-  Hive.registerAdapter(AppSettingsAdapter());
-
-  Hive.registerAdapter(AudioLaunchOptionsAdapter());
+  HiveBoxes.initHive();
 
   GlobalState globalState = GlobalState();
 
@@ -122,6 +116,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
       Home(),
       Library(),
     ];
+    HiveBoxes.checkFirstTime(context);
     super.initState();
   }
 

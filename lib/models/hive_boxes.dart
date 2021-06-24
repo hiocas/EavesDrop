@@ -1,10 +1,43 @@
 import 'package:gwa_app/models/audio_launch_options.dart';
+import 'package:gwa_app/screens/first_time_screen/first_time_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
 import 'package:gwa_app/models/app_settings.dart';
+import 'package:flutter/material.dart';
 
 class HiveBoxes {
   static List<String> listTags = ['Favorites', 'Planned'];
+
+  static void initHive() {
+    Hive.registerAdapter(LibraryGwaSubmissionAdapter());
+
+    Hive.registerAdapter(AppSettingsAdapter());
+
+    Hive.registerAdapter(AudioLaunchOptionsAdapter());
+  }
+
+  static Future<void> checkFirstTime(BuildContext context) async {
+    final settingsBox = await HiveBoxes.openAppSettingsBox();
+    if (settingsBox.isEmpty) {
+      await HiveBoxes.addAppSettings();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FirstTimeScreen(),
+        ),
+      );
+    }
+    else {
+      if (settingsBox.getAt(0).firstTime) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FirstTimeScreen(),
+          ),
+        );
+      }
+    }
+  }
 
   static Box<LibraryGwaSubmission> getLibraryBox() =>
       Hive.box<LibraryGwaSubmission>('library');
@@ -58,14 +91,18 @@ class HiveBoxes {
       AudioLaunchOptions audioLaunchOptions =
           AudioLaunchOptions.ChromeCustomTabs}) async {
     final AppSettings settings = AppSettings(
-        credentials: credentials, audioLaunchOptions: audioLaunchOptions);
+        credentials: credentials,
+        audioLaunchOptions: audioLaunchOptions,
+        firstTime: false);
     final box = getAppSettingsBox();
     await box.add(settings);
     return Future.value(settings);
   }
 
   static editAppSettings(
-      {String credentials, AudioLaunchOptions audioLaunchOptions}) async {
+      {String credentials,
+      AudioLaunchOptions audioLaunchOptions,
+      bool firstTime}) async {
     final box = getAppSettingsBox();
     if (box.isNotEmpty) {
       final AppSettings settings = box.getAt(0);
@@ -74,6 +111,9 @@ class HiveBoxes {
       }
       if (audioLaunchOptions != null) {
         settings.audioLaunchOptions = audioLaunchOptions;
+      }
+      if (firstTime != null) {
+        settings.firstTime = firstTime;
       }
       await settings.save();
     }

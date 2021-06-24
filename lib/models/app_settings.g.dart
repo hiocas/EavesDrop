@@ -19,17 +19,20 @@ class AppSettingsAdapter extends TypeAdapter<AppSettings> {
     return AppSettings(
       credentials: fields[0] as String,
       audioLaunchOptions: fields[1] as AudioLaunchOptions,
+      firstTime: fields[2] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, AppSettings obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.credentials)
       ..writeByte(1)
-      ..write(obj.audioLaunchOptions);
+      ..write(obj.audioLaunchOptions)
+      ..writeByte(2)
+      ..write(obj.firstTime);
   }
 
   @override

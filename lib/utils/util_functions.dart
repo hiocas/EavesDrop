@@ -30,20 +30,19 @@ String getUrlTitle(String url) {
 
 /// Use this function when you want to push a SubmissionPage. It'll handle
 /// returning the query data from it (if it exists).
-void pushSubmissionPageWithReturnData(BuildContext context,
-    String submissionFullname, bool fromLibrary) async {
+void pushSubmissionPageWithReturnData(
+    BuildContext context, String submissionFullname, bool fromLibrary) async {
   final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              SubmissionPage(
-                  submissionFullname: submissionFullname,
-                  fromLibrary: fromLibrary)));
+          builder: (context) => SubmissionPage(
+              submissionFullname: submissionFullname,
+              fromLibrary: fromLibrary)));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
         context,
         ExtractArgumentsSubmissionList.routeName,
-            (Route<dynamic> route) => false,
+        (Route<dynamic> route) => false,
         arguments: SubmissionListArguments(
             result['query'], result['sort'], result['timeFilter']));
   }
@@ -52,20 +51,19 @@ void pushSubmissionPageWithReturnData(BuildContext context,
 /// Use this function when you want to replace the current rout and push a
 /// SubmissionPage. It'll handle returning the query data from it
 /// (if it exists).
-void pushReplacementSubmissionPageWithReturnData(BuildContext context,
-    String submissionFullname, bool fromLibrary) async {
+void pushReplacementSubmissionPageWithReturnData(
+    BuildContext context, String submissionFullname, bool fromLibrary) async {
   final result = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              SubmissionPage(
-                  submissionFullname: submissionFullname,
-                  fromLibrary: fromLibrary)));
+          builder: (context) => SubmissionPage(
+              submissionFullname: submissionFullname,
+              fromLibrary: fromLibrary)));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
         context,
         ExtractArgumentsSubmissionList.routeName,
-            (Route<dynamic> route) => false,
+        (Route<dynamic> route) => false,
         arguments: SubmissionListArguments(
             result['query'], result['sort'], result['timeFilter']));
   }
@@ -87,8 +85,8 @@ void pushLogin(BuildContext context,
       context,
       CupertinoPageRoute(
           builder: (context) => Login(
-            redditClientService: redditClientService,
-          )));
+                redditClientService: redditClientService,
+              )));
   if (redirect != null && redirect) {
     Navigator.pushNamedAndRemoveUntil(
         context, RedirectToHome.routeName, (Route<dynamic> route) => false);
@@ -97,10 +95,8 @@ void pushLogin(BuildContext context,
 
 /// Pops [Login] and redirect [HomeScaffold] to [Home] based on [redirect].
 /// To use this make sure you pushed [Login] with [pushLogin].
-void popLogin(BuildContext context,
-    {bool redirect}) {
-  Navigator.pop(context,
-      redirect);
+void popLogin(BuildContext context, {bool redirect}) {
+  Navigator.pop(context, redirect);
 }
 
 String audioLaunchOptionToString(AudioLaunchOptions audioLaunchOptions) {

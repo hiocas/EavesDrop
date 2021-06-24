@@ -14,6 +14,9 @@ class AppSettings extends HiveObject {
   @HiveField(1)
   AudioLaunchOptions audioLaunchOptions;
 
-  AppSettings({this.credentials, this.audioLaunchOptions});
+  @HiveField(2)
+  bool firstTime;
+
+  AppSettings({this.credentials, this.audioLaunchOptions, this.firstTime});
 
 }
