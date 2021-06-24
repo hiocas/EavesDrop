@@ -85,6 +85,25 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
         _sort == Sort.comments;
   }
 
+  TimeFilter _getSortedTimeFilterValue(int index) {
+    switch (index) {
+      case 0:
+        return TimeFilter.all;
+      case 1:
+        return TimeFilter.year;
+      case 2:
+        return TimeFilter.month;
+      case 3:
+        return TimeFilter.week;
+      case 4:
+        return TimeFilter.day;
+      case 5:
+        return TimeFilter.hour;
+      default:
+        return TimeFilter.values[index];
+    }
+  }
+
   List<Widget> _makeAppBarActions() {
     if (_isSearching) {
       if (_timeFilterRelevant()) {
@@ -114,9 +133,9 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                 itemBuilder: (context) {
                   return List<PopupMenuEntry<TimeFilter>>.generate(6, (index) {
                     return PopupMenuItem(
-                        value: TimeFilter.values[index],
+                        value: _getSortedTimeFilterValue(index),
                         child: Text(
-                            _timeFilterToString(TimeFilter.values[index])));
+                            _timeFilterToString(_getSortedTimeFilterValue(index))));
                   });
                 },
                 elevation: 15.0,
