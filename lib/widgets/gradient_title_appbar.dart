@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class GradientTitleAppBar extends AppBar {
   GradientTitleAppBar(BuildContext context,
@@ -14,6 +15,8 @@ class GradientTitleAppBar extends AppBar {
                   bottomRight: Radius.circular(24.0))),
           titleSpacing: 0.0,
           backgroundColor: Colors.transparent,
+          backwardsCompatibility: false,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           flexibleSpace: Container(
             decoration: BoxDecoration(
                 color: backgroundColor ?? Theme.of(context).backgroundColor,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
 import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
@@ -120,6 +121,8 @@ class _LibraryState extends State<Library> {
                       title: Text('Library'),
                       backgroundColor: Colors.transparent,
                       elevation: 15.0,
+                      backwardsCompatibility: false,
+                      systemOverlayStyle: SystemUiOverlayStyle.light,
                       flexibleSpace: GradientAppBarFlexibleSpace(),
                       leading: IconButton(
                         icon: Icon(Icons.menu),

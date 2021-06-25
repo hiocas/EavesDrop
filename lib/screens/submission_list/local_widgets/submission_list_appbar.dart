@@ -1,6 +1,7 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'package:provider/provider.dart';
@@ -273,6 +274,8 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
           : Text('Search Results'),
       backgroundColor: Colors.transparent,
       elevation: 15.0,
+      backwardsCompatibility: false,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
       flexibleSpace: GradientAppBarFlexibleSpace(),
       leading: _isSearching
           ? Consumer<GlobalState>(builder: (context, state, child) {

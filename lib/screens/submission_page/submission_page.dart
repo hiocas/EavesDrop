@@ -78,63 +78,66 @@ class SubmissionPageState extends State<SubmissionPage> {
               return Future.value();
             },
             child: Scaffold(
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).primaryColor,
               body: SafeArea(
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  slivers: [
-                    //App Bar
-                    SubmissionPageAppBar(
-                      submission: _submission,
-                      maxTitleTop: 120,
-                      maxTitleAlignTop: 200,
-                    ),
-                    //Buttons and Tags
-                    SubmissionPageButtonsAndTags(
+                child: Container(
+                  color: Theme.of(context).backgroundColor,
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    slivers: [
+                      //App Bar
+                      SubmissionPageAppBar(
                         submission: _submission,
-                        redditSubmission: snapshot.data,
-                        fromLibrary: widget.fromLibrary),
-                    //MarkdownViewer
-                    SliverPadding(
-                      padding: const EdgeInsets.all(10.0),
-                      sliver: SliverToBoxAdapter(
-                          child: GestureDetector(
-                        behavior: HitTestBehavior.deferToChild,
-                        onTap: () {
-                          print('Hide button');
-                          _floatingPlayButtonKey.currentState.animateButton();
-                        },
-                        child: Material(
-                          color: Theme.of(context).backgroundColor,
-                          elevation: 15.0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(32.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(14.0),
-                            child: MarkdownViewer(
-                              text: _submission.selftext,
-                              fromLibrary: widget.fromLibrary,
-                              inPopupCard: false,
-                              bodyTextFontSize: 14.0,
+                        maxTitleTop: 120,
+                        maxTitleAlignTop: 200,
+                      ),
+                      //Buttons and Tags
+                      SubmissionPageButtonsAndTags(
+                          submission: _submission,
+                          redditSubmission: snapshot.data,
+                          fromLibrary: widget.fromLibrary),
+                      //MarkdownViewer
+                      SliverPadding(
+                        padding: const EdgeInsets.all(10.0),
+                        sliver: SliverToBoxAdapter(
+                            child: GestureDetector(
+                          behavior: HitTestBehavior.deferToChild,
+                          onTap: () {
+                            print('Hide button');
+                            _floatingPlayButtonKey.currentState.animateButton();
+                          },
+                          child: Material(
+                            color: Theme.of(context).backgroundColor,
+                            elevation: 15.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: MarkdownViewer(
+                                text: _submission.selftext,
+                                fromLibrary: widget.fromLibrary,
+                                inPopupCard: false,
+                                bodyTextFontSize: 14.0,
+                              ),
                             ),
                           ),
-                        ),
-                      )),
-                    ),
-                    /*FIXME(Design): This makes sure the SelfTextViewer (now the
-                        MarkdownViewer) can be fully read without the floating
-                        action button blocking the text at the end of the
-                        CustomScrollView. Find a better solution or redesign
-                        the ui. */
-                    SliverToBoxAdapter(
-                      child: Container(
-                        height: 70,
+                        )),
                       ),
-                    )
-                  ],
+                      /*FIXME(Design): This makes sure the SelfTextViewer (now the
+                          MarkdownViewer) can be fully read without the floating
+                          action button blocking the text at the end of the
+                          CustomScrollView. Find a better solution or redesign
+                          the ui. */
+                      SliverToBoxAdapter(
+                        child: Container(
+                          height: 70,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               floatingActionButton: FloatingPlayButton(

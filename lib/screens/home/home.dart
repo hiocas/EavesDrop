@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,8 @@ class Home extends StatelessWidget {
           title: Text('Home'),
           elevation: 15.0,
           backgroundColor: Colors.transparent,
+          backwardsCompatibility: false,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           flexibleSpace: GradientAppBarFlexibleSpace(),
           leading: IconButton(
             icon: Icon(Icons.menu),
