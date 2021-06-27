@@ -44,24 +44,43 @@ class GwaTag extends StatelessWidget {
 //TODO: Implement per tag icons.
 //Use the live templates "tagt" and tagt2.
 List _tagChipAvatar(String tag) {
-  if (tag.contains(RegExp('mf4|fm4', caseSensitive: false)))
-    return [Text('\u{1f46b}'), 1];
+  if (tag.contains(RegExp('tf4', caseSensitive: false)))
+    return [
+      Image.asset('lib/assets/images/GwaTransFemaleAvatar.png',
+          width: 18, height: 18),
+      1
+    ];
+  else if (tag.contains(RegExp('tm4', caseSensitive: false)))
+    return [
+      Image.asset('lib/assets/images/GwaTransMaleAvatar.png',
+          width: 18, height: 18),
+      1
+    ];
+  else if (tag.contains(RegExp('nb4', caseSensitive: false)))
+    return [
+      Image.asset('lib/assets/images/GwaNonBinaryAvatar.png',
+          width: 18, height: 18),
+      1
+    ];
+  else if (tag.contains(RegExp('f4', caseSensitive: false)))
+    return [
+      Image.asset('lib/assets/images/GwaFemaleAvatar.png',
+          width: 18, height: 18),
+      1
+    ];
+  else if (tag.contains(RegExp('m4', caseSensitive: false)))
+    return [
+      Image.asset('lib/assets/images/GwaMaleAvatar.png', width: 18, height: 18),
+      1
+    ];
   else if (tag.contains(RegExp('{author:}', caseSensitive: false)))
     return [Text('\u{1f4e3}'), 1];
-  else if (tag.contains(RegExp('f4', caseSensitive: false)))
-    return [Text('\u{1f469}'), 1];
-  else if (tag.contains(RegExp('m4', caseSensitive: false)))
-    return [Text('\u{1f9d1}'), 1];
   else if (tag.contains(RegExp('fingering', caseSensitive: false)))
     return [Text('\u{1f595}'), 1];
   else if (tag.contains(
       RegExp('neko|catgirl|cat girl|purr|nyaa', caseSensitive: false)))
     return [
-      Image.asset(
-        'lib/assets/images/headband.png',
-        width: 18,
-        height: 18,
-      ),
+      Image.asset('lib/assets/images/headband.png', width: 18, height: 18),
       1
     ];
   else if (tag.contains(RegExp('kiss', caseSensitive: false)))
