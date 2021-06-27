@@ -50,25 +50,25 @@ List _tagChipAvatar(String tag) {
           width: 18, height: 18),
       1
     ];
-  else if (tag.contains(RegExp('tm4', caseSensitive: false)))
+  else if (tag.contains(RegExp(r'^tm4|^(tm)$', caseSensitive: false)))
     return [
       Image.asset('lib/assets/images/GwaTransMaleAvatar.png',
           width: 18, height: 18),
       1
     ];
-  else if (tag.contains(RegExp('nb4', caseSensitive: false)))
+  else if (tag.contains(RegExp(r'^nb4|^(nb)$', caseSensitive: false)))
     return [
       Image.asset('lib/assets/images/GwaNonBinaryAvatar.png',
           width: 18, height: 18),
       1
     ];
-  else if (tag.contains(RegExp('f4', caseSensitive: false)))
+  else if (tag.contains(RegExp(r'^f4|^(f)$', caseSensitive: false)))
     return [
       Image.asset('lib/assets/images/GwaFemaleAvatar.png',
           width: 18, height: 18),
       1
     ];
-  else if (tag.contains(RegExp('m4', caseSensitive: false)))
+  else if (tag.contains(RegExp(r'^m4|^(m)$', caseSensitive: false)))
     return [
       Image.asset('lib/assets/images/GwaMaleAvatar.png', width: 18, height: 18),
       1
