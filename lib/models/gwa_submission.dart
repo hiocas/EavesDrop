@@ -75,19 +75,13 @@ class GwaSubmission {
     return tags;
   }
 
-  // Returns a list strings of all urls found in a submission's self text.
-  // There's an issue with the reddit &amp; flag, it can appear mid url
-  /* FIXME: There is a possibility that this won't work 100% of the times,
-      I'm assuming here that every link in a reddit posts gets turned into
-      a Markdown hyper link (in the [text](link) format).
-      I would've used a regex, but a simple regex sometimes fails on me (gets
-      stuff that aren't in the link) and a more complex one gets accurate
-      results but can sometimes freeze the app completely as I guess it uses
-      too much resources. This current way assumes every link would be picked
-      up by markdown but it works (doesn't freeze the app and gets accurate
-      results).
-      I could dump this and search only for soundcloud/image/gif links, which
-      are the only links I use this for. */
+  /// Returns a list strings of all urls found in a submission's self text.
+  /// There's an issue with the reddit &amp; flag, it can appear mid url
+  /* FIXME: We need a fast and kinda simple way to detect urls or else the app
+      crashed. The problem is that fast and simple url regexes don't work very
+      well on the markdown (LINK)[TEXT] pattern. So for now this is what I'm
+      doing to solve this. For most submissions this should work fine.
+   */
   List<String> findSubmissionURLS(String text) {
     final html = parse(md.markdownToHtml(text));
     final List<String> hrefs = html
@@ -95,7 +89,13 @@ class GwaSubmission {
         .where((e) => e.attributes.containsKey('href'))
         .map((e) => e.attributes['href'])
         .toList();
-    return hrefs;
+    final regex = RegExp(r"((https):\/\/)[\w/\-?=%.]+\.[\w/\-?=%.]+");
+    final results = regex
+        .allMatches(text)
+        .map((e) => e.group(0))
+        .where((element) => !hrefs.contains(element))
+        .toList();
+    return hrefs..addAll(results);
   }
 
   /// Returns a string of the first image or gif url found in a submission's self text.
