@@ -70,12 +70,10 @@ class _MyAppState extends State<MyApp> {
           ExtractArgumentsSubmissionList.routeName: (context) =>
               ExtractArgumentsSubmissionList(),
           RedirectToHome.routeName: (context) => RedirectToHome(),
-          '/home': (context) =>
-              HomeScaffold(
+          '/home': (context) => HomeScaffold(
                 initialIndex: 1,
               ),
-          '/library': (context) =>
-              HomeScaffold(
+          '/library': (context) => HomeScaffold(
                 initialIndex: 2,
               )
         },
@@ -125,9 +123,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       body: AnimatedSwitcher(
         duration: Duration(milliseconds: 400),
         transitionBuilder: (child, animation) {
@@ -143,7 +139,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
         currentIndex: _currentPageIndex,
         backgroundColor: Color.fromARGB(255, 28, 18, 28),
         selectedItemColor: Color.fromARGB(255, 119, 23, 45),
-        unselectedItemColor: Colors.black,
+        unselectedItemColor: Color.fromARGB(255, 48, 51, 55),
         elevation: 15.0,
         items: [
           BottomNavigationBarItem(
@@ -175,8 +171,8 @@ class SubmissionListArguments {
   Sort initialSort;
   TimeFilter initialTimeFilter;
 
-  SubmissionListArguments(this.initialSearchQuery, this.initialSort,
-      this.initialTimeFilter);
+  SubmissionListArguments(
+      this.initialSearchQuery, this.initialSort, this.initialTimeFilter);
 }
 
 class ExtractArgumentsSubmissionList extends StatelessWidget {
@@ -185,10 +181,7 @@ class ExtractArgumentsSubmissionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args =
-    ModalRoute
-        .of(context)
-        .settings
-        .arguments as SubmissionListArguments;
+        ModalRoute.of(context).settings.arguments as SubmissionListArguments;
     // Prepare a new search.
     Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
     return HomeScaffold(
