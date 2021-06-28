@@ -62,13 +62,13 @@ List _tagChipAvatar(String tag) {
           width: 18, height: 18),
       1
     ];
-  else if (tag.contains(RegExp(r'^f4|^(f)$', caseSensitive: false)))
+  else if (tag.contains(RegExp(r'^f+4|^(f)$', caseSensitive: false)))
     return [
       Image.asset('lib/assets/images/GwaFemaleAvatar.png',
           width: 18, height: 18),
       1
     ];
-  else if (tag.contains(RegExp(r'^m4|^(m)$', caseSensitive: false)))
+  else if (tag.contains(RegExp(r'^m+4|^(m)$', caseSensitive: false)))
     return [
       Image.asset('lib/assets/images/GwaMaleAvatar.png', width: 18, height: 18),
       1
