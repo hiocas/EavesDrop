@@ -48,7 +48,8 @@ class GwaSubmission {
     if (urlStr.contains('soundgasm')) {
       //Also display this link in the selftext.
       if (audioUrls.isEmpty) {
-        this.selftext = urlStr + '\n' + this.selftext;
+        this.selftext =
+            '------------\n$urlStr\n\n------------\n' + this.selftext;
       }
       this.audioUrls.add(urlStr);
     }
