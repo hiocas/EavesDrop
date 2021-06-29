@@ -194,6 +194,8 @@ class SubmissionListState extends State<SubmissionList> {
               } else {
                 this.globalState = Provider.of<GlobalState>(context);
                 return RefreshIndicator(
+                  color: Theme.of(context).accentColor,
+                  backgroundColor: Theme.of(context).backgroundColor,
                   onRefresh: () {
                     globalState.prepareNewSearch();
                     _updateSearch(true);

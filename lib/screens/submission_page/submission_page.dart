@@ -79,6 +79,8 @@ class SubmissionPageState extends State<SubmissionPage> {
         } else {
           _submission = new GwaSubmission(snapshot.data);
           return RefreshIndicator(
+            color: Theme.of(context).accentColor,
+            backgroundColor: Theme.of(context).backgroundColor,
             /*TODO: Implement pull to refresh without pushing a new route (it
                 looks confusing and a bit jarring). */
             onRefresh: () {
