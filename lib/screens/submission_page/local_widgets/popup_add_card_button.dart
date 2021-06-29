@@ -74,7 +74,7 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<Box<LibraryGwaSubmission>>(
       future: HiveBoxes.openLibraryBox(),
       builder: (context, futureBox) {
         if (futureBox.hasData) {

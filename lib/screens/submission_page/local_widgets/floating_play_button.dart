@@ -10,10 +10,10 @@ import 'package:gwa_app/widgets/navigator_routes/hero_dialog_route.dart';
 import 'package:gwa_app/widgets/rect_tweens/calm_rect_tween.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart'
     show
-    ChromeSafariBrowser,
-    ChromeSafariBrowserClassOptions,
-    AndroidChromeCustomTabsOptions,
-    IOSSafariOptions;
+        ChromeSafariBrowser,
+        ChromeSafariBrowserClassOptions,
+        AndroidChromeCustomTabsOptions,
+        IOSSafariOptions;
 import 'dart:math' as Math;
 
 import 'package:gwa_app/widgets/website_viewer.dart';
@@ -284,8 +284,7 @@ class _PopupCard extends StatelessWidget {
                                   builder: (context) => WebsiteViewer(
                                       title: submission.title,
                                       url: submission.audioUrls[index]
-                                    // submission.audioUrls[index],
-                                  ),
+                                      ),
                                 ),
                               );
                               break;

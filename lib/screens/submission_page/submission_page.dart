@@ -73,12 +73,12 @@ class SubmissionPageState extends State<SubmissionPage> {
           );
         } else {
           _submission = new GwaSubmission(snapshot.data);
-          return Scaffold(
-            backgroundColor: Theme.of(context).primaryColor,
-            body: SafeArea(
-              child: Container(
-                color: Theme.of(context).backgroundColor,
-                child: CustomScrollView(
+          return Container(
+            color: Theme.of(context).primaryColor,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Theme.of(context).backgroundColor,
+                body: CustomScrollView(
                   controller: _scrollController,
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
@@ -136,16 +136,16 @@ class SubmissionPageState extends State<SubmissionPage> {
                     )
                   ],
                 ),
+                floatingActionButton: FloatingPlayButton(
+                  key: _floatingPlayButtonKey,
+                  heroTag: 'floating-play-button-popup',
+                  submission: _submission,
+                  scrollController: _scrollController,
+                ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerFloat,
               ),
             ),
-            floatingActionButton: FloatingPlayButton(
-              key: _floatingPlayButtonKey,
-              heroTag: 'floating-play-button-popup',
-              submission: _submission,
-              scrollController: _scrollController,
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
           );
         }
       },
