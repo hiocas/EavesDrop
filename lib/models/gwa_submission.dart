@@ -43,8 +43,15 @@ class GwaSubmission {
     this.urls = findSubmissionURLS(this.selftext);
     _populateAudioUrls(submission);
     var urlStr = this.url.toString();
+    print(urlStr);
     //Only add the url to urls if it has soundgasm in it -> when posting a link submission to reddit this is where the link is.
-    if (urlStr.contains('soundgasm')) this.urls.add(urlStr);
+    if (urlStr.contains('soundgasm')) {
+      //Also display this link in the selftext.
+      if (audioUrls.isEmpty) {
+        this.selftext = urlStr + '\n' + this.selftext;
+      }
+      this.audioUrls.add(urlStr);
+    }
     if (submission.preview.length > 0)
       this.thumbnailUrl = submission.preview[0].source.url.toString();
     this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
