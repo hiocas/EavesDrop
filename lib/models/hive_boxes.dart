@@ -35,12 +35,6 @@ class HiveBoxes {
           ),
         );
       }
-      // TODO: Delete this -> new app setting creation for existing users.
-      else {
-        if (settingsBox.getAt(0).librarySmallSubmissions == null) {
-          HiveBoxes.editAppSettings(librarySmallSubmissions: false);
-        }
-      }
     }
     settingsBox.close();
   }
