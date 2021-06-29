@@ -84,6 +84,8 @@ class SubmissionPageState extends State<SubmissionPage> {
             /*TODO: Implement pull to refresh without pushing a new route (it
                 looks confusing and a bit jarring). */
             onRefresh: () {
+              /*FIXME: This makes it so we can't search using tags after
+                 refreshing. */
               pushReplacementSubmissionPageWithReturnData(
                   context, widget.submissionFullname, widget.fromLibrary);
               return Future.value();
