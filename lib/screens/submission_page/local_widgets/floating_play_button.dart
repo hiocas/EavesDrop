@@ -35,6 +35,8 @@ class MyChromeSafariBrowser extends ChromeSafariBrowser {
   }
 }
 
+/* FIXME: You can't dismiss this button before starting to scroll because
+    animates is null. */
 class FloatingPlayButton extends StatefulWidget {
   const FloatingPlayButton({
     Key key,
