@@ -55,6 +55,7 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   bool _isFABVisible;
+  bool animates;
   void Function() _waitForNotNull;
 
   animateButton() {
@@ -112,10 +113,12 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
         /* If maxScrollController is smaller than 450, don't animate the button
          based on the user scrolling. */
         if (widget.scrollController.position.maxScrollExtent <= 450) {
+          animates = false;
           _removeWaitForNotNull();
         } else {
           alwaysShowFABAt = Math.max(
               widget.scrollController.position.maxScrollExtent - 200, 0);
+          animates = true;
           _removeWaitForNotNull();
           widget.scrollController.addListener(animateButton);
         }

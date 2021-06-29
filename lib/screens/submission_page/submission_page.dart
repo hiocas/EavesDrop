@@ -116,7 +116,10 @@ class SubmissionPageState extends State<SubmissionPage> {
                           behavior: HitTestBehavior.deferToChild,
                           onTap: () {
                             print('Hide button');
-                            _floatingPlayButtonKey.currentState.animateButton();
+                            if (_floatingPlayButtonKey.currentState.animates) {
+                              _floatingPlayButtonKey.currentState
+                                  .animateButton();
+                            }
                           },
                           child: Material(
                             color: Theme.of(context).backgroundColor,
