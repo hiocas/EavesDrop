@@ -9,10 +9,6 @@ import 'local_widgets/all_page_local.dart';
 import 'package:provider/provider.dart';
 import 'package:gwa_app/states/global_state.dart';
 
-/* FIXME: If we search for certain queries (for instance
-    'authorLookingForMyBlueSky') in SubmissionList and then press on them
-    to open their SubmissionPage sometimes the page will get stuck and the
-    whole app will freeze. */
 class SubmissionPage extends StatefulWidget {
   final String submissionFullname;
 

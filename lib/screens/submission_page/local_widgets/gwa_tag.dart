@@ -41,7 +41,6 @@ class GwaTag extends StatelessWidget {
   }
 }
 
-//TODO: Implement per tag icons.
 //Use the live templates "tagt" and tagt2.
 List _tagChipAvatar(String tag) {
   if (tag.contains(RegExp('tf4', caseSensitive: false)))

@@ -13,11 +13,8 @@ import 'local_widgets/submission_list_appbar.dart';
 /*FIXME: This implements GlobalState but it seems to be slower than the old
    implementation. */
 
-/*TODO: Implement lazy loading and a "show more" in search so that the user can
-   search for more than 1000 (I think that's the limit) submissions. */
-
-/*TODO: I think there are too many separate calls for Provider.of... I dunno
-    how this impacts performance but you should look into it. */
+/*TODO: I think there are too many separate calls for Provider.of... I don't
+   know how this impacts performance but you should look into it. */
 class SubmissionList extends StatefulWidget {
   final String initialQuery;
   final TimeFilter initialTimeFilter;
@@ -52,10 +49,6 @@ class SubmissionListState extends State<SubmissionList> {
         Provider.of<GlobalState>(context, listen: false)
             .updateLastSeenSubmission();
         _updateSearch(false);
-        /*FIXME: This is what's responsible for loading more submissions when
-           the user reaches the end of the list but it's scuffed... */
-        // Provider.of<GlobalState>(context, listen: false)
-        //     .updateLastSeenSubmission();
       }
     });
 

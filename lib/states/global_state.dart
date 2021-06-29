@@ -178,7 +178,6 @@ class GlobalState with ChangeNotifier {
   /// submissions loaded (which is the reddit cap) but not [limit] left
   /// (for instance, if [limit] is 99 but there are only 3 submissions left
   /// to load).
-  // TODO: Add a check to see if there's no more content to be loaded.
   _loadContent(
       {@required Stream<UserContent> Function(int overrideLimit) stream,
         @required limit}) {

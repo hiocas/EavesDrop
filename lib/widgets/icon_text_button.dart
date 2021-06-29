@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-/*TODO(Design): Maybe redesign the button. Need to make the 'Open' button a lot
-   more appealing and to write somewhere "open in reddit to upvote and show your"
-   "support!". */
 class IconTextButton extends StatelessWidget {
   final String label;
   final String subtext;

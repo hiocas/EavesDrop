@@ -81,10 +81,8 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
     _animationController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 500));
     void Function() animateButton = () {
-      // TODO: Find a way to calculate this once.
       alwaysShowFABAt =
           Math.max(widget.scrollController.position.maxScrollExtent - 200, 0);
-      // TODO: Make this less messy...
       canHideFAB = widget.scrollController.offset < alwaysShowFABAt;
       if (canHideFAB &&
           widget.scrollController.position.userScrollDirection ==

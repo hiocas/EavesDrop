@@ -85,7 +85,7 @@ class GwaSubmission {
   /// Returns a list strings of all urls found in a submission's self text.
   /// There's an issue with the reddit &amp; flag, it can appear mid url
   /* FIXME: We need a fast and kinda simple way to detect urls or else the app
-      crashed. The problem is that fast and simple url regexes don't work very
+      crashes. The problem is that fast and simple url regexes don't work very
       well on the markdown (LINK)[TEXT] pattern. So for now this is what I'm
       doing to solve this. For most submissions this should work fine.
    */

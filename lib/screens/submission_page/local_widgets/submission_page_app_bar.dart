@@ -22,7 +22,7 @@ class SubmissionPageAppBar extends StatelessWidget {
     double top;
     int authorNameTapCounts = 0;
     return SliverAppBar(
-      // TODO(Design): Decide whether the app bar should be pinned or not.
+      // TODO: Hide this app bar when tapping to hide the FloatingPlayButton
       pinned: true,
       elevation: 15.0,
       shape: RoundedRectangleBorder(

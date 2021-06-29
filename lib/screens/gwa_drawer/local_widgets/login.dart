@@ -188,16 +188,15 @@ class _LoginState extends State<Login> {
                       'Change Your Reddit Preferences',
                       style: _textStyle,
                     ),
-                    /* TODO: Add a tutorial for changing the
-                                  preferences so that the user could see
-                                  submission preview thumbnails in GwaDrawer. */
                     content: const Text(
                       "Your current reddit account preferences "
                       "won't allow you to see post preview "
-                      "thumbnails. You can change this yourself "
-                      "(see how in the app drawer) or this can "
-                      "be changed now programmatically.\n"
-                      "You can still use this app without this "
+                      "thumbnails."
+                      "\n\nYou can change this yourself (see how in the Help "
+                      "page -> \"How do I manually set my Reddit account "
+                      "preferences?\") or this can be changed now "
+                      "programmatically."
+                      "\n\nYou can still use this app without this "
                       "setting on in your preferences.",
                       style: TextStyle(
                         color: Colors.white,
