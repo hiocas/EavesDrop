@@ -19,13 +19,11 @@ class SubmissionPageButtonsAndTags extends StatefulWidget {
     Key key,
     @required this.submission,
     @required this.redditSubmission,
-    @required this.fromLibrary,
     this.mini = false,
   }) : super(key: key);
 
   final GwaSubmission submission;
   final Submission redditSubmission;
-  final bool fromLibrary;
   final bool mini;
 
   @override
@@ -116,7 +114,6 @@ class _SubmissionPageButtonsAndTagsState
                   gwaSubmission: widget.submission,
                   heroTag: 'save-submission-popup',
                   usePlaceholder: true,
-                  fromLibrary: widget.fromLibrary,
                 ),
                 _makeSupportButton(context),
                 PopupCardButton(

@@ -55,7 +55,6 @@ class FirstTimeScreen extends StatelessWidget {
                         "anything here that you think you can improve or help with "
                         "(doesn't have to be programming related!) please consider "
                         "contributing on GitHub! :)",
-                    fromLibrary: false,
                     inPopupCard: false,
                     bodyTextFontSize: 15.0,
                     bodyTextColor: Colors.white,

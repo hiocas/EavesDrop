@@ -180,7 +180,7 @@ class SubmissionListState extends State<SubmissionList> {
             this.currentSearchQuery = '';
           },
         ),
-        drawer: GwaDrawer(fromLibrary: false),
+        drawer: GwaDrawer(),
         backgroundColor: Theme.of(context).backgroundColor,
         body: Container(
           child: StreamBuilder(

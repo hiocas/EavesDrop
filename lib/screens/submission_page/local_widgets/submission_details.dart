@@ -44,7 +44,6 @@ class SubmissionDetails extends StatelessWidget {
       children: [
         MarkdownViewer(
           text: _makeMarkdownDetails(),
-          fromLibrary: false,
           inPopupCard: true,
           bodyTextColor: Colors.black,
           blockQuoteDecoration: BoxDecoration(

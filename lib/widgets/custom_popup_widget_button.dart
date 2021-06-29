@@ -20,6 +20,9 @@ class CustomPopupWidgetButton extends StatelessWidget {
   final Widget placeholder;
   final bool mini;
 
+  /// Gets called when the popup is popped.
+  final void Function(String) onPopupPopped;
+
   const CustomPopupWidgetButton({
     Key key,
     this.label,
@@ -33,6 +36,7 @@ class CustomPopupWidgetButton extends StatelessWidget {
     this.usePlaceholder,
     this.placeholder,
     this.mini = false,
+    this.onPopupPopped,
   }) : super(key: key);
 
   @override
@@ -47,7 +51,10 @@ class CustomPopupWidgetButton extends StatelessWidget {
                 widget: this.widget,
                 heroTag: this.heroTag,
               );
-            }));
+            })).then((value) {
+              if (this.onPopupPopped != null)
+                this.onPopupPopped.call(value);
+            });
           },
           child: Hero(
             tag: this.heroTag,

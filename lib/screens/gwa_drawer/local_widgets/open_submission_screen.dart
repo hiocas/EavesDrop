@@ -8,10 +8,7 @@ import 'package:provider/provider.dart';
 class OpenSubmissionScreen extends StatelessWidget {
   const OpenSubmissionScreen({
     Key key,
-    @required this.fromLibrary,
   }) : super(key: key);
-
-  final bool fromLibrary;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +21,6 @@ class OpenSubmissionScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _OpenSubmissionSection(
-              fromLibrary: fromLibrary,
               title: 'Open A Post From A Link:',
               emptyError: 'No input was given.',
               getFullname: (url) async {
@@ -45,7 +41,6 @@ class OpenSubmissionScreen extends StatelessWidget {
               },
             ),
             _OpenSubmissionSection(
-              fromLibrary: fromLibrary,
               title: 'Open A Post From An ID:',
               emptyError: 'No input was given.',
               getFullname: (id) async {
@@ -76,14 +71,12 @@ class OpenSubmissionScreen extends StatelessWidget {
 class _OpenSubmissionSection extends StatelessWidget {
   const _OpenSubmissionSection({
     Key key,
-    @required this.fromLibrary,
     @required this.title,
     this.subtitle,
     @required this.emptyError,
     @required this.getFullname,
   }) : super(key: key);
 
-  final bool fromLibrary;
   final String title;
   final String subtitle;
   final String emptyError;
@@ -126,7 +119,7 @@ class _OpenSubmissionSection extends StatelessWidget {
               var fullname = await getFullname.call(data);
               if (fullname.isNotEmpty) {
                 pushSubmissionPageWithReturnData(
-                    context, fullname, fromLibrary);
+                    context, fullname);
               }
             } else {
               ScaffoldMessenger.of(context)

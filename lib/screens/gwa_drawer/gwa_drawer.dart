@@ -9,11 +9,7 @@ import 'local_widgets/all_local_widgets.dart';
 class GwaDrawer extends StatelessWidget {
   const GwaDrawer({
     Key key,
-    @required this.fromLibrary,
   }) : super(key: key);
-
-  // TODO: Figure out if it's needed here.
-  final bool fromLibrary;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +35,6 @@ class GwaDrawer extends StatelessWidget {
                   context,
                   CupertinoPageRoute(
                     builder: (context) => OpenSubmissionScreen(
-                      fromLibrary: fromLibrary,
                     ),
                   )),
             ),

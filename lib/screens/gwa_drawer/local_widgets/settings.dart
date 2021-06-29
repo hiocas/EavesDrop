@@ -18,6 +18,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   AudioLaunchOptions _audioLaunchOptions;
   bool _miniButtons;
+  bool _librarySmallSubmissions;
   Box<AppSettings> _box;
 
   @override
@@ -58,6 +59,23 @@ class _SettingsState extends State<Settings> {
     });
   }
 
+  _SettingOption<bool> _makeLibrarySmallSubmissionsSettingOption(
+      BuildContext context,
+      {bool value,
+      String title,
+      String subtitle}) {
+    return _SettingOption<bool>(context,
+        value: value,
+        title: title,
+        subtitle: subtitle,
+        groupValue: _librarySmallSubmissions, onChanged: (v) async {
+      await HiveBoxes.editAppSettings(librarySmallSubmissions: v);
+      setState(() {
+        _librarySmallSubmissions = v;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +92,7 @@ class _SettingsState extends State<Settings> {
               AppSettings _appSettings = futureBox.data.getAt(0);
               _audioLaunchOptions = _appSettings.audioLaunchOptions;
               _miniButtons = _appSettings.miniButtons;
+              _librarySmallSubmissions = _appSettings.librarySmallSubmissions;
               return Center(
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -109,7 +128,6 @@ class _SettingsState extends State<Settings> {
                         children: [
                           ListTile(
                             title: MarkdownViewer(
-                              fromLibrary: false,
                               inPopupCard: false,
                               text:
                                   "When you click on the large play button after opening a post, this setting tells the app which browser to open the audio link with.\n\n"
@@ -126,6 +144,7 @@ class _SettingsState extends State<Settings> {
                         ],
                       ),
                     ),
+                    // Action Button Size Setting
                     _Setting(
                         icon: Icons.aspect_ratio_outlined,
                         settingName: "Choose your action buttons' size:",
@@ -146,6 +165,16 @@ class _SettingsState extends State<Settings> {
                                 "Will show smaller buttons consisting only of "
                                 "an icon an a label.",
                           ),
+                        ]),
+                    // Library Cross Axis Extent Setting
+                    _Setting(
+                        icon: Icons.grid_view_outlined,
+                        settingName: "Choose your library's posts size:",
+                        options: [
+                          _makeLibrarySmallSubmissionsSettingOption(context,
+                              title: 'Big', value: false),
+                          _makeLibrarySmallSubmissionsSettingOption(context,
+                              title: 'Small', value: true),
                         ])
                   ],
                 ),

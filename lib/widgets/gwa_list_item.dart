@@ -60,7 +60,7 @@ class GwaListItem extends StatelessWidget {
         child: InkWell(
           onTap: () {
             pushSubmissionPageWithReturnData(
-                context, submission.fullname, false);
+                context, submission.fullname);
           },
         ),
       )
@@ -72,12 +72,14 @@ class GwaLibraryListItem extends StatelessWidget {
   final String title;
   final String fullname;
   final String thumbnailUrl;
+  final void Function() onReturn;
 
   const GwaLibraryListItem({
     Key key,
     this.title,
     this.fullname,
     this.thumbnailUrl,
+    this.onReturn,
   }) : super(key: key);
 
   /*FIXME: This is a very weird item design. It happened by mistake and
@@ -136,8 +138,7 @@ class GwaLibraryListItem extends StatelessWidget {
             pushSubmissionPageWithReturnData(
               context,
               fullname,
-              true,
-            );
+            ).then((value) => onReturn.call());
           },
         ),
       )

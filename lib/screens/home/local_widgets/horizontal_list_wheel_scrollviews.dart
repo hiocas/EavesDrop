@@ -51,7 +51,7 @@ class __HorizontalClickableListWheelScrollViewState
             Feedback.forTap(context);
             Timer(Duration(milliseconds: 600), () {
               pushSubmissionPageWithReturnData(
-                  context, widget.itemList.elementAt(index).fullname, false);
+                  context, widget.itemList.elementAt(index).fullname);
             });
           },
           child: ListWheelScrollView.useDelegate(

@@ -35,7 +35,14 @@ class HiveBoxes {
           ),
         );
       }
+      // TODO: Delete this -> new app setting creation for existing users.
+      else {
+        if (settingsBox.getAt(0).librarySmallSubmissions == null) {
+          HiveBoxes.editAppSettings(librarySmallSubmissions: false);
+        }
+      }
     }
+    settingsBox.close();
   }
 
   static Box<LibraryGwaSubmission> getLibraryBox() =>
@@ -52,21 +59,41 @@ class HiveBoxes {
     return Hive.openBox<AppSettings>('settings');
   }
 
-  static Future<AppSettings> getAppSettings() async {
-    final settingsBox = await HiveBoxes.openAppSettingsBox();
-    final AppSettings appSettings = settingsBox.getAt(0);
-    settingsBox.close();
-    return appSettings;
+  /// Returns the user's library list (consisting of [LibraryGwaSubmission]
+  /// entries) and then closes the library box.
+  /// If there are no app settings, returns an empty list.
+  static Future<List<LibraryGwaSubmission>>
+      getLibraryGwaSubmissionList() async {
+    final libraryBox = await HiveBoxes.openLibraryBox();
+    if (libraryBox.isNotEmpty) {
+      final List<LibraryGwaSubmission> libraryList =
+          libraryBox.values.toList().cast<LibraryGwaSubmission>();
+      libraryBox.close();
+      return libraryList;
+    }
+    return [];
   }
 
-  static LibraryGwaSubmission addLibrarySubmission(
-      String title, String fullname, String thumbnailUrl, List<String> lists) {
+  /// Returns the user's [AppSettings] and then closes their box.
+  /// If there are no app settings, returns null.
+  static Future<AppSettings> getAppSettings() async {
+    final settingsBox = await HiveBoxes.openAppSettingsBox();
+    if (settingsBox.isNotEmpty) {
+      final AppSettings appSettings = settingsBox.getAt(0);
+      settingsBox.close();
+      return appSettings;
+    }
+    return null;
+  }
+
+  static Future<LibraryGwaSubmission> addLibrarySubmission(String title,
+      String fullname, String thumbnailUrl, List<String> lists) async {
+    final box = await HiveBoxes.openLibraryBox();
     final LibraryGwaSubmission libraryGwaSubmission = LibraryGwaSubmission()
       ..title = title
       ..fullname = fullname
       ..thumbnailUrl = thumbnailUrl
       ..lists = lists;
-    final box = getLibraryBox();
     box.add(libraryGwaSubmission);
     return libraryGwaSubmission;
   }
@@ -76,12 +103,15 @@ class HiveBoxes {
       String fullname,
       String thumbnailUrl,
       List<String> lists]) {
+    final box = HiveBoxes.getLibraryBox();
+    if (!box.isOpen) {
+      HiveBoxes.openLibraryBox();
+    }
     if (title != null && title.isNotEmpty) submission.title = title;
     if (fullname != null && fullname.isNotEmpty) submission.fullname = fullname;
     if (thumbnailUrl != null && thumbnailUrl.isNotEmpty)
       submission.thumbnailUrl = thumbnailUrl;
     if (lists != null) submission.lists = lists;
-
     submission.save();
   }
 
@@ -89,13 +119,15 @@ class HiveBoxes {
       {String credentials,
       AudioLaunchOptions audioLaunchOptions =
           AudioLaunchOptions.ChromeCustomTabs,
-      bool miniButtons = false}) async {
+      bool miniButtons = false,
+      bool librarySmallSubmissions = false}) async {
     final AppSettings settings = AppSettings(
         credentials: credentials,
         audioLaunchOptions: audioLaunchOptions,
         firstTime: false,
-        miniButtons: miniButtons);
-    final box = getAppSettingsBox();
+        miniButtons: miniButtons,
+        librarySmallSubmissions: librarySmallSubmissions);
+    final box = await HiveBoxes.openAppSettingsBox();
     await box.add(settings);
     return Future.value(settings);
   }
@@ -105,8 +137,9 @@ class HiveBoxes {
     AudioLaunchOptions audioLaunchOptions,
     bool firstTime,
     bool miniButtons,
+    bool librarySmallSubmissions,
   }) async {
-    final box = getAppSettingsBox();
+    final box = await HiveBoxes.openAppSettingsBox();
     if (box.isNotEmpty) {
       final AppSettings settings = box.getAt(0);
       if (credentials != null) {
@@ -121,12 +154,22 @@ class HiveBoxes {
       if (miniButtons != null) {
         settings.miniButtons = miniButtons;
       }
+      if (librarySmallSubmissions != null) {
+        settings.librarySmallSubmissions = librarySmallSubmissions;
+      }
       await settings.save();
     }
   }
 
-  static clearAppSettings() async {
-    final box = getAppSettingsBox();
+  static clearLibrary() async {
+    final box = await openLibraryBox();
     await box.clear();
+    box.close();
+  }
+
+  static clearAppSettings() async {
+    final box = await openAppSettingsBox();
+    await box.clear();
+    box.close();
   }
 }

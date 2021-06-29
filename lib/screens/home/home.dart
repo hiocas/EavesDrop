@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
             },
           ),
         ),
-        drawer: GwaDrawer(fromLibrary: false,),
+        drawer: GwaDrawer(),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

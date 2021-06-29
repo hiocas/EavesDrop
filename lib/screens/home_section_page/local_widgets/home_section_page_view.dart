@@ -60,7 +60,7 @@ class _HomeSectionPageViewState extends State<HomeSectionPageView> {
           return InkWell(
             onTap: () {
               pushSubmissionPageWithReturnData(
-                  context, widget.previews[index].fullname, false);
+                  context, widget.previews[index].fullname);
             },
             child: Container(
               margin:

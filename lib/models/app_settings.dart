@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:gwa_app/models/audio_launch_options.dart';
 import 'package:hive/hive.dart';
 
@@ -21,10 +20,14 @@ class AppSettings extends HiveObject {
   @HiveField(3)
   bool miniButtons;
 
+  @HiveField(4)
+  bool librarySmallSubmissions;
+
   AppSettings({
     this.credentials,
     this.audioLaunchOptions,
     this.firstTime,
-    @required this.miniButtons,
+    this.miniButtons,
+    this.librarySmallSubmissions,
   });
 }

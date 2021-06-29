@@ -8,7 +8,6 @@ import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'package:gwa_app/widgets/gwa_list_item.dart';
 import 'package:gwa_app/widgets/gwa_scrollbar.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class Library extends StatefulWidget {
   const Library({Key key}) : super(key: key);
@@ -19,7 +18,7 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool _smallSubmissions = false;
+  bool _smallSubmissions;
 
   /// Returns a list of [Tab] widgets from [HiveBoxes.listTags].
   List<Widget> _makeListTabs() {
@@ -76,6 +75,9 @@ class _LibraryState extends State<Library> {
                       title: list[index].title,
                       fullname: list[index].fullname,
                       thumbnailUrl: list[index].thumbnailUrl,
+                      onReturn: () {
+                        setState(() {});
+                      },
                     );
                   },
                   childCount: list.length,
@@ -86,6 +88,12 @@ class _LibraryState extends State<Library> {
         ),
       ),
     );
+  }
+
+  Future<List<LibraryGwaSubmission>> _initLibrary() async {
+    final appSettings = await HiveBoxes.openAppSettingsBox();
+    _smallSubmissions = appSettings.getAt(0).librarySmallSubmissions;
+    return HiveBoxes.getLibraryGwaSubmissionList();
   }
 
   @override
@@ -103,20 +111,21 @@ class _LibraryState extends State<Library> {
        it). */
     return WillPopScope(
       onWillPop: () async => false,
-      child: FutureBuilder(
-        future: HiveBoxes.openLibraryBox(),
+      child: FutureBuilder<List<LibraryGwaSubmission>>(
+        future: _initLibrary(),
         builder: (context, futureBox) {
           if (futureBox.hasData) {
-            return ValueListenableBuilder<Box<LibraryGwaSubmission>>(
-              valueListenable: HiveBoxes.getLibraryBox().listenable(),
-              builder: (context, libraryBox, _) {
-                List<LibraryGwaSubmission> librarySubmissions =
-                    libraryBox.values.toList().cast<LibraryGwaSubmission>();
-                return DefaultTabController(
+            return DefaultTabController(
                   initialIndex: 0,
                   length: HiveBoxes.listTags.length + 1,
                   child: Scaffold(
                     key: _scaffoldKey,
+                    onDrawerChanged: (open) {
+                      // Rebuild when closing the GwaDrawer
+                      if (!open) {
+                        setState(() {});
+                      }
+                    },
                     appBar: AppBar(
                       title: Text('Library'),
                       backgroundColor: Colors.transparent,
@@ -140,44 +149,51 @@ class _LibraryState extends State<Library> {
                                 ? 'Display less posts'
                                 : 'Display more posts',
                             onPressed: () {
-                              setState(() {
-                                _smallSubmissions = !_smallSubmissions;
-                              });
+                              HiveBoxes.editAppSettings(
+                                  librarySmallSubmissions: !_smallSubmissions);
+                              // Rebuild when updating the submissions size
+                              setState(() {});
                             }),
                         // Clear Library
                         IconButton(
                           icon: Icon(Icons.close),
                           tooltip: 'Clear your library',
-                          onPressed: () => showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              backgroundColor:
-                                  Theme.of(context).backgroundColor,
-                              title: const Text(
-                                'Clear Library',
-                                style: TextStyle(color: Colors.white),
+                          onPressed: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
+                                title: const Text(
+                                  'Clear Library',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                content: const Text(
+                                  'Are you sure you want to clear '
+                                  'your library? This action cannot be '
+                                  'reverted.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'cancel'),
+                                      child: const Text('Cancel')),
+                                  TextButton(
+                                      onPressed: () {
+                                        HiveBoxes.clearLibrary();
+                                        Navigator.pop(context, 'clear');
+                                      },
+                                      child: const Text('Clear my Library'))
+                                ],
                               ),
-                              content: const Text(
-                                'Are you sure you want to clear '
-                                'your library? This action cannot be '
-                                'reverted.',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'Cancel'),
-                                    child: const Text('Cancel')),
-                                TextButton(
-                                    onPressed: () {
-                                      libraryBox.clear();
-                                      Navigator.pop(
-                                          context, 'Clear my Library');
-                                    },
-                                    child: const Text('Clear my Library'))
-                              ],
-                            ),
-                          ),
+                            ).then((value) {
+                              // Rebuild when clearing the library
+                              if (value == 'clear') {
+                                setState(() {});
+                              }
+                            });
+                          },
                         )
                       ],
                       bottom: TabBar(
@@ -188,16 +204,13 @@ class _LibraryState extends State<Library> {
                       ),
                     ),
                     drawer: GwaDrawer(
-                      fromLibrary: true,
                     ),
                     backgroundColor: Theme.of(context).backgroundColor,
                     body: TabBarView(
-                      children: _makeListTabViews(librarySubmissions),
+                      children: _makeListTabViews(futureBox.data),
                     ),
                   ),
                 );
-              },
-            );
           }
           /* FIXME: This is can be seen for a very quick duration and is very
               jarring. */

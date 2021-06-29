@@ -16,7 +16,6 @@ class MarkdownViewer extends StatelessWidget {
   final Color tableBorderColor;
   final BoxDecoration blockQuoteDecoration;
   final BoxDecoration horizontalRuleDecoration;
-  final bool fromLibrary;
 
   // This determines if the MarkdownViewer is in a popup card.
   final bool inPopupCard;
@@ -29,7 +28,6 @@ class MarkdownViewer extends StatelessWidget {
     this.tableBorderColor,
     this.blockQuoteDecoration,
     this.horizontalRuleDecoration,
-    @required this.fromLibrary,
     @required this.inPopupCard,
   }) : super(key: key);
 
@@ -49,7 +47,7 @@ class MarkdownViewer extends StatelessWidget {
           print(url);
           if (url.contains('reddit.com/r/gonewildaudio/comments/')) {
             String fullname = SubmissionRef.idFromUrl(url);
-            pushSubmissionPageWithReturnData(context, fullname, false);
+            pushSubmissionPageWithReturnData(context, fullname);
           } else {
             Navigator.push(
               context,

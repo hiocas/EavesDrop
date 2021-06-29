@@ -30,14 +30,13 @@ String getUrlTitle(String url) {
 
 /// Use this function when you want to push a SubmissionPage. It'll handle
 /// returning the query data from it (if it exists).
-void pushSubmissionPageWithReturnData(
-    BuildContext context, String submissionFullname, bool fromLibrary) async {
+Future<void> pushSubmissionPageWithReturnData(
+    BuildContext context, String submissionFullname) async {
   final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SubmissionPage(
-              submissionFullname: submissionFullname,
-              fromLibrary: fromLibrary)));
+              submissionFullname: submissionFullname)));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
         context,
@@ -52,13 +51,13 @@ void pushSubmissionPageWithReturnData(
 /// SubmissionPage. It'll handle returning the query data from it
 /// (if it exists).
 void pushReplacementSubmissionPageWithReturnData(
-    BuildContext context, String submissionFullname, bool fromLibrary) async {
+    BuildContext context, String submissionFullname) async {
   final result = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
           builder: (context) => SubmissionPage(
-              submissionFullname: submissionFullname,
-              fromLibrary: fromLibrary)));
+              submissionFullname: submissionFullname
+              )));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
         context,

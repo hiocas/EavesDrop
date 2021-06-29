@@ -6,7 +6,6 @@ import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
 import 'package:gwa_app/widgets/custom_popup_widget_button.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:math' as math;
 
 //FIXME: This all seems kinda scuffed and very inefficient.
@@ -19,14 +18,11 @@ class PopupAddCardButton extends StatefulWidget {
   final String heroTag;
   final GwaSubmission gwaSubmission;
 
-  ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
+  /// If this is true, the placeholder will be the default one I made unless the
+  /// [placeholder] parameter is specified. If it isn't the placeholder will be
+  /// the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
-
-  ///This will be used to determine whether to close the library box when
-  ///disposing this widget. If we're coming from the [Library] we shouldn't close
-  ///it since the library relies on it. Otherwise we should close it.
-  final bool fromLibrary;
 
   final bool mini;
 
@@ -41,7 +37,6 @@ class PopupAddCardButton extends StatefulWidget {
     @required this.gwaSubmission,
     this.usePlaceholder,
     this.placeholder,
-    @required this.fromLibrary,
     this.mini = false,
   }) : super(key: key);
 
@@ -57,6 +52,8 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
   // This variable will be used here to update the button ui.
   bool _inLibrary = false;
 
+  Box<LibraryGwaSubmission> libraryBox;
+
   /// Checks if the submission is in the user's library.
   bool _checkInLibrary(List<LibraryGwaSubmission> librarySubmissions) {
     if (librarySubmissions == null || librarySubmissions.isEmpty) return false;
@@ -71,11 +68,7 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
 
   @override
   void dispose() {
-    /*FIXME: This makes sure the library isn't open so that we won't close the
-        hive box on it but it's a pretty hacky solution. */
-    if (!widget.fromLibrary) {
-      Hive.close();
-    }
+    libraryBox.close();
     super.dispose();
   }
 
@@ -85,31 +78,28 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
       future: HiveBoxes.openLibraryBox(),
       builder: (context, futureBox) {
         if (futureBox.hasData) {
-          return ValueListenableBuilder<Box<LibraryGwaSubmission>>(
-            valueListenable: HiveBoxes.getLibraryBox().listenable(),
-            builder: (context, libraryBox, _) {
-              final List<LibraryGwaSubmission> librarySubmissions =
-                  libraryBox.values.toList().cast<LibraryGwaSubmission>();
-              _inLibrary = _checkInLibrary(librarySubmissions);
-              return CustomPopupWidgetButton(
-                mini: widget.mini,
-                label: _inLibrary ? 'Edit' : widget.label,
-                subtext: _inLibrary
-                    ? "Edit the post's library information"
-                    : widget.subtext,
-                color: widget.color,
-                subtextColor: widget.subtextColor,
-                icon: _inLibrary ? Icons.edit_outlined : widget.icon,
-                heroTag: widget.heroTag,
-                widget: PopupStatefulAddCard(
-                  inLibrary: _inLibrary,
-                  libraryGwaSubmission: libraryGwaSubmission,
-                  gwaSubmission: widget.gwaSubmission,
-                ),
-                usePlaceholder: this.widget.usePlaceholder,
-                placeholder: this.widget.placeholder,
-              );
-            },
+          libraryBox = futureBox.data;
+          final List<LibraryGwaSubmission> librarySubmissions =
+              libraryBox.values.toList().cast<LibraryGwaSubmission>();
+          _inLibrary = _checkInLibrary(librarySubmissions);
+          return CustomPopupWidgetButton(
+            mini: widget.mini,
+            label: _inLibrary ? 'Edit' : widget.label,
+            subtext: _inLibrary
+                ? "Edit the post's library information"
+                : widget.subtext,
+            color: widget.color,
+            subtextColor: widget.subtextColor,
+            icon: _inLibrary ? Icons.edit_outlined : widget.icon,
+            heroTag: widget.heroTag,
+            onPopupPopped: (value) => setState(() {}),
+            widget: PopupStatefulAddCard(
+              inLibrary: _inLibrary,
+              libraryGwaSubmission: libraryGwaSubmission,
+              gwaSubmission: widget.gwaSubmission,
+            ),
+            usePlaceholder: this.widget.usePlaceholder,
+            placeholder: this.widget.placeholder,
           );
         }
         //TODO: Find a better way to load this button in.
@@ -180,8 +170,8 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
 
   /// Adds [_libraryGwaSubmission] to the user's library and sets [_inLibrary]
   /// to true.
-  void _addToLibrary() {
-    _libraryGwaSubmission = HiveBoxes.addLibrarySubmission(
+  _addToLibrary() async {
+    _libraryGwaSubmission = await HiveBoxes.addLibrarySubmission(
         widget.gwaSubmission.title,
         widget.gwaSubmission.fullname,
         widget.gwaSubmission.thumbnailUrl, []);
@@ -192,8 +182,8 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
 
   /// Removes [_libraryGwaSubmission] from the user's library and sets
   /// [_inLibrary] to false.
-  void _removeFromLibrary() {
-    _libraryGwaSubmission.delete();
+  _removeFromLibrary() async {
+    await _libraryGwaSubmission.delete();
     setState(() {
       _inLibrary = false;
       // Reset the _inList bool list.
@@ -287,11 +277,11 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                           elevation: 8.0),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_inLibrary) {
                           _removeFromLibrary();
                         } else {
-                          _addToLibrary();
+                          await _addToLibrary();
                         }
                       },
                     ),

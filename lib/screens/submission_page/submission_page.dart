@@ -16,13 +16,9 @@ import 'package:gwa_app/states/global_state.dart';
 class SubmissionPage extends StatefulWidget {
   final String submissionFullname;
 
-  ///Are we coming here from the [Library] page?
-  final bool fromLibrary;
-
   const SubmissionPage({
     Key key,
     this.submissionFullname,
-    @required this.fromLibrary,
   }) : super(key: key);
 
   @override
@@ -95,10 +91,10 @@ class SubmissionPageState extends State<SubmissionPage> {
                     ),
                     //Buttons and Tags
                     SubmissionPageButtonsAndTags(
-                        mini: miniButtons,
-                        submission: _submission,
-                        redditSubmission: snapshot.data,
-                        fromLibrary: widget.fromLibrary),
+                      mini: miniButtons,
+                      submission: _submission,
+                      redditSubmission: snapshot.data,
+                    ),
                     //MarkdownViewer
                     SliverPadding(
                       padding: const EdgeInsets.all(10.0),
@@ -108,8 +104,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                         onTap: () {
                           print('Hide button');
                           if (_floatingPlayButtonKey.currentState.animates) {
-                            _floatingPlayButtonKey.currentState
-                                .animateButton();
+                            _floatingPlayButtonKey.currentState.animateButton();
                           }
                         },
                         child: Material(
@@ -122,7 +117,6 @@ class SubmissionPageState extends State<SubmissionPage> {
                             padding: const EdgeInsets.all(14.0),
                             child: MarkdownViewer(
                               text: _submission.selftext,
-                              fromLibrary: widget.fromLibrary,
                               inPopupCard: false,
                               bodyTextFontSize: 14.0,
                             ),
