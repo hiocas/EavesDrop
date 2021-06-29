@@ -94,6 +94,27 @@ class Help extends StatelessWidget {
               ),
             ),
           ]),
+      _HelpSectionTextOnly(
+          title: 'Searching outputs only a small amounts of posts',
+          content: "If you got less results than you know you should get, this "
+              "probably isn't a bug."
+              "\n\nThe official reddit api (the thingy I get data from) lets "
+              "me receive up to 250 posts on a subreddit search."
+              "\n\nIf you just get the newest/hottest or top posts the limit "
+              "is different, but for searching it's 250."
+              "\n\nIn the future, we may switch to a different api that "
+              "supposedly has a far greater limit,"
+              " but for now this is what's implemented, sorry!"
+              "\n\nIf you're looking for a specific post, try to search for it "
+              "more specifically (include more of it's title etc...)."
+              // FIXME: Report issue flag.
+              "\n\nIn case you got less results than 250-ish and you know for "
+              "sure you're supposed to get more, please report this as an "
+              "issue (see how in REPORT-ISSUE-FLAG)."
+              "\n\nThank you for reading this, have a great day!"
+              "\n\ntldr: reddit bad limits results uwu (but not really since "
+              "they're holding a lot of data that needs to be supplied to a "
+              "lot of users).")
       //TODO: Add an "My Issue isn't on here" help section
     ];
     return Scaffold(

@@ -280,11 +280,11 @@ class SubmissionListState extends State<SubmissionList> {
                                                       "If you got less results than you know you should get, this probably isn't a bug."
                                                       "\n\nThe official reddit api (the thingy I get data from) lets me receive up to 250 posts on a subreddit search."
                                                       "\n\nIf you just get the newest/hottest or top posts the limit is different, but for searching it's 250."
-                                                      "\n\nIn the future I'm planning on implementing a different api that's supposed to give me more results,"
-                                                      " but for now this is what I implemented, sorry!"
-                                                      "\n\nIf you're looking for a specific post, try to search for more of it's title."
+                                                      "\n\nIn the future, we may switch to a different api that supposedly has a far greater limit,"
+                                                      " but for now this is what's implemented, sorry!"
+                                                      "\n\nIf you're looking for a specific post, try to search for it more specifically (include more of it's title etc...)."
                                                       "\n\nThank you for reading this, have a great day!"
-                                                      "\n\ntldr: reddit bad limits results uwu.",
+                                                      "\n\ntldr: reddit bad limits results uwu (but not really since they're holding a lot of data that needs to be supplied to a lot of users).",
                                                       style: TextStyle(
                                                           fontSize: 14.0,
                                                           color: Colors.white)),
