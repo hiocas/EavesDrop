@@ -22,6 +22,8 @@ class PopupTagsCardButton extends StatelessWidget {
   final bool usePlaceholder;
   final Widget placeholder;
 
+  final bool mini;
+
   const PopupTagsCardButton({
     Key key,
     this.label,
@@ -35,6 +37,7 @@ class PopupTagsCardButton extends StatelessWidget {
     @required this.selectedTags,
     this.usePlaceholder,
     this.placeholder,
+    this.mini = false,
   }) : super(key: key);
 
   @override
@@ -45,6 +48,7 @@ class PopupTagsCardButton extends StatelessWidget {
       color: this.color,
       subtextColor: this.subtextColor,
       icon: this.icon,
+      mini: this.mini,
       heroTag: this.heroTag,
       widget: PopupStatefulTagsCard(
         onSelected: this.onSelected,

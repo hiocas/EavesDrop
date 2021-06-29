@@ -9,8 +9,13 @@ import 'package:url_launcher/url_launcher.dart';
 //TODO(Design): Maybe redesign this widget.
 class SubmissionDetails extends StatelessWidget {
   final GwaSubmission gwaSubmission;
+  final double maxWidth;
 
-  const SubmissionDetails({Key key, this.gwaSubmission}) : super(key: key);
+  const SubmissionDetails({
+    Key key,
+    @required this.gwaSubmission,
+    this.maxWidth = 240,
+  }) : super(key: key);
 
   String _makeMarkdownDetails() {
     return '>### **${gwaSubmission.fullTitle}**'
@@ -35,6 +40,7 @@ class SubmissionDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         MarkdownViewer(
           text: _makeMarkdownDetails(),
@@ -50,19 +56,25 @@ class SubmissionDetails extends StatelessWidget {
               border: Border(top: BorderSide(width: 3.0, color: Colors.black))),
         ),
         Provider.of<GlobalState>(context, listen: false).eligiblePrefs
-            ? Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: ElevatedButton.icon(
-                    icon: Icon(Icons.launch),
-                    label: Text('Open Post in Browser/Reddit'),
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(15.0),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).primaryColor)),
-                    onPressed: () {
-                      launch(gwaSubmission.shortlink.toString());
-                    }),
-              )
+            // The LayoutBuilder is here to prevent overflow.
+            ? LayoutBuilder(builder: (context, constraints) {
+                if (constraints.maxWidth < this.maxWidth) {
+                  return Container();
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
+                  child: ElevatedButton.icon(
+                      icon: Icon(Icons.launch),
+                      label: Text('Open Post in Browser/Reddit'),
+                      style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(15.0),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).primaryColor)),
+                      onPressed: () {
+                        launch(gwaSubmission.shortlink.toString());
+                      }),
+                );
+              })
             : Container()
       ],
     );

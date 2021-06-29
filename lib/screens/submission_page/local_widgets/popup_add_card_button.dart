@@ -28,6 +28,8 @@ class PopupAddCardButton extends StatefulWidget {
   ///it since the library relies on it. Otherwise we should close it.
   final bool fromLibrary;
 
+  final bool mini;
+
   const PopupAddCardButton({
     Key key,
     this.label,
@@ -40,6 +42,7 @@ class PopupAddCardButton extends StatefulWidget {
     this.usePlaceholder,
     this.placeholder,
     @required this.fromLibrary,
+    this.mini = false,
   }) : super(key: key);
 
   @override
@@ -89,6 +92,7 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
                   libraryBox.values.toList().cast<LibraryGwaSubmission>();
               _inLibrary = _checkInLibrary(librarySubmissions);
               return CustomPopupWidgetButton(
+                mini: widget.mini,
                 label: _inLibrary ? 'Edit' : widget.label,
                 subtext: _inLibrary
                     ? "Edit the post's library information"

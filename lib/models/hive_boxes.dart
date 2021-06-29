@@ -26,8 +26,7 @@ class HiveBoxes {
           builder: (context) => FirstTimeScreen(),
         ),
       );
-    }
-    else {
+    } else {
       if (settingsBox.getAt(0).firstTime) {
         Navigator.push(
           context,
@@ -89,20 +88,24 @@ class HiveBoxes {
   static Future<AppSettings> addAppSettings(
       {String credentials,
       AudioLaunchOptions audioLaunchOptions =
-          AudioLaunchOptions.ChromeCustomTabs}) async {
+          AudioLaunchOptions.ChromeCustomTabs,
+      bool miniButtons = false}) async {
     final AppSettings settings = AppSettings(
         credentials: credentials,
         audioLaunchOptions: audioLaunchOptions,
-        firstTime: false);
+        firstTime: false,
+        miniButtons: miniButtons);
     final box = getAppSettingsBox();
     await box.add(settings);
     return Future.value(settings);
   }
 
-  static editAppSettings(
-      {String credentials,
-      AudioLaunchOptions audioLaunchOptions,
-      bool firstTime}) async {
+  static editAppSettings({
+    String credentials,
+    AudioLaunchOptions audioLaunchOptions,
+    bool firstTime,
+    bool miniButtons,
+  }) async {
     final box = getAppSettingsBox();
     if (box.isNotEmpty) {
       final AppSettings settings = box.getAt(0);
@@ -114,6 +117,9 @@ class HiveBoxes {
       }
       if (firstTime != null) {
         settings.firstTime = firstTime;
+      }
+      if (miniButtons != null) {
+        settings.miniButtons = miniButtons;
       }
       await settings.save();
     }

@@ -14,11 +14,16 @@ class PopupCardButton extends StatelessWidget {
   final Widget child;
   final Color cardColor;
   final Axis cardScrollDirection;
-  ///If this is true, the placeholder will be the default one I made
-  ///unless the [placeholder] parameter is specified.
-  ///If it isn't the placeholder will be the normal default placeholder.
+
+  /// If this is true, the placeholder will be the default one I made
+  /// unless the [placeholder] parameter is specified.
+  /// If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
+
+  final bool mini;
+
+  final EdgeInsets padding;
 
   const PopupCardButton({
     Key key,
@@ -34,6 +39,8 @@ class PopupCardButton extends StatelessWidget {
     this.cardScrollDirection,
     this.usePlaceholder,
     this.placeholder,
+    this.mini = false,
+    this.padding = const EdgeInsets.all(0.0),
   }) : super(key: key);
 
   @override
@@ -45,12 +52,14 @@ class PopupCardButton extends StatelessWidget {
       color: this.color,
       subtextColor: this.subtextColor,
       backgroundColor: this.backgroundColor,
+      mini: this.mini,
       heroTag: this.heroTag,
       widget: _PopupCard(
         heroTag: this.heroTag,
         child: this.child,
         color: this.cardColor,
         scrollDirection: this.cardScrollDirection,
+        padding: this.padding,
       ),
       usePlaceholder: this.usePlaceholder,
       placeholder: this.placeholder,
@@ -63,6 +72,7 @@ class _PopupCard extends StatelessWidget {
   final Widget child;
   final Color color;
   final Axis scrollDirection;
+  final EdgeInsets padding;
 
   const _PopupCard({
     Key key,
@@ -70,22 +80,24 @@ class _PopupCard extends StatelessWidget {
     @required this.heroTag,
     this.color,
     this.scrollDirection,
+    this.padding = const EdgeInsets.all(0.0),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: color ?? Theme.of(context).backgroundColor,
-      elevation: 2.0,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32.0)),
-      child: SingleChildScrollView(
-        scrollDirection: scrollDirection ?? Axis.vertical,
+        color: color ?? Theme.of(context).backgroundColor,
+        elevation: 2.0,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: child,
-        ),
-      ),
-    );
+            padding: this.padding,
+            child: SingleChildScrollView(
+              scrollDirection: scrollDirection ?? Axis.vertical,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: child,
+              ),
+            )));
   }
 }

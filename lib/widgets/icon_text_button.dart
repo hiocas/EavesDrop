@@ -50,6 +50,7 @@ class IconTextButtonElement extends StatelessWidget {
   final IconData icon;
   final Color color;
   final Color backgroundColor;
+  final bool mini;
 
   const IconTextButtonElement({
     Key key,
@@ -57,10 +58,44 @@ class IconTextButtonElement extends StatelessWidget {
     this.icon,
     this.color,
     this.backgroundColor,
+    this.mini = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (this.mini) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 6.0),
+        child: Container(
+          width: 88,
+          height: 45,
+          child: Material(
+            color: this.backgroundColor ?? Theme.of(context).backgroundColor,
+            elevation: 15.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(14.0))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  color: this.color ?? Theme.of(context).primaryColor,
+                  size: 28.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Text(
+                      label ?? '',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: this.color ?? Theme.of(context).primaryColor)),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 6.0),
       child: Container(

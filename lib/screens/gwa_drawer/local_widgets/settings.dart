@@ -17,6 +17,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   AudioLaunchOptions _audioLaunchOptions;
+  bool _miniButtons;
   Box<AppSettings> _box;
 
   @override
@@ -43,6 +44,20 @@ class _SettingsState extends State<Settings> {
     });
   }
 
+  _SettingOption<bool> _makeMiniButtonsSettingOption(BuildContext context,
+      {bool value, String title, String subtitle}) {
+    return _SettingOption<bool>(context,
+        value: value,
+        title: title,
+        subtitle: subtitle,
+        groupValue: _miniButtons, onChanged: (v) async {
+      await HiveBoxes.editAppSettings(miniButtons: v);
+      setState(() {
+        _miniButtons = v;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +72,8 @@ class _SettingsState extends State<Settings> {
             if (futureBox.hasData) {
               _box = futureBox.data;
               AppSettings _appSettings = futureBox.data.getAt(0);
-                _audioLaunchOptions = _appSettings.audioLaunchOptions;
+              _audioLaunchOptions = _appSettings.audioLaunchOptions;
+              _miniButtons = _appSettings.miniButtons;
               return Center(
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -110,6 +126,27 @@ class _SettingsState extends State<Settings> {
                         ],
                       ),
                     ),
+                    _Setting(
+                        icon: Icons.aspect_ratio_outlined,
+                        settingName: "Choose your action buttons' size:",
+                        options: [
+                          _makeMiniButtonsSettingOption(
+                            context,
+                            value: false,
+                            title: "Default",
+                            subtitle:
+                                "Will show bigger buttons and a subtext to "
+                                "describe what they each do.",
+                          ),
+                          _makeMiniButtonsSettingOption(
+                            context,
+                            value: true,
+                            title: "Small",
+                            subtitle:
+                                "Will show smaller buttons consisting only of "
+                                "an icon an a label.",
+                          ),
+                        ])
                   ],
                 ),
               ));

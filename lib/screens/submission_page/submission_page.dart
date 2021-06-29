@@ -1,6 +1,8 @@
+import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/widgets/markdown_viewer.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
@@ -34,6 +36,7 @@ class SubmissionPageState extends State<SubmissionPage> {
   ScrollController _scrollController;
   GlobalKey<FloatingPlayButtonState> _floatingPlayButtonKey =
       new GlobalKey<FloatingPlayButtonState>();
+  bool miniButtons;
 
   @override
   void initState() {
@@ -51,14 +54,20 @@ class SubmissionPageState extends State<SubmissionPage> {
     super.dispose();
   }
 
+  Future<Submission> _initSubmissionPage() async {
+    final appSettings = await HiveBoxes.getAppSettings();
+    miniButtons = appSettings.miniButtons;
+    return Provider.of<GlobalState>(context, listen: false)
+        .populateSubmission(id: _fullname);
+  }
+
   @override
   Widget build(BuildContext context) {
     /* This keeps track of how many times the user tapped the author name
     so that if it's multiple times we can show them a Snackbar that tells them
     to long press on the author's name if they want to see their submissions. */
     return FutureBuilder(
-      future:
-          Provider.of<GlobalState>(context).populateSubmission(id: _fullname),
+      future: _initSubmissionPage(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (!snapshot.hasData) {
           return Scaffold(
@@ -95,6 +104,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                       ),
                       //Buttons and Tags
                       SubmissionPageButtonsAndTags(
+                          mini: miniButtons,
                           submission: _submission,
                           redditSubmission: snapshot.data,
                           fromLibrary: widget.fromLibrary),

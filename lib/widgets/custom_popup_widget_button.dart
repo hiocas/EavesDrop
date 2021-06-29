@@ -18,6 +18,7 @@ class CustomPopupWidgetButton extends StatelessWidget {
   ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
   final Widget placeholder;
+  final bool mini;
 
   const CustomPopupWidgetButton({
     Key key,
@@ -31,6 +32,7 @@ class CustomPopupWidgetButton extends StatelessWidget {
     @required this.widget,
     this.usePlaceholder,
     this.placeholder,
+    this.mini = false,
   }) : super(key: key);
 
   @override
@@ -56,6 +58,7 @@ class CustomPopupWidgetButton extends StatelessWidget {
               icon: this.icon,
               color: this.color,
               backgroundColor: this.backgroundColor,
+              mini: this.mini,
             ),
             placeholderBuilder: (context, size, widget) {
               if (this.usePlaceholder ?? false) {
@@ -88,10 +91,10 @@ class CustomPopupWidgetButton extends StatelessWidget {
             },
           ),
         ),
-        IconTextButtonSubtext(
+        (this.mini ? Container() : IconTextButtonSubtext(
           subtext: this.subtext ?? '',
           subtextColor: this.subtextColor,
-        )
+        ))
       ],
     );
   }

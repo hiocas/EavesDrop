@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/gwa_tag.dart';
@@ -19,11 +20,13 @@ class SubmissionPageButtonsAndTags extends StatefulWidget {
     @required this.submission,
     @required this.redditSubmission,
     @required this.fromLibrary,
+    this.mini = false,
   }) : super(key: key);
 
   final GwaSubmission submission;
   final Submission redditSubmission;
   final bool fromLibrary;
+  final bool mini;
 
   @override
   _SubmissionPageButtonsAndTagsState createState() =>
@@ -46,6 +49,7 @@ class _SubmissionPageButtonsAndTagsState
   Widget _makeSupportButton(BuildContext context) {
     if (Provider.of<GlobalState>(context, listen: false).eligiblePrefs) {
       return ParticlesIconTextToggleButton(
+        mini: widget.mini,
         icon: Icons.favorite_border,
         iconPressed: Icons.favorite,
         label: 'Upvote',
@@ -54,7 +58,9 @@ class _SubmissionPageButtonsAndTagsState
         color: Theme.of(context).primaryColor,
         initialPressed: _voted(),
         millisecondsBeforeOnPressed: 0,
-        onPressed: widget.redditSubmission.archived ? null : () async {
+        onPressed: widget.redditSubmission.archived
+            ? null
+            : () async {
                 // TODO: Display a snackbar if action failed.
                 if (_voted()) {
                   await widget.redditSubmission
@@ -67,6 +73,7 @@ class _SubmissionPageButtonsAndTagsState
       );
     }
     return ParticlesIconTextButton(
+      mini: widget.mini,
       icon: Icons.favorite_border,
       iconPressed: Icons.favorite,
       label: 'Open',
@@ -90,10 +97,10 @@ class _SubmissionPageButtonsAndTagsState
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(
+            padding: EdgeInsets.only(
               left: 4.0,
               right: 4.0,
-              bottom: 10.0,
+              bottom: widget.mini ? 4.0 : 10.0,
               top: 15.0,
             ),
             //TODO(Design): Design these buttons better.
@@ -101,6 +108,7 @@ class _SubmissionPageButtonsAndTagsState
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 PopupAddCardButton(
+                  mini: widget.mini,
                   icon: Icons.add,
                   label: 'Save',
                   subtext: 'Save this post to your library',
@@ -116,13 +124,12 @@ class _SubmissionPageButtonsAndTagsState
                   label: 'Details',
                   subtext: "Show all of the post's details",
                   color: Theme.of(context).primaryColor,
+                  mini: widget.mini,
                   heroTag: 'submission-details-popup',
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SubmissionDetails(
-                      gwaSubmission: widget.submission,
-                    ),
+                  child: SubmissionDetails(
+                    gwaSubmission: widget.submission,
                   ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   usePlaceholder: true,
                 ),
                 PopupTagsCardButton(
@@ -130,6 +137,7 @@ class _SubmissionPageButtonsAndTagsState
                   label: 'Tags',
                   subtext: "View and query all of the post's tags",
                   color: Theme.of(context).primaryColor,
+                  mini: widget.mini,
                   heroTag: 'submission-tags-popup',
                   gwaSubmission: widget.submission,
                   selectedTags: _selectedTags,
@@ -150,8 +158,7 @@ class _SubmissionPageButtonsAndTagsState
                   margin:
                       const EdgeInsets.only(left: 10.0, top: 4.0, bottom: 4.0),
                   height: 35,
-                  child:
-                      ListView.builder(
+                  child: ListView.builder(
                     itemBuilder: (BuildContext context, int index) {
                       return GwaTag(
                         tag: widget.submission.tags[index],

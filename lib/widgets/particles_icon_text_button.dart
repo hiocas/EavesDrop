@@ -18,6 +18,8 @@ class ParticlesIconTextButton extends StatefulWidget {
   final List<Color> confettiColors;
   final int millisecondsBeforeOnPressed;
 
+  final bool mini;
+
   const ParticlesIconTextButton({
     Key key,
     @required this.label,
@@ -31,6 +33,7 @@ class ParticlesIconTextButton extends StatefulWidget {
     @required this.confettiDuration,
     this.confettiColors,
     this.millisecondsBeforeOnPressed,
+    this.mini = false,
   }) : super(key: key);
 
   @override
@@ -88,6 +91,7 @@ class _ParticlesIconTextButtonState extends State<ParticlesIconTextButton> {
             alignment: AlignmentDirectional.center,
             children: [
               IconTextButtonElement(
+                mini: widget.mini,
                 label: this.widget.label,
                 icon: _icon,
                 color: this.widget.color,
@@ -110,10 +114,10 @@ class _ParticlesIconTextButtonState extends State<ParticlesIconTextButton> {
             ],
           ),
         ),
-        IconTextButtonSubtext(
+        (widget.mini ? Container() : IconTextButtonSubtext(
           subtext: this.widget.subtext ?? '',
           subtextColor: this.widget.subtextColor,
-        )
+        ))
       ],
     );
   }
@@ -140,6 +144,8 @@ class ParticlesIconTextToggleButton extends StatefulWidget {
   final List<Color> confettiColors;
   final int millisecondsBeforeOnPressed;
 
+  final bool mini;
+
   const ParticlesIconTextToggleButton({
     Key key,
     @required this.label,
@@ -155,6 +161,7 @@ class ParticlesIconTextToggleButton extends StatefulWidget {
     @required this.confettiDuration,
     this.confettiColors,
     this.millisecondsBeforeOnPressed,
+    this.mini = false,
   }) : super(key: key);
 
   @override
@@ -225,6 +232,7 @@ class _ParticlesIconTextToggleButtonState
             alignment: AlignmentDirectional.center,
             children: [
               IconTextButtonElement(
+                mini: widget.mini,
                 label: this.widget.label,
                 icon: _icon,
                 color: widget.onPressed == null
@@ -249,7 +257,7 @@ class _ParticlesIconTextToggleButtonState
             ],
           ),
         ),
-        IconTextButtonSubtext(
+        (widget.mini ? Container() : IconTextButtonSubtext(
           subtext: widget.onPressed == null
               ? (this.widget.disabledSubtext ?? (this.widget.subtext ?? ''))
               : (this.widget.subtext ?? ''),
@@ -258,7 +266,7 @@ class _ParticlesIconTextToggleButtonState
                   ? Colors.grey.withOpacity(0.6)
                   : (this.widget.subtextColor.withOpacity(0.6))
               : this.widget.subtextColor,
-        )
+        ))
       ],
     );
   }
