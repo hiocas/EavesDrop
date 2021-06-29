@@ -151,10 +151,18 @@ class _LibraryState extends State<Library> {
                           onPressed: () => showDialog<String>(
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Clear Library'),
+                              backgroundColor:
+                                  Theme.of(context).backgroundColor,
+                              title: const Text(
+                                'Clear Library',
+                                style: TextStyle(color: Colors.white),
+                              ),
                               content: const Text(
-                                  'Are you sure you want to clear'
-                                  ' your library? This action cannot be reverted.'),
+                                'Are you sure you want to clear '
+                                'your library? This action cannot be '
+                                'reverted.',
+                                style: TextStyle(color: Colors.white),
+                              ),
                               actions: <Widget>[
                                 TextButton(
                                     onPressed: () =>
