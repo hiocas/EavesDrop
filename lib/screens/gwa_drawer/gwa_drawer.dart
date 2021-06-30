@@ -32,7 +32,7 @@ class GwaDrawer extends StatelessWidget {
                   child: ListTile(
                     visualDensity: VisualDensity.compact,
                     title: Text(
-                      'Big PP App',
+                      'GoneWildAudio App',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
