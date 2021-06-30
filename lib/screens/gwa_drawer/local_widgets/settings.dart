@@ -180,7 +180,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ));
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gwa_app/services/reddit_client_service.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/states/global_state.dart';
+import 'package:gwa_app/widgets/GwaGradientShaderMask.dart';
 import 'package:provider/provider.dart';
 import 'local_widgets/all_local_widgets.dart';
 
@@ -15,51 +16,106 @@ class GwaDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     RedditClientService _redditClientService =
         Provider.of<GlobalState>(context, listen: false).redditClientService;
-    return Drawer(
-      child: Material(
-        color: Theme.of(context).primaryColor,
-        child: ListView(
-          itemExtent: 50.0,
-          children: [
-            DrawerHeader(child: Text('GoneWildAudio App')),
-            ListTile(
-              title: Text(_redditClientService.loggedIn
-                  ? 'Account (u/${_redditClientService.displayName})'
-                  : 'Log in'),
-              onTap: () =>
-                  pushLogin(context, redditClientService: _redditClientService),
-            ),
-            ListTile(
-              title: Text('Open Post (Link or ID)'),
-              onTap: () => Navigator.push(
+    return SafeArea(
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(22.0)),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Drawer(
+          elevation: 15.0,
+          child: Material(
+            color: Theme.of(context).backgroundColor,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GwaGradientShaderMask(
                   context,
-                  CupertinoPageRoute(
-                    builder: (context) => OpenSubmissionScreen(
+                  child: ListTile(
+                    visualDensity: VisualDensity.compact,
+                    title: Text(
+                      'Big PP App',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24.0,
+                      ),
                     ),
-                  )),
+                  ),
+                ),
+                Divider(color: Colors.black, thickness: 1.0,),
+                _GwaDrawerListTile(
+                  icon: _redditClientService.loggedIn
+                      ? Icons.account_circle
+                      : Icons.login,
+                  title: _redditClientService.loggedIn
+                      ? 'Account (u/${_redditClientService.displayName})'
+                      : 'Log in',
+                  onTap: () => pushLogin(context,
+                      redditClientService: _redditClientService),
+                ),
+                _GwaDrawerListTile(
+                  icon: Icons.import_export,
+                  title: 'Open Post (Link or ID)',
+                  onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => OpenSubmissionScreen(),
+                      )),
+                ),
+                _GwaDrawerListTile(
+                  icon: Icons.settings,
+                  title: 'Settings',
+                  onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => Settings(),
+                      )),
+                ),
+                _GwaDrawerListTile(
+                  icon: Icons.info,
+                  title: 'About',
+                ),
+                _GwaDrawerListTile(
+                  icon: Icons.help,
+                  title: 'Help',
+                  onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => Help(),
+                      )),
+                )
+              ],
             ),
-            ListTile(
-              title: Text('Settings'),
-              onTap: () => Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => Settings(),
-                  )),
-            ),
-            ListTile(
-              title: Text('About'),
-            ),
-            ListTile(
-              title: Text('Help'),
-              onTap: () => Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => Help(),
-                  )),
-            )
-          ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class _GwaDrawerListTile extends StatelessWidget {
+  const _GwaDrawerListTile({
+    Key key,
+    this.icon,
+    this.title,
+    this.onTap,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String title;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        leading: Icon(
+          icon,
+          color: Colors.white,
+        ),
+        horizontalTitleGap: 0.0,
+        title: Text(
+          title,
+          style: TextStyle(color: Colors.white),
+        ),
+        onTap: onTap);
   }
 }
