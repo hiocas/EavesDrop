@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="Gwa App 0.2.7"
+        android:label="Gwa App 0.2.8"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
