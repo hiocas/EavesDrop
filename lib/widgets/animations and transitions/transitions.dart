@@ -5,9 +5,9 @@ class SlideFadeTransition extends StatelessWidget {
     Key key,
     @required this.animationController,
     @required this.child,
-    this.beginOffset,
-    this.endOffset,
-    this.slideCurve,
+    this.beginOffset = const Offset(0.0, 0.06),
+    this.endOffset = Offset.zero,
+    this.slideCurve = Curves.easeInOut,
   }) : super(key: key);
 
   final AnimationController animationController;
@@ -20,11 +20,10 @@ class SlideFadeTransition extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: this.beginOffset ?? Offset(0.0, 0.06),
-        end: this.endOffset ?? Offset.zero,
+        begin: this.beginOffset,
+        end: this.endOffset,
       ).animate(CurvedAnimation(
-          parent: this.animationController,
-          curve: this.slideCurve ?? Curves.easeInOut)),
+          parent: this.animationController, curve: this.slideCurve)),
       child: FadeTransition(
         opacity: this.animationController,
         child: this.child,

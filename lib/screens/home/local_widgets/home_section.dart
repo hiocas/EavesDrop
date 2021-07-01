@@ -15,13 +15,13 @@ class HomeSection extends StatefulWidget {
     Key key,
     @required this.title,
     @required this.contentStream,
-    this.animationDuration,
-    this.waitDuration,
+    this.animationDuration = const Duration(milliseconds: 500),
+    this.waitDuration = const Duration(seconds: 1),
     this.homeSectionPageContentStream,
     this.homeSectionPageShowOnlyPictures,
     this.homeSectionPageMaxPages,
     this.homeSectionPageShufflePages,
-    this.itemSize,
+    this.itemSize = 130,
     this.offAxisFraction,
     this.squeeze,
   }) : super(key: key);
@@ -52,11 +52,9 @@ class __HomeSectionState extends State<HomeSection>
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-        vsync: this,
-        duration: widget.animationDuration ?? Duration(milliseconds: 500));
-    Timer(widget.waitDuration ?? Duration(seconds: 1),
-            () => _animationController.forward());
+    _animationController =
+        AnimationController(vsync: this, duration: widget.animationDuration);
+    Timer(widget.waitDuration, () => _animationController.forward());
   }
 
   @override
@@ -85,7 +83,7 @@ class __HomeSectionState extends State<HomeSection>
                       builder: (context) => HomeSectionPage(
                           sectionTitle: widget.title,
                           pageShowOnlyPictures:
-                          widget.homeSectionPageShowOnlyPictures,
+                              widget.homeSectionPageShowOnlyPictures,
                           shufflePages: widget.homeSectionPageShufflePages,
                           maxPages: widget.homeSectionPageMaxPages,
                           contentStream: widget.homeSectionPageContentStream),
@@ -98,7 +96,7 @@ class __HomeSectionState extends State<HomeSection>
               splashColor: Theme.of(context).primaryColor.withOpacity(0.5),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -126,7 +124,7 @@ class __HomeSectionState extends State<HomeSection>
                       ),
                       child: HorizontalClickableListWheelScrollViewStream(
                         stream: this.widget.contentStream,
-                        itemSize: widget.itemSize ?? 130,
+                        itemSize: widget.itemSize,
                         offAxisFraction: widget.offAxisFraction,
                         squeeze: widget.squeeze,
                       ),
