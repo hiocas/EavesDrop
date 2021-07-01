@@ -141,7 +141,8 @@ class RedditClientService {
       );
       var _me = await redditClientService.reddit.user.me();
       redditClientService.displayName = _me.displayName;
-      redditClientService.iconImg = _me.data["icon_img"];
+      redditClientService.iconImg =
+          _me.data["icon_img"].toString().replaceAll('&amp;', '&');
       await redditClientService.eligiblePreferences();
       return redditClientService;
     }
@@ -211,7 +212,7 @@ class RedditClientService {
     await reddit.auth.authorize(authCode);
     var _me = await reddit.user.me();
     this.displayName = _me.displayName;
-    this.iconImg = _me.data["icon_img"];
+    this.iconImg = _me.data["icon_img"].toString().replaceAll('&amp;', '&');
     if (this.rememberClient) {
       this._saveCredentials();
     }
@@ -230,8 +231,8 @@ class RedditClientService {
   /// Returns an auth url relevant to [reddit], which must be an instance of
   /// [Reddit] with a [WebAuthenticator].
   Uri _generateAuthUrl(Reddit reddit) {
-    return reddit.auth
-        .url(['read', 'account', 'identity', 'vote'], 'gwa-app', compactLogin: true);
+    return reddit.auth.url(['read', 'account', 'identity', 'vote'], 'gwa-app',
+        compactLogin: true);
   }
 
   /// Returns whether the current user in [reddit] (if logged in) has eligible
@@ -279,10 +280,9 @@ class RedditClientService {
   _saveCredentials() async {
     if (loggedIn) {
       Box<AppSettings> box = await HiveBoxes.openAppSettingsBox();
-        await HiveBoxes.editAppSettings(
-            credentials: reddit.auth.credentials.toJson());
+      await HiveBoxes.editAppSettings(
+          credentials: reddit.auth.credentials.toJson());
       await box.close();
     }
   }
-
 }

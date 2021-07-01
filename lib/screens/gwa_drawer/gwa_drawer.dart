@@ -55,6 +55,23 @@ class GwaDrawer extends StatelessWidget {
                           _redditClientService.iconImg,
                           width: 30.0,
                           height: 30.0,
+                          errorBuilder: (context, _, __) => Icon(
+                            Icons.account_circle,
+                            color: Colors.white,
+                          ),
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return SizedBox(
+                              width: 30.0,
+                              height: 30.0,
+                              child: CircularProgressIndicator(
+                                value: progress.expectedTotalBytes != null
+                                    ? progress.cumulativeBytesLoaded /
+                                        progress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          },
                         ))
                       : null,
                   icon: Icons.login,
