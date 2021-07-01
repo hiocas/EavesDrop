@@ -28,6 +28,7 @@ class SubmissionPageState extends State<SubmissionPage> {
   GlobalKey<FloatingPlayButtonState> _floatingPlayButtonKey =
       new GlobalKey<FloatingPlayButtonState>();
   bool miniButtons;
+  bool _showFPB = true;
 
   @override
   void initState() {
@@ -69,6 +70,7 @@ class SubmissionPageState extends State<SubmissionPage> {
           );
         } else {
           _submission = new GwaSubmission(snapshot.data);
+          _showFPB = _submission.hasAudioUrl && _submission.tags.length > 0;
           return Container(
             color: Theme.of(context).primaryColor,
             child: SafeArea(
@@ -99,7 +101,8 @@ class SubmissionPageState extends State<SubmissionPage> {
                         behavior: HitTestBehavior.deferToChild,
                         onTap: () {
                           print('Hide button');
-                          if (_floatingPlayButtonKey.currentState.animates) {
+                          if (_showFPB &&
+                              _floatingPlayButtonKey.currentState.animates) {
                             _floatingPlayButtonKey.currentState.animateButton();
                           }
                         },
@@ -132,14 +135,16 @@ class SubmissionPageState extends State<SubmissionPage> {
                     )
                   ],
                 ),
-                floatingActionButton: FloatingPlayButton(
-                  key: _floatingPlayButtonKey,
-                  heroTag: 'floating-play-button-popup',
-                  submission: _submission,
-                  scrollController: _scrollController,
-                ),
+                floatingActionButton: _showFPB
+                    ? FloatingPlayButton(
+                        key: _floatingPlayButtonKey,
+                        heroTag: 'floating-play-button-popup',
+                        submission: _submission,
+                        scrollController: _scrollController,
+                      )
+                    : null,
                 floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerFloat,
+                    _showFPB ? FloatingActionButtonLocation.centerFloat : null,
               ),
             ),
           );
