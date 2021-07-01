@@ -41,7 +41,10 @@ class GwaDrawer extends StatelessWidget {
                     ),
                   ),
                 ),
-                Divider(color: Colors.black, thickness: 1.0,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 48),
+                  child: Divider(color: Colors.black, thickness: 1.0,),
+                ),
                 _GwaDrawerListTile(
                   icon: _redditClientService.loggedIn
                       ? Icons.account_circle
