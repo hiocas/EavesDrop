@@ -43,12 +43,21 @@ class GwaDrawer extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 48),
-                  child: Divider(color: Colors.black, thickness: 1.0,),
+                  child: Divider(
+                    color: Colors.black,
+                    thickness: 1.0,
+                  ),
                 ),
                 _GwaDrawerListTile(
-                  icon: _redditClientService.loggedIn
-                      ? Icons.account_circle
-                      : Icons.login,
+                  leading: _redditClientService.loggedIn
+                      ? ClipOval(
+                          child: Image.network(
+                          _redditClientService.iconImg,
+                          width: 30.0,
+                          height: 30.0,
+                        ))
+                      : null,
+                  icon: Icons.login,
                   title: _redditClientService.loggedIn
                       ? 'Account (u/${_redditClientService.displayName})'
                       : 'Log in',
@@ -99,21 +108,24 @@ class _GwaDrawerListTile extends StatelessWidget {
   const _GwaDrawerListTile({
     Key key,
     this.icon,
+    this.leading,
     this.title,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
+  final Widget leading;
   final String title;
   final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        leading: Icon(
-          icon,
-          color: Colors.white,
-        ),
+        leading: leading ??
+            Icon(
+              icon,
+              color: Colors.white,
+            ),
         horizontalTitleGap: 0.0,
         title: Text(
           title,

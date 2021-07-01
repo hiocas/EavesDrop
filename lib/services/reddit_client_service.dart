@@ -92,12 +92,19 @@ class RedditClientService {
   /// authenticated user) allow them to see submission preview thumbnails?
   bool eligiblePrefs = false;
 
+  /// The icon_img of the logged-in user [Reddit] instance in [reddit].
+  /// If the user isn't logged in this is null.
+  String iconImg;
+
   /// Updates [reddit] and [_gwaSubreddit].
   /// Make sure to set [eligiblePrefs] after the client has been authorised
   /// (if they didn't log out) afterwards.
   setReddit(Reddit newInstance) {
     this.reddit = newInstance;
-    if (!loggedIn) this.displayName = '';
+    if (!loggedIn) {
+      this.displayName = '';
+      this.iconImg = null;
+    }
     this.gwaSubreddit = this.reddit.subreddit('gonewildaudio');
   }
 
@@ -134,6 +141,7 @@ class RedditClientService {
       );
       var _me = await redditClientService.reddit.user.me();
       redditClientService.displayName = _me.displayName;
+      redditClientService.iconImg = _me.data["icon_img"];
       await redditClientService.eligiblePreferences();
       return redditClientService;
     }
@@ -203,6 +211,7 @@ class RedditClientService {
     await reddit.auth.authorize(authCode);
     var _me = await reddit.user.me();
     this.displayName = _me.displayName;
+    this.iconImg = _me.data["icon_img"];
     if (this.rememberClient) {
       this._saveCredentials();
     }
