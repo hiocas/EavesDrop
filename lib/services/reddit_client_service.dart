@@ -222,9 +222,9 @@ class RedditClientService {
   logout() async {
     setReddit(this._untrustedReddit);
     this.eligiblePrefs = false;
-    await HiveBoxes.openAppSettingsBox();
+    final box = await HiveBoxes.openAppSettingsBox();
     await HiveBoxes.editAppSettings(credentials: '');
-    await Hive.close();
+    await box.close();
   }
 
   /// Returns an auth url relevant to [reddit], which must be an instance of
@@ -271,7 +271,7 @@ class RedditClientService {
       AppSettings settings = box.getAt(0);
       credentials = settings.credentials;
     }
-    await Hive.close();
+    await box.close();
     return Future.value(credentials);
   }
 
@@ -281,7 +281,7 @@ class RedditClientService {
       Box<AppSettings> box = await HiveBoxes.openAppSettingsBox();
         await HiveBoxes.editAppSettings(
             credentials: reddit.auth.credentials.toJson());
-      await Hive.close();
+      await box.close();
     }
   }
 
