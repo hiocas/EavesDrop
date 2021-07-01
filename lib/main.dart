@@ -114,7 +114,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
         initialSort: widget.initialSort,
         initialTimeFilter: widget.initialTimeFilter,
       ),
-      NewHome(biggestSize: 175, sizeDiff: 30,),
+      NewHome(),
       Library(),
     ];
     HiveBoxes.checkFirstTime(context);

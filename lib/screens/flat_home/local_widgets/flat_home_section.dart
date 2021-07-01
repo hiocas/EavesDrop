@@ -19,6 +19,9 @@ class FlatHomeSection extends StatefulWidget {
     this.homeSectionPageMaxPages,
     this.size,
     this.sizeRatio = 1.5,
+    this.showAuthors = false,
+    this.textSize,
+    this.authorTextSize,
   }) : super(key: key);
 
   final String title;
@@ -32,6 +35,11 @@ class FlatHomeSection extends StatefulWidget {
 
   final Duration animationDuration;
   final Duration waitDuration;
+
+  final bool showAuthors;
+
+  final double textSize;
+  final double authorTextSize;
 
   @override
   _FlatHomeSectionState createState() => _FlatHomeSectionState();
@@ -104,6 +112,9 @@ class _FlatHomeSectionState extends State<FlatHomeSection>
                   width: MediaQuery.of(context).size.width,
                   child: FlatHomeListViewStream(
                     contentStream: this.widget.contentStream,
+                    showAuthors: this.widget.showAuthors,
+                    textSize: this.widget.textSize,
+                    authorTextSize: this.widget.authorTextSize,
                     size: this.widget.size,
                     sizeRatio: this.widget.sizeRatio,
                   ),

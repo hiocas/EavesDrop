@@ -1,23 +1,27 @@
 import 'dart:async';
-
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
-
 import 'dummy_flat_home_list_view.dart';
 
 class FlatHomeListViewStream extends StatefulWidget {
   const FlatHomeListViewStream({
     Key key,
     @required this.contentStream,
+    this.showAuthors = false,
     @required this.size,
     @required this.sizeRatio,
+    this.textSize,
+    this.authorTextSize,
   }) : super(key: key);
 
   final Stream<UserContent> contentStream;
+  final bool showAuthors;
   final double size;
   final double sizeRatio;
+  final double textSize;
+  final double authorTextSize;
 
   @override
   _FlatHomeListViewStreamState createState() => _FlatHomeListViewStreamState();
@@ -26,6 +30,7 @@ class FlatHomeListViewStream extends StatefulWidget {
 class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
   StreamController<UserContent> _streamController;
   List<GwaSubmissionPreview> previews = [];
+  List<String> authors = [];
 
   @override
   void initState() {
@@ -33,6 +38,7 @@ class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
     _streamController.stream.listen((event) {
       Submission submission = event;
       this.previews.add(GwaSubmissionPreview(submission));
+      if (widget.showAuthors) authors.add(submission.author);
     });
     widget.contentStream.pipe(_streamController);
     super.initState();
@@ -62,8 +68,12 @@ class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
           child: snapshot.hasData
               ? FlatHomeListView(
                   previews: previews,
+                  authors: authors,
                   size: widget.size,
-                  sizeRatio: widget.sizeRatio)
+                  sizeRatio: widget.sizeRatio,
+                  textSize: this.widget.textSize,
+                  authorTextSize: this.widget.authorTextSize,
+                )
               : DummyFlatHomeListView(
                   size: widget.size, sizeRatio: widget.sizeRatio, length: 3),
         );
@@ -76,13 +86,19 @@ class FlatHomeListView extends StatelessWidget {
   const FlatHomeListView({
     Key key,
     @required this.previews,
+    this.authors,
     @required this.size,
     @required this.sizeRatio,
+    this.textSize,
+    this.authorTextSize,
   }) : super(key: key);
 
   final List<GwaSubmissionPreview> previews;
+  final List<String> authors;
   final double size;
   final double sizeRatio;
+  final double textSize;
+  final double authorTextSize;
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +108,15 @@ class FlatHomeListView extends StatelessWidget {
       itemCount: this.previews.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.all(6.0),
+          padding: const EdgeInsets.all(8.0),
           child: _FlatHomeListViewItem(
-              preview: this.previews[index],
-              size: this.size,
-              sizeRatio: this.sizeRatio),
+            preview: this.previews[index],
+            author: this.authors.isEmpty ? null : this.authors[index],
+            size: this.size,
+            sizeRatio: this.sizeRatio,
+            textSize: this.textSize,
+            authorTextSize: this.authorTextSize,
+          ),
         );
       },
     );
@@ -107,13 +127,19 @@ class _FlatHomeListViewItem extends StatelessWidget {
   const _FlatHomeListViewItem({
     Key key,
     @required this.preview,
+    this.author,
     @required this.size,
     @required this.sizeRatio,
+    this.textSize = 14.0,
+    this.authorTextSize = 14.0,
   }) : super(key: key);
 
   final GwaSubmissionPreview preview;
+  final String author;
   final double size;
   final double sizeRatio;
+  final double textSize;
+  final double authorTextSize;
 
   @override
   Widget build(BuildContext context) {
@@ -161,12 +187,34 @@ class _FlatHomeListViewItem extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 8.0),
                 child: Align(
                   alignment: Alignment.bottomLeft,
-                  child: Text(
-                    this.preview.title,
-                    maxLines: 2,
-                    style: TextStyle(color: Colors.white, fontSize: 14.0),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  child: this.author == null
+                      ? Text(
+                          this.preview.title,
+                          maxLines: 2,
+                          style: TextStyle(color: Colors.white, fontSize: 14.0),
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              this.preview.title,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: this.textSize),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              this.author,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: this.authorTextSize),
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          ],
+                        ),
                 ),
               ),
             ],
