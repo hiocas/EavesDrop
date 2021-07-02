@@ -177,7 +177,6 @@ class SubmissionListState extends State<SubmissionList> {
           print('Drawer Changed $open');
           // In case a setting change occurred that requires a rebuild.
           if (!open && GwaDrawerManager.updateOnReturn) {
-            print('hey');
             GwaDrawerManager.updateOnReturn = false;
             _updateSearch(false);
           }
