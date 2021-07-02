@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
                 thumbColor: MaterialStateProperty.all(
                     Color.fromARGB(255, 119, 23, 45).withOpacity(0.3)),
               )),
-          home: SafeArea(top: false, child: HomeScaffold()),
+          home: HomeScaffold(),
           routes: {
             ExtractArgumentsSubmissionList.routeName: (context) =>
                 ExtractArgumentsSubmissionList(),
