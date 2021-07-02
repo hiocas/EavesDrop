@@ -122,7 +122,8 @@ class _LibraryState extends State<Library> {
                     key: _scaffoldKey,
                     onDrawerChanged: (open) {
                       // Rebuild when closing the GwaDrawer
-                      if (!open) {
+                      if (!open && GwaDrawerManager.updateOnReturn) {
+                        GwaDrawerManager.updateOnReturn = false;
                         setState(() {});
                       }
                     },

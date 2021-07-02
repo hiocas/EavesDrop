@@ -92,6 +92,7 @@ class _SettingsState extends State<Settings> {
         subtitle: subtitle,
         groupValue: _librarySmallSubmissions, onChanged: (v) async {
       await HiveBoxes.editAppSettings(librarySmallSubmissions: v);
+      GwaDrawerManager.updateOnReturn = true;
       setState(() {
         _librarySmallSubmissions = v;
       });

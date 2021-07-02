@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
+import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 
 class GwaListItem extends StatelessWidget {
@@ -94,7 +95,7 @@ class GwaLibraryListItem extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15)),
           image: new DecorationImage(
             image: NetworkImage(thumbnailUrl == null || thumbnailUrl.isEmpty
-                ? 'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9'
+                ? GwaFunctions.getPlaceholderImageUrl(this.fullname)
                 : thumbnailUrl),
             fit: BoxFit.cover,
           ),

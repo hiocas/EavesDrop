@@ -19,7 +19,10 @@ class GwaSubmission {
   List<String> audioUrls = [];
   String firstImageOrGifUrl = '';
   Image img;
-  String thumbnailUrl;
+  /// The thumbnail url of the first submission preview. Will be an empty
+  /// string if there are no previews in the submission or if we failed to
+  /// get them.
+  String thumbnailUrl = '';
   bool hasAudioUrl = false;
   String fromNow;
   int upvotes;
@@ -54,8 +57,6 @@ class GwaSubmission {
     }
     if (submission.preview.length > 0)
       this.thumbnailUrl = submission.preview[0].source.url.toString();
-    else
-      this.thumbnailUrl = GwaFunctions.getPlaceholderImageUrl(fullname);
     this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
     this.img = _getImg();
     this.hasAudioUrl = checkHasAudioUrl();
@@ -114,10 +115,10 @@ class GwaSubmission {
         return s;
       }
     }
-    if (this.thumbnailUrl != null) {
+    if (this.thumbnailUrl != null && this.thumbnailUrl.isNotEmpty) {
       return this.thumbnailUrl;
     }
-    return '';
+    return GwaFunctions.getPlaceholderImageUrl(this.fullname);
   }
 
   _populateAudioUrls(Submission submission) {
