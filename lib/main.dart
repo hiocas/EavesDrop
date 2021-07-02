@@ -1,5 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/screens/flat_home/new_home.dart';
 import 'package:gwa_app/screens/library/library.dart';
@@ -52,36 +53,42 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GlobalState>.value(
       value: widget.globalState,
-      child: MaterialApp(
-        title: 'GoneWildAudio App',
-        themeMode: ThemeMode.dark,
-        theme: ThemeData(
-            primaryColor: Color.fromARGB(255, 119, 23, 45),
-            accentColor: Color.fromARGB(255, 62, 26, 92),
-            backgroundColor: Colors.grey[200],
-            cardColor: Color.fromARGB(255, 7, 13, 43),
-            textTheme: TextTheme(bodyText2: TextStyle(color: Colors.black))),
-        darkTheme: ThemeData(
-            primaryColor: Color.fromARGB(255, 119, 23, 45),
-            accentColor: Color.fromARGB(255, 62, 26, 92),
-            backgroundColor: Color.fromARGB(255, 28, 18, 28),
-            cardColor: Color.fromARGB(255, 7, 13, 43),
-            scrollbarTheme: ScrollbarThemeData(
-              thumbColor: MaterialStateProperty.all(
-                  Color.fromARGB(255, 119, 23, 45).withOpacity(0.3)),
-            )),
-        home: HomeScaffold(),
-        routes: {
-          ExtractArgumentsSubmissionList.routeName: (context) =>
-              ExtractArgumentsSubmissionList(),
-          RedirectToHome.routeName: (context) => RedirectToHome(),
-          '/home': (context) => HomeScaffold(
-                initialIndex: 1,
-              ),
-          '/library': (context) => HomeScaffold(
-                initialIndex: 2,
-              )
-        },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Color.fromARGB(255, 28, 18, 28),
+        ),
+        child: MaterialApp(
+          title: 'GoneWildAudio App',
+          themeMode: ThemeMode.dark,
+          theme: ThemeData(
+              primaryColor: Color.fromARGB(255, 119, 23, 45),
+              accentColor: Color.fromARGB(255, 62, 26, 92),
+              backgroundColor: Colors.grey[200],
+              cardColor: Color.fromARGB(255, 7, 13, 43),
+              textTheme: TextTheme(bodyText2: TextStyle(color: Colors.black))),
+          darkTheme: ThemeData(
+              primaryColor: Color.fromARGB(255, 119, 23, 45),
+              accentColor: Color.fromARGB(255, 62, 26, 92),
+              backgroundColor: Color.fromARGB(255, 28, 18, 28),
+              cardColor: Color.fromARGB(255, 7, 13, 43),
+              scrollbarTheme: ScrollbarThemeData(
+                thumbColor: MaterialStateProperty.all(
+                    Color.fromARGB(255, 119, 23, 45).withOpacity(0.3)),
+              )),
+          home: SafeArea(top: false, child: HomeScaffold()),
+          routes: {
+            ExtractArgumentsSubmissionList.routeName: (context) =>
+                ExtractArgumentsSubmissionList(),
+            RedirectToHome.routeName: (context) => RedirectToHome(),
+            '/home': (context) => HomeScaffold(
+                  initialIndex: 1,
+                ),
+            '/library': (context) => HomeScaffold(
+                  initialIndex: 2,
+                )
+          },
+        ),
       ),
     );
   }
