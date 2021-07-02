@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gwa_app/models/app_settings.dart';
 import 'package:gwa_app/models/audio_launch_options.dart';
 import 'package:gwa_app/models/hive_boxes.dart';
+import 'package:gwa_app/models/placeholders_options.dart';
+import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:gwa_app/widgets/gradient_title_appbar.dart';
 import 'package:gwa_app/utils/util_functions.dart'
-    show audioLaunchOptionToString;
+    show audioLaunchOptionToString, placeholdersOptionsToString;
 import 'package:gwa_app/widgets/markdown_viewer.dart';
 import 'package:hive/hive.dart';
 
@@ -17,6 +19,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   AudioLaunchOptions _audioLaunchOptions;
+  PlaceholdersOptions _placeholdersOptions;
   bool _miniButtons;
   bool _librarySmallSubmissions;
   Box<AppSettings> _box;
@@ -41,6 +44,23 @@ class _SettingsState extends State<Settings> {
       await HiveBoxes.editAppSettings(audioLaunchOptions: v);
       setState(() {
         _audioLaunchOptions = v;
+      });
+    });
+  }
+
+  _SettingOption<PlaceholdersOptions> _makePlaceholdersOptionsSettingOption(
+      BuildContext context,
+      {PlaceholdersOptions value,
+      String subtitle}) {
+    return _SettingOption<PlaceholdersOptions>(context,
+        value: value,
+        title: placeholdersOptionsToString(value),
+        subtitle: subtitle,
+        groupValue: _placeholdersOptions, onChanged: (v) async {
+      await HiveBoxes.editAppSettings(placeholdersOptions: v);
+      GwaFunctions.setPlaceholders(v);
+      setState(() {
+        _placeholdersOptions = v;
       });
     });
   }
@@ -91,6 +111,7 @@ class _SettingsState extends State<Settings> {
               _box = futureBox.data;
               AppSettings _appSettings = futureBox.data.getAt(0);
               _audioLaunchOptions = _appSettings.audioLaunchOptions;
+              _placeholdersOptions = _appSettings.placeholdersOptions;
               _miniButtons = _appSettings.miniButtons;
               _librarySmallSubmissions = _appSettings.librarySmallSubmissions;
               return Center(
@@ -175,6 +196,26 @@ class _SettingsState extends State<Settings> {
                               title: 'Big', value: false),
                           _makeLibrarySmallSubmissionsSettingOption(context,
                               title: 'Small', value: true),
+                        ]),
+                    // Placeholders Options Setting.
+                    _Setting(
+                        icon: Icons.image_outlined,
+                        settingName: "Choose your preview placeholders:",
+                        options: [
+                          _makePlaceholdersOptionsSettingOption(context,
+                              value: PlaceholdersOptions.Gradients,
+                              subtitle: 'A random gradient per preview from a '
+                                  'gradient collection.'),
+                          _makePlaceholdersOptionsSettingOption(context,
+                              value: PlaceholdersOptions.Abstract,
+                              subtitle:
+                                  'A random abstract image per preview from an '
+                                  'abstract images collection.'),
+                          _makePlaceholdersOptionsSettingOption(context,
+                              value: PlaceholdersOptions.GoneWildAudioLogo,
+                              subtitle:
+                                  'The GoneWildAudio subreddit image. Will be '
+                                  'the same for all previews.')
                         ])
                   ],
                 ),

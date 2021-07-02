@@ -5,6 +5,7 @@ import 'package:gwa_app/screens/flat_home/new_home.dart';
 import 'package:gwa_app/screens/library/library.dart';
 import 'package:gwa_app/screens/submission_list/submission_list.dart';
 import 'package:gwa_app/states/global_state.dart';
+import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,9 @@ Future main() async {
   GlobalState globalState = GlobalState();
 
   await globalState.initApp();
+
+  final appSettings = await HiveBoxes.getAppSettings();
+  GwaFunctions.setPlaceholders(appSettings.placeholdersOptions);
 
   runApp(MyApp(
     globalState: globalState,

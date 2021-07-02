@@ -33,7 +33,7 @@ class GwaSubmission {
 
   GwaSubmission(Submission submission) {
     this.fullTitle = submission.title ?? '';
-    this.title = findSubmissionTitle(this.fullTitle) ?? '';
+    this.title = GwaFunctions.findSubmissionTitle(this.fullTitle) ?? '';
     this.shortlink = submission.shortlink;
     this.selftext = submission.selftext ?? '';
     this.author = submission.author ?? '';
@@ -54,6 +54,8 @@ class GwaSubmission {
     }
     if (submission.preview.length > 0)
       this.thumbnailUrl = submission.preview[0].source.url.toString();
+    else
+      this.thumbnailUrl = GwaFunctions.getPlaceholderImageUrl(fullname);
     this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
     this.img = _getImg();
     this.hasAudioUrl = checkHasAudioUrl();
@@ -115,7 +117,7 @@ class GwaSubmission {
     if (this.thumbnailUrl != null) {
       return this.thumbnailUrl;
     }
-    return 'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9';
+    return '';
   }
 
   _populateAudioUrls(Submission submission) {
@@ -158,8 +160,7 @@ class GwaSubmission {
       errorBuilder:
           (BuildContext context, Object exception, StackTrace stackTrace) {
         return Image.network(
-          this.thumbnailUrl ??
-              'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9',
+          this.thumbnailUrl,
           fit: BoxFit.cover,
           loadingBuilder: (BuildContext context, Widget child,
               ImageChunkEvent loadingProgress) {

@@ -1,4 +1,5 @@
 import 'package:gwa_app/models/audio_launch_options.dart';
+import 'package:gwa_app/models/placeholders_options.dart';
 import 'package:hive/hive.dart';
 
 part 'app_settings.g.dart';
@@ -23,11 +24,15 @@ class AppSettings extends HiveObject {
   @HiveField(4)
   bool librarySmallSubmissions;
 
+  @HiveField(5)
+  PlaceholdersOptions placeholdersOptions;
+
   AppSettings({
     this.credentials,
     this.audioLaunchOptions,
     this.firstTime,
     this.miniButtons,
     this.librarySmallSubmissions,
+    this.placeholdersOptions,
   });
 }

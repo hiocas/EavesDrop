@@ -10,7 +10,12 @@ import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
 import 'local_widgets/home_section.dart';
 
 //FIXME: Sometimes certain lists don't load.
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

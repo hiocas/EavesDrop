@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:gwa_app/models/audio_launch_options.dart';
+import 'package:gwa_app/models/placeholders_options.dart';
 import 'package:gwa_app/screens/gwa_drawer/local_widgets/login.dart';
 import 'package:gwa_app/screens/submission_page/submission_page.dart';
 import 'package:gwa_app/services/reddit_client_service.dart';
@@ -35,8 +36,8 @@ Future<void> pushSubmissionPageWithReturnData(
   final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SubmissionPage(
-              submissionFullname: submissionFullname)));
+          builder: (context) =>
+              SubmissionPage(submissionFullname: submissionFullname)));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
         context,
@@ -55,9 +56,8 @@ void pushReplacementSubmissionPageWithReturnData(
   final result = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) => SubmissionPage(
-              submissionFullname: submissionFullname
-              )));
+          builder: (context) =>
+              SubmissionPage(submissionFullname: submissionFullname)));
   if (result != null) {
     Navigator.pushNamedAndRemoveUntil(
         context,
@@ -104,6 +104,18 @@ String audioLaunchOptionToString(AudioLaunchOptions audioLaunchOptions) {
       return 'Chrome Custom Tabs';
     case AudioLaunchOptions.WebView:
       return 'WebView';
+  }
+  return '';
+}
+
+String placeholdersOptionsToString(PlaceholdersOptions placeholdersOptions) {
+  switch (placeholdersOptions) {
+    case PlaceholdersOptions.Abstract:
+      return 'Abstract';
+    case PlaceholdersOptions.Gradients:
+      return 'Gradients';
+    case PlaceholdersOptions.GoneWildAudioLogo:
+      return 'GoneWildAudioLogo';
   }
   return '';
 }

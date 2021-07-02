@@ -1,4 +1,5 @@
 import 'package:gwa_app/models/audio_launch_options.dart';
+import 'package:gwa_app/models/placeholders_options.dart';
 import 'package:gwa_app/screens/first_time_screen/first_time_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:gwa_app/models/library_gwa_submission.dart';
@@ -14,6 +15,8 @@ class HiveBoxes {
     Hive.registerAdapter(AppSettingsAdapter());
 
     Hive.registerAdapter(AudioLaunchOptionsAdapter());
+
+    Hive.registerAdapter(PlaceholdersOptionsAdapter());
   }
 
   static Future<void> checkFirstTime(BuildContext context) async {
@@ -62,7 +65,6 @@ class HiveBoxes {
     if (libraryBox.isNotEmpty) {
       final List<LibraryGwaSubmission> libraryList =
           libraryBox.values.toList().cast<LibraryGwaSubmission>();
-      libraryBox.close();
       return libraryList;
     }
     return [];
@@ -114,13 +116,16 @@ class HiveBoxes {
       AudioLaunchOptions audioLaunchOptions =
           AudioLaunchOptions.ChromeCustomTabs,
       bool miniButtons = false,
-      bool librarySmallSubmissions = false}) async {
+      bool librarySmallSubmissions = false,
+      PlaceholdersOptions placeholdersOptions =
+          PlaceholdersOptions.Gradients}) async {
     final AppSettings settings = AppSettings(
         credentials: credentials,
         audioLaunchOptions: audioLaunchOptions,
         firstTime: false,
         miniButtons: miniButtons,
-        librarySmallSubmissions: librarySmallSubmissions);
+        librarySmallSubmissions: librarySmallSubmissions,
+        placeholdersOptions: placeholdersOptions);
     final box = await HiveBoxes.openAppSettingsBox();
     await box.add(settings);
     return Future.value(settings);
@@ -132,6 +137,7 @@ class HiveBoxes {
     bool firstTime,
     bool miniButtons,
     bool librarySmallSubmissions,
+    PlaceholdersOptions placeholdersOptions,
   }) async {
     final box = await HiveBoxes.openAppSettingsBox();
     if (box.isNotEmpty) {
@@ -150,6 +156,9 @@ class HiveBoxes {
       }
       if (librarySmallSubmissions != null) {
         settings.librarySmallSubmissions = librarySmallSubmissions;
+      }
+      if (placeholdersOptions != null) {
+        settings.placeholdersOptions = placeholdersOptions;
       }
       await settings.save();
     }
