@@ -116,102 +116,107 @@ class _LibraryState extends State<Library> {
         builder: (context, futureBox) {
           if (futureBox.hasData) {
             return DefaultTabController(
-                  initialIndex: 0,
-                  length: HiveBoxes.listTags.length + 1,
-                  child: Scaffold(
-                    key: _scaffoldKey,
-                    onDrawerChanged: (open) {
-                      // Rebuild when closing the GwaDrawer
-                      if (!open && GwaDrawerManager.updateOnReturn) {
-                        GwaDrawerManager.updateOnReturn = false;
-                        setState(() {});
-                      }
+              initialIndex: 0,
+              length: HiveBoxes.listTags.length + 1,
+              child: Scaffold(
+                key: _scaffoldKey,
+                onDrawerChanged: (open) {
+                  // Rebuild when closing the GwaDrawer
+                  if (!open && GwaDrawerManager.updateOnReturn) {
+                    GwaDrawerManager.updateOnReturn = false;
+                    setState(() {});
+                  }
+                },
+                appBar: AppBar(
+                  title: Text('Library'),
+                  backgroundColor: Colors.transparent,
+                  elevation: 15.0,
+                  backwardsCompatibility: false,
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
+                  flexibleSpace: GradientAppBarFlexibleSpace(),
+                  leading: IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () {
+                      _scaffoldKey.currentState.openDrawer();
                     },
-                    appBar: AppBar(
-                      title: Text('Library'),
-                      backgroundColor: Colors.transparent,
-                      elevation: 15.0,
-                      backwardsCompatibility: false,
-                      systemOverlayStyle: SystemUiOverlayStyle.light,
-                      flexibleSpace: GradientAppBarFlexibleSpace(),
-                      leading: IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: () {
-                          _scaffoldKey.currentState.openDrawer();
-                        },
-                      ),
-                      actions: [
-                        // Submission Cross Axis Count
-                        IconButton(
-                            icon: Icon(_smallSubmissions
-                                ? Icons.grid_view_outlined
-                                : Icons.grid_on_outlined),
-                            tooltip: _smallSubmissions
-                                ? 'Display less posts'
-                                : 'Display more posts',
-                            onPressed: () {
-                              HiveBoxes.editAppSettings(
-                                  librarySmallSubmissions: !_smallSubmissions);
-                              // Rebuild when updating the submissions size
-                              setState(() {});
-                            }),
-                        // Clear Library
-                        IconButton(
-                          icon: Icon(Icons.close),
-                          tooltip: 'Clear your library',
-                          onPressed: () {
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                backgroundColor:
-                                    Theme.of(context).backgroundColor,
-                                title: const Text(
-                                  'Clear Library',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                content: const Text(
-                                  'Are you sure you want to clear '
-                                  'your library? This action cannot be '
-                                  'reverted.',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'cancel'),
-                                      child: const Text('Cancel')),
-                                  TextButton(
-                                      onPressed: () {
-                                        HiveBoxes.clearLibrary();
-                                        Navigator.pop(context, 'clear');
-                                      },
-                                      child: const Text('Clear my Library'))
-                                ],
-                              ),
-                            ).then((value) {
-                              // Rebuild when clearing the library
-                              if (value == 'clear') {
-                                setState(() {});
-                              }
-                            });
-                          },
-                        )
-                      ],
-                      bottom: TabBar(
-                        tabs: _makeListTabs(),
-                        indicatorColor: Theme.of(context).accentColor,
-                        indicatorSize: TabBarIndicatorSize.label,
-                        isScrollable: HiveBoxes.listTags.length > 4,
-                      ),
-                    ),
-                    drawer: GwaDrawer(
-                    ),
-                    backgroundColor: Theme.of(context).backgroundColor,
-                    body: TabBarView(
-                      children: _makeListTabViews(futureBox.data),
-                    ),
                   ),
-                );
+                  actions: [
+                    // Submission Cross Axis Count
+                    IconButton(
+                        icon: Icon(_smallSubmissions
+                            ? Icons.grid_view_outlined
+                            : Icons.grid_on_outlined),
+                        tooltip: _smallSubmissions
+                            ? 'Display less posts'
+                            : 'Display more posts',
+                        onPressed: () {
+                          HiveBoxes.editAppSettings(
+                              librarySmallSubmissions: !_smallSubmissions);
+                          // Rebuild when updating the submissions size
+                          setState(() {});
+                        }),
+                    // Clear Library
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      tooltip: 'Clear your library',
+                      onPressed: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            title: const Text(
+                              'Clear Library',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            content: const Text(
+                              'Are you sure you want to clear '
+                              'your library? This action cannot be '
+                              'reverted.',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'cancel'),
+                                  child: const Text('Cancel')),
+                              TextButton(
+                                  onPressed: () {
+                                    HiveBoxes.clearLibrary();
+                                    Navigator.pop(context, 'clear');
+                                  },
+                                  child: const Text('Clear my Library'))
+                            ],
+                          ),
+                        ).then((value) {
+                          // Rebuild when clearing the library
+                          if (value == 'clear') {
+                            setState(() {
+                              /*TODO: Need to make these methods as widgets or
+                                 else setState() doesn't update the state (we
+                                 want all widgets to be created in our build
+                                 method. */
+                              _initLibrary();
+                              _makeListTabs();
+                            });
+                          }
+                        });
+                      },
+                    )
+                  ],
+                  bottom: TabBar(
+                    tabs: _makeListTabs(),
+                    indicatorColor: Theme.of(context).accentColor,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    isScrollable: HiveBoxes.listTags.length > 4,
+                  ),
+                ),
+                drawer: GwaDrawer(),
+                backgroundColor: Theme.of(context).backgroundColor,
+                body: TabBarView(
+                  children: _makeListTabViews(futureBox.data),
+                ),
+              ),
+            );
           }
           /* FIXME: This is can be seen for a very quick duration and is very
               jarring. */
