@@ -7,9 +7,14 @@ import 'package:gwa_app/states/global_state.dart';
 import 'package:provider/provider.dart';
 import 'local_widgets/flat_home_section.dart';
 
-class NewHome extends StatelessWidget {
+class NewHome extends StatefulWidget {
   const NewHome({Key key}) : super(key: key);
 
+  @override
+  _NewHomeState createState() => _NewHomeState();
+}
+
+class _NewHomeState extends State<NewHome> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -43,6 +48,13 @@ class NewHome extends StatelessWidget {
               },
             ),
           ),
+          onDrawerChanged: (open) {
+            // In case a setting change occurred that requires a rebuild.
+            if (!open && GwaDrawerManager.updateOnReturn) {
+              GwaDrawerManager.updateOnReturn = false;
+              setState(() {});
+            }
+          },
           drawer: GwaDrawer(),
           backgroundColor: Colors.transparent,
           body: Center(

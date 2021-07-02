@@ -3,6 +3,7 @@ import 'package:gwa_app/models/app_settings.dart';
 import 'package:gwa_app/models/audio_launch_options.dart';
 import 'package:gwa_app/models/hive_boxes.dart';
 import 'package:gwa_app/models/placeholders_options.dart';
+import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
 import 'package:gwa_app/utils/gwa_functions.dart';
 import 'package:gwa_app/widgets/gradient_title_appbar.dart';
 import 'package:gwa_app/utils/util_functions.dart'
@@ -59,6 +60,7 @@ class _SettingsState extends State<Settings> {
         groupValue: _placeholdersOptions, onChanged: (v) async {
       await HiveBoxes.editAppSettings(placeholdersOptions: v);
       GwaFunctions.setPlaceholders(v);
+      GwaDrawerManager.updateOnReturn = true;
       setState(() {
         _placeholdersOptions = v;
       });

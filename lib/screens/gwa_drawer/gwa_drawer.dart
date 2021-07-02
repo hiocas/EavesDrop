@@ -14,6 +14,7 @@ class GwaDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GwaDrawerManager.updateOnReturn = false;
     RedditClientService _redditClientService =
         Provider.of<GlobalState>(context, listen: false).redditClientService;
     return SafeArea(
@@ -150,4 +151,8 @@ class _GwaDrawerListTile extends StatelessWidget {
         ),
         onTap: onTap);
   }
+}
+
+class GwaDrawerManager {
+  static bool updateOnReturn = false;
 }

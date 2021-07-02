@@ -173,6 +173,15 @@ class SubmissionListState extends State<SubmissionList> {
             this.currentSearchQuery = '';
           },
         ),
+        onDrawerChanged: (open) {
+          print('Drawer Changed $open');
+          // In case a setting change occurred that requires a rebuild.
+          if (!open && GwaDrawerManager.updateOnReturn) {
+            print('hey');
+            GwaDrawerManager.updateOnReturn = false;
+            _updateSearch(false);
+          }
+        },
         drawer: GwaDrawer(),
         backgroundColor: Theme.of(context).backgroundColor,
         body: Container(
