@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission.dart';
+import 'package:gwa_app/screens/submission_page/local_widgets/gwa_link_flair_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_image_gradient_button.dart';
 import 'package:gwa_app/screens/submission_page/local_widgets/popup_text_button.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:draw/draw.dart' as Draw;
+import 'package:gwa_app/widgets/gwa_author_flair.dart';
 
 class SubmissionPageAppBar extends StatelessWidget {
   const SubmissionPageAppBar({
@@ -99,7 +101,7 @@ class SubmissionPageAppBar extends StatelessWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content:
-                                        Text("If you want to see this author's"
+                                        Text("If you want to see this author's "
                                             "posts, long press their name."),
                                   ),
                                 );
@@ -114,31 +116,49 @@ class SubmissionPageAppBar extends StatelessWidget {
                                   sort: Draw.Sort.newest,
                                   timeFilter: Draw.TimeFilter.all);
                             },
-                            child: Text(
-                              submission.author,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  submission.author,
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                GwaAuthorFlair(
+                                  width: 16,
+                                  height: 14,
+                                  flair: submission.authorFlairText,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                       Visibility(
                         visible: top >= maxTitleAlignTop,
-                        child: Text(
-                          '\n' +
-                              submission.fromNow +
-                              ', \u{2b06}' +
-                              submission.upvotes.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            height: 0.8,
-                            color: Colors.grey,
-                            fontSize: 8,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '\n${submission.fromNow}, '
+                              '\u{2b06}${submission.upvotes}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                height: 0.8,
+                                color: Colors.grey,
+                                fontSize: 8,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            GwaLinkFlairButton(
+                              linkFlair: submission.linkFlairText,
+                              height: 9.0,
+                            ),
+                          ],
                         ),
                       ),
                     ],

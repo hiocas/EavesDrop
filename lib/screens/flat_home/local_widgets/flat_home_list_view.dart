@@ -3,6 +3,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
+import 'package:gwa_app/widgets/gwa_author_flair.dart';
 import 'dummy_flat_home_list_view.dart';
 
 class FlatHomeListViewStream extends StatefulWidget {
@@ -31,6 +32,7 @@ class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
   StreamController<UserContent> _streamController;
   List<GwaSubmissionPreview> previews = [];
   List<String> authors = [];
+  List<String> authorFlairTexts = [];
 
   @override
   void initState() {
@@ -38,7 +40,10 @@ class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
     _streamController.stream.listen((event) {
       Submission submission = event;
       this.previews.add(GwaSubmissionPreview(submission));
-      if (widget.showAuthors) authors.add(submission.author);
+      if (widget.showAuthors) {
+        authors.add(submission.author);
+        authorFlairTexts.add(submission.authorFlairText);
+      }
     });
     widget.contentStream.pipe(_streamController);
     super.initState();
@@ -69,6 +74,7 @@ class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
               ? FlatHomeListView(
                   previews: previews,
                   authors: authors,
+                  authorFlairTexts: authorFlairTexts,
                   size: widget.size,
                   sizeRatio: widget.sizeRatio,
                   textSize: this.widget.textSize,
@@ -87,6 +93,7 @@ class FlatHomeListView extends StatelessWidget {
     Key key,
     @required this.previews,
     this.authors,
+    this.authorFlairTexts,
     @required this.size,
     @required this.sizeRatio,
     this.textSize,
@@ -95,6 +102,7 @@ class FlatHomeListView extends StatelessWidget {
 
   final List<GwaSubmissionPreview> previews;
   final List<String> authors;
+  final List<String> authorFlairTexts;
   final double size;
   final double sizeRatio;
   final double textSize;
@@ -112,6 +120,8 @@ class FlatHomeListView extends StatelessWidget {
           child: _FlatHomeListViewItem(
             preview: this.previews[index],
             author: this.authors.isEmpty ? null : this.authors[index],
+            authorFlairText:
+                this.authors.isEmpty ? null : this.authorFlairTexts[index],
             size: this.size,
             sizeRatio: this.sizeRatio,
             textSize: this.textSize,
@@ -128,6 +138,7 @@ class _FlatHomeListViewItem extends StatelessWidget {
     Key key,
     @required this.preview,
     this.author,
+    this.authorFlairText,
     @required this.size,
     @required this.sizeRatio,
     this.textSize = 14.0,
@@ -136,6 +147,7 @@ class _FlatHomeListViewItem extends StatelessWidget {
 
   final GwaSubmissionPreview preview;
   final String author;
+  final String authorFlairText;
   final double size;
   final double sizeRatio;
   final double textSize;
@@ -205,13 +217,27 @@ class _FlatHomeListViewItem extends StatelessWidget {
                                   color: Colors.white, fontSize: this.textSize),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Text(
-                              this.author,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: this.authorTextSize),
-                              overflow: TextOverflow.ellipsis,
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  this.author,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: this.authorTextSize),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                GwaAuthorFlair(
+                                  // For some reason this can happen.
+                                  width: this.authorTextSize == null
+                                      ? 14.0
+                                      : this.authorTextSize,
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  height: this.authorTextSize,
+                                  flair: this.authorFlairText,
+                                ),
+                              ],
                             )
                           ],
                         ),

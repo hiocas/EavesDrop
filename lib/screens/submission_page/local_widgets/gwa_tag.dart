@@ -43,7 +43,7 @@ class GwaTag extends StatelessWidget {
 
 //Use the live templates "tagt" and tagt2.
 List _tagChipAvatar(String tag) {
-  if (tag.contains(RegExp('tf4', caseSensitive: false)))
+  if (tag.contains(RegExp(r'^tf4|^(tf)$', caseSensitive: false)))
     return [
       Image.asset('lib/assets/images/GwaTransFemaleAvatar.png',
           width: 18, height: 18),
