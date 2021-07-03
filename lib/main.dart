@@ -149,9 +149,9 @@ class _HomeScaffoldState extends State<HomeScaffold> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentPageIndex,
-        backgroundColor: Color.fromARGB(255, 28, 18, 28),
-        selectedItemColor: Color.fromARGB(255, 119, 23, 45),
-        unselectedItemColor: Colors.black,
+        backgroundColor: Theme.of(context).backgroundColor,
+        selectedItemColor: Colors.grey[400],
+        unselectedItemColor: Colors.grey[800],
         elevation: 15.0,
         items: [
           BottomNavigationBarItem(
