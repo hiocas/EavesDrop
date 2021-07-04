@@ -70,7 +70,7 @@ class SubmissionPageState extends State<SubmissionPage> {
           );
         } else {
           _submission = new GwaSubmission(snapshot.data);
-          _showFPB = _submission.hasAudioUrl && _submission.tags.length > 0;
+          _showFPB = _submission.hasAudioUrl || _submission.tags.length > 0;
           return Container(
             color: Theme.of(context).primaryColor,
             child: SafeArea(
