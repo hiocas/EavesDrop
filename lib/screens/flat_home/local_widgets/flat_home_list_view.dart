@@ -221,13 +221,16 @@ class _FlatHomeListViewItem extends StatelessWidget {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
-                                  this.author,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.grey[500],
-                                      fontSize: this.authorTextSize),
-                                  overflow: TextOverflow.ellipsis,
+                                ConstrainedBox(
+                                  constraints:
+                                      BoxConstraints(maxWidth: this.size),
+                                  child: Text(
+                                    this.author,
+                                    style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontSize: this.authorTextSize),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 GwaAuthorFlair(
                                   width: this.authorTextSize + 2.0,

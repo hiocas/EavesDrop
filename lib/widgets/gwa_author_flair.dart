@@ -27,6 +27,8 @@ class GwaAuthorFlair extends StatelessWidget {
         return 'lib/assets/images/GwaFemaleAvatar.png';
       case ':male: Verified!':
         return 'lib/assets/images/GwaMaleAvatar.png';
+      case ':Writer:Writer':
+        return 'lib/assets/images/GwaWriterAvatar.png';
       default:
         return '';
     }
