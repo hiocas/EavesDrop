@@ -29,6 +29,8 @@ class GwaAuthorFlair extends StatelessWidget {
         return 'lib/assets/images/GwaMaleAvatar.png';
       case ':Writer:Writer':
         return 'lib/assets/images/GwaWriterAvatar.png';
+      case 'Verified!':
+        return 'Verified!';
       default:
         return '';
     }
@@ -37,6 +39,28 @@ class GwaAuthorFlair extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String flairImagePath = _getFlairImagePath();
+    if (flairImagePath == 'Verified!') {
+      return SizedBox(
+        width: width,
+        height: height,
+        child: Padding(
+          padding: padding,
+          child: Material(
+            color: Color.fromARGB(255, 52, 53, 54),
+            borderRadius: BorderRadius.circular(4.0),
+            child: Center(
+              child: Text(
+                'V',
+                style: TextStyle(
+                  fontSize: height - 2.0,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     if (flairImagePath.isNotEmpty) {
       return SizedBox(
         width: width,
