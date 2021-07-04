@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:draw/draw.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
@@ -229,11 +230,7 @@ class _FlatHomeListViewItem extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 GwaAuthorFlair(
-                                  // For some reason this can happen.
-                                  width: this.authorTextSize == null
-                                      ? 14.0
-                                      : this.authorTextSize,
-                                  padding: const EdgeInsets.only(left: 4.0),
+                                  width: this.authorTextSize + 2.0,
                                   height: this.authorTextSize,
                                   flair: this.authorFlairText,
                                 ),

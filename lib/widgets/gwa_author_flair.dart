@@ -15,8 +15,7 @@ class GwaAuthorFlair extends StatelessWidget {
   final double height;
 
   String _getFlairImagePath() {
-    if (this.flair == null || this.flair.isEmpty)
-      return '';
+    if (this.flair == null || this.flair.isEmpty) return '';
     switch (this.flair) {
       case ':NB:Verified!':
         return 'lib/assets/images/GwaNonBinaryAvatar.png';

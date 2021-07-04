@@ -65,6 +65,7 @@ class _NewHomeState extends State<NewHome> {
                   title: 'Top Posts of The Month',
                   size: 175,
                   showAuthors: true,
+                  authorTextSize: 14.0,
                   textSize: 15.5,
                   waitDuration: Duration(milliseconds: 600),
                   contentStream:
