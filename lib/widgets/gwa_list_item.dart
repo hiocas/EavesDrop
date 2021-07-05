@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
@@ -18,7 +19,7 @@ class GwaListItem extends StatelessWidget {
       Container(
         decoration: BoxDecoration(
           color: Colors.grey[900],
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
           image: new DecorationImage(
             image: NetworkImage(submission.thumbnailUrl),
             fit: BoxFit.cover,
@@ -59,9 +60,9 @@ class GwaListItem extends StatelessWidget {
       Material(
         color: Colors.transparent,
         child: InkWell(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
           onTap: () {
-            pushSubmissionPageWithReturnData(
-                context, submission.fullname);
+            pushSubmissionPageWithReturnData(context, submission.fullname);
           },
         ),
       )
@@ -92,7 +93,7 @@ class GwaLibraryListItem extends StatelessWidget {
       Container(
         decoration: BoxDecoration(
           color: Colors.grey[900],
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
           image: new DecorationImage(
             image: NetworkImage(thumbnailUrl == null || thumbnailUrl.isEmpty
                 ? GwaFunctions.getPlaceholderImageUrl(this.fullname)
@@ -135,6 +136,7 @@ class GwaLibraryListItem extends StatelessWidget {
       Material(
         color: Colors.transparent,
         child: InkWell(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
           onTap: () {
             pushSubmissionPageWithReturnData(
               context,
