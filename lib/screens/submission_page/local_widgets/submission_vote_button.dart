@@ -53,10 +53,10 @@ class _SubmissionVoteButtonState extends State<SubmissionVoteButton> {
   void initState() {
     _archived = widget.submission.archived;
     _voteState = widget.submission.vote;
+    _setWidgets();
     if (_archived) {
       _subtext = 'This post is archived';
     }
-    _setWidgets();
     _confettiController = ConfettiController(
         duration: widget.confettiDuration.inMilliseconds > 1
             ? widget.confettiDuration
@@ -112,7 +112,7 @@ class _SubmissionVoteButtonState extends State<SubmissionVoteButton> {
                   borderRadius: widget.mini
                       ? BorderRadius.circular(14.0)
                       : BorderRadius.circular(22.0),
-                  onTap: _archived == null
+                  onTap: _archived
                       ? null
                       : () async {
                     Feedback.forTap(context);
