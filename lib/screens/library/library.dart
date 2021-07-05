@@ -71,7 +71,7 @@ class _LibraryState extends State<Library> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return GwaLibraryListItem(
+                    return ListPreviewItem(
                       title: list[index].title,
                       fullname: list[index].fullname,
                       thumbnailUrl: list[index].thumbnailUrl,

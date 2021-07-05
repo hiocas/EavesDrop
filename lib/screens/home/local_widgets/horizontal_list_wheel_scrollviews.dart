@@ -17,7 +17,7 @@ class HorizontalClickableListWheelScrollView extends StatefulWidget {
     this.squeeze,
   }) : super(key: key);
 
-  final List<GwaLibraryListItem> itemList;
+  final List<ListPreviewItem> itemList;
   final double itemSize;
   final double offAxisFraction;
   final double squeeze;
@@ -103,7 +103,7 @@ class HorizontalClickableListWheelScrollViewStream extends StatefulWidget {
 class _HorizontalClickableListWheelScrollViewStreamState
     extends State<HorizontalClickableListWheelScrollViewStream> {
   StreamController<UserContent> _streamController;
-  List<GwaLibraryListItem> _itemList = [];
+  List<ListPreviewItem> _itemList = [];
 
   @override
   void initState() {
@@ -111,7 +111,7 @@ class _HorizontalClickableListWheelScrollViewStreamState
     _streamController.stream.listen((event) {
       Submission submission = event;
       GwaSubmissionPreview preview = new GwaSubmissionPreview(submission);
-      this._itemList.add(GwaLibraryListItem(
+      this._itemList.add(ListPreviewItem(
         title: preview.title,
         fullname: preview.fullname,
         thumbnailUrl: preview.thumbnailUrl,
