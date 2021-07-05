@@ -8,6 +8,7 @@ import 'package:gwa_app/screens/submission_page/local_widgets/popup_tags_card_bu
 import 'package:gwa_app/screens/submission_page/local_widgets/submission_details.dart';
 import 'package:gwa_app/states/global_state.dart';
 import 'package:gwa_app/widgets/particles_icon_text_button.dart';
+import 'submission_vote_button.dart';
 import 'package:gwa_app/widgets/popup_card_button.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' show launch;
@@ -46,27 +47,16 @@ class _SubmissionPageButtonsAndTagsState
 
   Widget _makeSupportButton(BuildContext context) {
     if (Provider.of<GlobalState>(context, listen: false).eligiblePrefs) {
-      return ParticlesIconTextToggleButton(
+      return SubmissionVoteButton(
         mini: widget.mini,
         icon: Icons.favorite_border,
-        iconPressed: Icons.favorite,
-        label: 'Upvote',
-        subtext: 'Upvote this and show your support!',
-        disabledSubtext: 'This post is archived',
+        upvotedIcon: Icons.favorite,
+        downvotedIcon: Icons.thumb_down,
+        label: 'Vote',
+        archivedSubtext: 'This post is archived',
         color: Theme.of(context).primaryColor,
-        initialPressed: _voted(),
+        submission: widget.redditSubmission,
         millisecondsBeforeOnPressed: 0,
-        onPressed: widget.redditSubmission.archived
-            ? null
-            : () async {
-                // TODO: Display a snackbar if action failed.
-                if (_voted()) {
-                  await widget.redditSubmission
-                      .clearVote(waitForResponse: true);
-                } else {
-                  await widget.redditSubmission.upvote(waitForResponse: true);
-                }
-              },
         confettiDuration: Duration(milliseconds: 300),
       );
     }
@@ -82,11 +72,6 @@ class _SubmissionPageButtonsAndTagsState
       },
       confettiDuration: Duration(milliseconds: 300),
     );
-  }
-
-  bool _voted() {
-    if (widget.redditSubmission.vote == VoteState.upvoted) return true;
-    return false;
   }
 
   @override
