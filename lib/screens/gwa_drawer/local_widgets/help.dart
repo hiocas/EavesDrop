@@ -95,6 +95,10 @@ class Help extends StatelessWidget {
             ),
           ]),
       _HelpSectionTextOnly(
+          title: 'How do I downvote posts?',
+          content: "If the post isn't archived, just long-press the Vote "
+              "button."),
+      _HelpSectionTextOnly(
           title: 'Searching outputs only a small amounts of posts',
           content: "If you got less results than you know you should get, this "
               "probably isn't a bug."
