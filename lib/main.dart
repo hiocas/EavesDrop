@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
               cardColor: Color.fromARGB(255, 7, 13, 43),
               scrollbarTheme: ScrollbarThemeData(
                 thumbColor: MaterialStateProperty.all(
-                    Color.fromARGB(255, 119, 23, 45).withOpacity(0.3)),
+                    Color.fromARGB(255, 119, 23, 45).withOpacity(0.7)),
               )),
           home: HomeScaffold(),
           routes: {
