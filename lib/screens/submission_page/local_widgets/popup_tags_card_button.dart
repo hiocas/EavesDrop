@@ -107,15 +107,15 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
   }
 
   String _makeHardTagQuery() {
-    String query = '';
+    String query = 'title:';
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.selectedTags[i]) {
         String _specialQuery =
             _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
         if (_specialQuery.isEmpty) {
-          query += 'title:${widget.gwaSubmission.tags[i]} ';
+          query += '"${widget.gwaSubmission.tags[i]}" ';
         } else {
-          query += _specialQuery;
+          query = _specialQuery + query;
         }
       }
     }
