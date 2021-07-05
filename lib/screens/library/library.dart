@@ -190,14 +190,13 @@ class _LibraryState extends State<Library> {
                         ).then((value) {
                           // Rebuild when clearing the library
                           if (value == 'clear') {
-                            setState(() {
-                              /*TODO: Need to make these methods as widgets or
+                            /*TODO: Need to make these methods as widgets or
                                  else setState() doesn't update the state (we
                                  want all widgets to be created in our build
                                  method. */
-                              _initLibrary();
-                              _makeListTabs();
-                            });
+                            _initLibrary();
+                            _makeListTabs();
+                            setState(() {});
                           }
                         });
                       },
