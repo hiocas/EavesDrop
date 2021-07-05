@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
+import 'package:gwa_app/widgets/gwa_author_flair.dart';
 
 // THIS IS NOT MY DESIGN AND CODE I LOOKED AT A TUTORIAL BY Marcus Ng.
 class HomeSectionPageView extends StatefulWidget {
@@ -64,7 +65,7 @@ class _HomeSectionPageViewState extends State<HomeSectionPageView> {
             },
             child: Container(
               margin:
-              const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
               width: 120.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
@@ -107,19 +108,32 @@ class _HomeSectionPageViewState extends State<HomeSectionPageView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.previews[index].title,
+                              widget.previews[index].title + ' asdaaaaaahhhhhhhhhhhhhdgfffffffff',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18.0),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Text(widget.previews[index].author,
-                                style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14.0),
-                                overflow: TextOverflow.ellipsis),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 300.0),
+                                  child: Text(widget.previews[index].author,
+                                      style: TextStyle(
+                                          color: Colors.grey[500],
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14.0),
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                                GwaAuthorFlair(
+                                  width: 16.0,
+                                  height: 14.0,
+                                  flair: widget.previews[index].authorFlairText,
+                                ),
+                              ],
+                            ),
                           ],
                         )),
                   ),

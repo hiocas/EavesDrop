@@ -32,6 +32,7 @@ class GwaSubmissionPreview {
 class GwaSubmissionPreviewWithAuthor {
   String title;
   String author;
+  String authorFlairText;
   String fullname;
   String thumbnailUrl;
 
@@ -45,14 +46,16 @@ class GwaSubmissionPreviewWithAuthor {
     } else {
       this.thumbnailUrl = GwaFunctions.getPlaceholderImageUrl(this.fullname);
     }
+    this.authorFlairText = submission.authorFlairText;
   }
 
   GwaSubmissionPreviewWithAuthor.fromData(
-      String title, String author, String fullname, String thumbnailUrl) {
+      String title, String author, String fullname, String thumbnailUrl, String authorFlairText) {
     this.title = title;
     this.author = author;
     this.fullname = fullname;
     this.thumbnailUrl = thumbnailUrl;
+    this.authorFlairText = authorFlairText;
   }
 
   GwaSubmissionPreview toGwaSubmissionPreview() {
