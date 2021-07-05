@@ -89,7 +89,7 @@ class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
   }
 }
 
-class FlatHomeListView extends StatelessWidget {
+class FlatHomeListView extends StatefulWidget {
   const FlatHomeListView({
     Key key,
     @required this.previews,
@@ -110,27 +110,98 @@ class FlatHomeListView extends StatelessWidget {
   final double authorTextSize;
 
   @override
+  _FlatHomeListViewState createState() => _FlatHomeListViewState();
+}
+
+class _FlatHomeListViewState extends State<FlatHomeListView> {
+  ScrollController _scrollController;
+  double itemSize;
+
+  @override
+  void initState() {
+    itemSize = this.widget.size * this.widget.sizeRatio;
+    _scrollController = new ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _scrollController = null;
+    super.dispose();
+  }
+
+  double _calcNewOffset(double maxWidth, int index) {
+    final double fit = maxWidth / itemSize;
+    if (index == 0) return 0;
+
+    if (index == this.widget.previews.length - 1)
+      return _scrollController.position.maxScrollExtent;
+
+    return ((1.5 - (fit / 2)) * itemSize) + (itemSize * (index - 1));
+  }
+
+  int _findClosestIndex(double offset) {
+    return (offset / itemSize).ceil();
+  }
+
+  void _animateScroll(double location) {
+    // This is the solution ScrollSnapList uses to avoid a stack overflow,
+    // I don't really know why it works...
+    Future.delayed(Duration.zero, () {
+      _scrollController.animateTo(
+        location,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemExtent: this.size * this.sizeRatio,
-      scrollDirection: Axis.horizontal,
-      itemCount: this.previews.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _FlatHomeListViewItem(
-            preview: this.previews[index],
-            author: this.authors.isEmpty ? null : this.authors[index],
-            authorFlairText:
-                this.authors.isEmpty ? null : this.authorFlairTexts[index],
-            size: this.size,
-            sizeRatio: this.sizeRatio,
-            textSize: this.textSize,
-            authorTextSize: this.authorTextSize,
-          ),
-        );
-      },
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification is ScrollEndNotification) {
+            _animateScroll(_calcNewOffset(constraints.maxWidth,
+                _findClosestIndex(notification.metrics.pixels)));
+          }
+          return true;
+        },
+        child: ListView.builder(
+          itemExtent: this.widget.size * this.widget.sizeRatio,
+          controller: _scrollController,
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: this.widget.previews.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _FlatHomeListViewItem(
+                preview: this.widget.previews[index],
+                onTap: () {
+                  _animateScroll(_calcNewOffset(constraints.maxWidth, index));
+                },
+                pushSubmissionPageDelay:
+                    _findClosestIndex(_scrollController.offset) == index
+                        ? Duration.zero
+                        : null,
+                author: this.widget.authors.isEmpty
+                    ? null
+                    : this.widget.authors[index],
+                authorFlairText: this.widget.authors.isEmpty
+                    ? null
+                    : this.widget.authorFlairTexts[index],
+                size: this.widget.size,
+                sizeRatio: this.widget.sizeRatio,
+                textSize: this.widget.textSize,
+                authorTextSize: this.widget.authorTextSize,
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 }
 
@@ -138,6 +209,8 @@ class _FlatHomeListViewItem extends StatelessWidget {
   const _FlatHomeListViewItem({
     Key key,
     @required this.preview,
+    this.onTap,
+    this.pushSubmissionPageDelay,
     this.author,
     this.authorFlairText,
     @required this.size,
@@ -147,6 +220,8 @@ class _FlatHomeListViewItem extends StatelessWidget {
   }) : super(key: key);
 
   final GwaSubmissionPreview preview;
+  final void Function() onTap;
+  final Duration pushSubmissionPageDelay;
   final String author;
   final String authorFlairText;
   final double size;
@@ -181,7 +256,11 @@ class _FlatHomeListViewItem extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(10.0),
           onTap: () {
-            pushSubmissionPageWithReturnData(context, this.preview.fullname);
+            onTap.call();
+            Timer(
+                this.pushSubmissionPageDelay ?? const Duration(milliseconds: 500),
+                () => pushSubmissionPageWithReturnData(
+                    context, this.preview.fullname));
           },
           onLongPress: () {},
           child: Stack(

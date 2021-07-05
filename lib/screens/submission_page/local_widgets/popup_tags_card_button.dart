@@ -160,6 +160,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               "Couldn't find any tags for this post.",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20.0,
                 color: Colors.grey[700],
