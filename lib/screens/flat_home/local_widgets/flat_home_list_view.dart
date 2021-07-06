@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:gwa_app/models/gwa_submission_preview.dart';
 import 'package:gwa_app/utils/util_functions.dart';
 import 'package:gwa_app/widgets/gwa_author_flair.dart';
@@ -68,21 +69,21 @@ class _FlatHomeListViewStreamState extends State<FlatHomeListViewStream> {
           duration: Duration(milliseconds: 500),
           transitionBuilder: (Widget child, Animation<double> animation) =>
               FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
+                opacity: animation,
+                child: child,
+              ),
           child: snapshot.hasData
               ? FlatHomeListView(
-                  previews: previews,
-                  authors: authors,
-                  authorFlairTexts: authorFlairTexts,
-                  size: widget.size,
-                  sizeRatio: widget.sizeRatio,
-                  textSize: this.widget.textSize,
-                  authorTextSize: this.widget.authorTextSize,
-                )
+            previews: previews,
+            authors: authors,
+            authorFlairTexts: authorFlairTexts,
+            size: widget.size,
+            sizeRatio: widget.sizeRatio,
+            textSize: this.widget.textSize,
+            authorTextSize: this.widget.authorTextSize,
+          )
               : DummyFlatHomeListView(
-                  size: widget.size, sizeRatio: widget.sizeRatio, length: 3),
+              size: widget.size, sizeRatio: widget.sizeRatio, length: 3),
         );
       },
     );
@@ -116,11 +117,16 @@ class FlatHomeListView extends StatefulWidget {
 class _FlatHomeListViewState extends State<FlatHomeListView> {
   ScrollController _scrollController;
   double itemSize;
+  int _currentIndex = 0;
+  bool _animating = false;
 
   @override
   void initState() {
     itemSize = this.widget.size * this.widget.sizeRatio;
     _scrollController = new ScrollController();
+    _scrollController.addListener(() {
+      _animating = false;
+    });
     super.initState();
   }
 
@@ -141,19 +147,36 @@ class _FlatHomeListViewState extends State<FlatHomeListView> {
     return ((1.5 - (fit / 2)) * itemSize) + (itemSize * (index - 1));
   }
 
-  int _findClosestIndex(double offset) {
-    return (offset / itemSize).ceil();
+  int _findClosestIndex(double offset, {ScrollDirection scrollDirection}) {
+    final int defaultIndex = (offset / itemSize).ceil();
+    if (scrollDirection != null && _currentIndex == defaultIndex) {
+      print(scrollDirection);
+      if (scrollDirection == ScrollDirection.forward && defaultIndex != 0) {
+        return defaultIndex - 1;
+      }
+      else if (scrollDirection == ScrollDirection.reverse &&
+          defaultIndex != widget.previews.length - 1) {
+        return defaultIndex + 1;
+      }
+    }
+    return defaultIndex;
   }
 
   void _animateScroll(double location) {
+    _animating = true;
     // This is the solution ScrollSnapList uses to avoid a stack overflow,
     // I don't really know why it works...
     Future.delayed(Duration.zero, () {
-      _scrollController.animateTo(
+      _scrollController
+          .animateTo(
         location,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
-      );
+      )
+          .then((value) {
+        _animating = false;
+        _currentIndex = _findClosestIndex(_scrollController.offset);
+      });
     });
   }
 
@@ -163,8 +186,12 @@ class _FlatHomeListViewState extends State<FlatHomeListView> {
       return NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           if (notification is ScrollEndNotification) {
-            _animateScroll(_calcNewOffset(constraints.maxWidth,
-                _findClosestIndex(notification.metrics.pixels)));
+            if (!_animating) {
+              final int newIndex = _findClosestIndex(
+                  notification.metrics.pixels,
+                  scrollDirection: _scrollController.position.userScrollDirection);
+              _animateScroll(_calcNewOffset(constraints.maxWidth, newIndex));
+            }
           }
           return true;
         },
@@ -183,9 +210,9 @@ class _FlatHomeListViewState extends State<FlatHomeListView> {
                   _animateScroll(_calcNewOffset(constraints.maxWidth, index));
                 },
                 pushSubmissionPageDelay:
-                    _findClosestIndex(_scrollController.offset) == index
-                        ? Duration.zero
-                        : null,
+                _findClosestIndex(_scrollController.offset) == index
+                    ? Duration.zero
+                    : null,
                 author: this.widget.authors.isEmpty
                     ? null
                     : this.widget.authors[index],
@@ -258,9 +285,11 @@ class _FlatHomeListViewItem extends StatelessWidget {
           onTap: () {
             onTap.call();
             Timer(
-                this.pushSubmissionPageDelay ?? const Duration(milliseconds: 500),
-                () => pushSubmissionPageWithReturnData(
-                    context, this.preview.fullname));
+                this.pushSubmissionPageDelay ??
+                    const Duration(milliseconds: 500),
+                    () =>
+                    pushSubmissionPageWithReturnData(
+                        context, this.preview.fullname));
           },
           onLongPress: () {},
           child: Stack(
@@ -281,45 +310,45 @@ class _FlatHomeListViewItem extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: this.author == null
                       ? Text(
-                          this.preview.title,
-                          maxLines: 2,
-                          style: TextStyle(color: Colors.white, fontSize: 14.0),
-                          overflow: TextOverflow.ellipsis,
-                        )
+                    this.preview.title,
+                    maxLines: 2,
+                    style: TextStyle(color: Colors.white, fontSize: 14.0),
+                    overflow: TextOverflow.ellipsis,
+                  )
                       : Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              this.preview.title,
-                              maxLines: 2,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        this.preview.title,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: this.textSize),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ConstrainedBox(
+                            constraints:
+                            BoxConstraints(maxWidth: this.size),
+                            child: Text(
+                              this.author,
                               style: TextStyle(
-                                  color: Colors.white, fontSize: this.textSize),
+                                  color: Colors.grey[500],
+                                  fontSize: this.authorTextSize),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ConstrainedBox(
-                                  constraints:
-                                      BoxConstraints(maxWidth: this.size),
-                                  child: Text(
-                                    this.author,
-                                    style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontSize: this.authorTextSize),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                GwaAuthorFlair(
-                                  width: this.authorTextSize + 2.0,
-                                  height: this.authorTextSize,
-                                  flair: this.authorFlairText,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+                          ),
+                          GwaAuthorFlair(
+                            width: this.authorTextSize + 2.0,
+                            height: this.authorTextSize,
+                            flair: this.authorFlairText,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],
