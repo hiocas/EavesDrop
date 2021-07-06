@@ -62,7 +62,14 @@ class MarkdownViewer extends StatelessWidget {
         styleSheet: MarkdownStyleSheet.fromTheme(ThemeData(
             dividerColor: this.tableBorderColor ?? Colors.grey[600],
             textTheme: Theme.of(context).textTheme.copyWith(
-                    bodyText2: TextStyle(
+                headline5:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                headline6: TextStyle(color: Colors.grey[200]),
+                subtitle1: TextStyle(
+                    color: Colors.grey[300],
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+                bodyText2: TextStyle(
                   fontSize: this.bodyTextFontSize ?? 15.0,
                   color: this.bodyTextColor ?? Colors.grey[400],
                 )))).copyWith(
@@ -76,8 +83,8 @@ class MarkdownViewer extends StatelessWidget {
               BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    width: 5.0,
-                    color: Theme.of(context).dividerColor,
+                    width: 2.0,
+                    color: Colors.black26,
                   ),
                 ),
               ),
