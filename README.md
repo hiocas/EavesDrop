@@ -13,12 +13,11 @@ It's currently available for Android, but since it's built with Flutter cross pl
 - User Library
 ## Contributing
 
-Be it patching, new code, feature request, ui designs and anything else (does not have to be coding related), contributions are always welcome!
+Be it patching, new code, a feature request, ui designs and anything else (does not have to be coding related!), contributions are always welcome!
 
-See [Contributions.md](Contributions.md) for what you can help with and how to get started.
+Additionally, you can always vote on existing new feature requests or general app ideas that you'd like to see implemented!
 
-Also, you can always vote on existing new feature requests or general app ideas that you'd like to see implemented!
-See how in [Contributions.md](Contributions.md).
+See [Contributions.md](Contributions.md) for how to vote, what you can help with and how to get started.
   
 ## Submitting Issues
 
