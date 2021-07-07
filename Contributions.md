@@ -8,7 +8,7 @@ You can do so by heading to the [issues](https://github.com/hiocas/GWA-App/issue
 
 To sort issues by their votes, click on Sort and choose either 👍 or 👎.
 
-![GitHub Screenshot](screenshots/Voting3.png)
+<img src="screenshots/Voting3.png" width="640">
 
 Here's the link for [the issues with the most 👍.](https://github.com/hiocas/GWA-App/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc)
 
@@ -16,9 +16,8 @@ You can also sort issues by their label. For new feature requests and feature im
 
 You can filter issues by labels by clicking on the Label button and choosing the label you want to sort by.
 
-![GitHub Screenshot](screenshots/Voting4.png)
+<img src="screenshots/Voting4.png" width="640">
 
 Once you do, click on the one you want to vote on. Then, click on the little smiley face at the top right of the issue and react with a 👍 or a 👎.
 
-![GitHub Screenshot](screenshots/Voting1.png)
-![GitHub Screenshot](screenshots/Voting2.png)
+<img align="left" src="screenshots/Voting1.png" width="460"> <img align="right" src="screenshots/Voting2.png" width="460">
