@@ -4,7 +4,7 @@ A browser for the GoneWildAudio subreddit.
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshots+Here)
 
 ## The First GoneWildAudio Focused App
-{Name} is the first GoneWildAudio focused app. It's built with Flutter and is open sourced.
+{Name} is the first GoneWildAudio focused app. It's built with the Flutter framework.
 
 It's currently available for Android, but since it's built with Flutter cross platform support is possible.
 ## Features
