@@ -15,10 +15,10 @@ It's currently available for Android, but since it's built with Flutter cross pl
 
 Be it patching, new code, feature request, ui designs and anything else (does not have to be coding related), contributions are always welcome!
 
-See Contributions.md for what you can help with and how to get started.
+See [Contributions.md](Contributions.md) for what you can help with and how to get started.
 
 Also, you can always vote on existing new feature requests or general app ideas that you'd like to see implemented!
-See how in Contributions.md.
+See how in [Contributions.md](Contributions.md).
   
 ## Submitting Issues
 
