@@ -7,7 +7,9 @@ You can vote on existing feature request and improvements that you want to see i
 You can do so by heading to the [issues](https://github.com/hiocas/GWA-App/issues) page on the GitHub repo for this app and finding feature requests and improvements you like.
 
 To sort issues by their votes, click on Sort and choose either 👍 or 👎.
+
 ![GitHub Screenshot](https://via.placeholder.com/468x300?text=Voting3+Screenshot+Here)
+
 Here's the link for [the issues with the most 👍.](https://github.com/hiocas/GWA-App/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc)
 
 You can also sort issues by their label. For new feature requests and feature improvements the relevant label is [enhancement.](https://github.com/hiocas/GWA-App/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3Aenhancement)
