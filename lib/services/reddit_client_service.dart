@@ -139,12 +139,18 @@ class RedditClientService {
         initialInstance: initialRedditInstance,
         untrustedInstance: untrustedRedditInstance,
       );
-      var _me = await redditClientService.reddit.user.me();
+      try {
+        var _me = await redditClientService.reddit.user.me();
       redditClientService.displayName = _me.displayName;
       redditClientService.iconImg =
           _me.data["icon_img"].toString().replaceAll('&amp;', '&');
       await redditClientService.eligiblePreferences();
       return redditClientService;
+      }
+      catch (e) {
+        print('Error $e');
+        redditClientService.logout();
+      }
     }
     final Reddit initialRedditInstance =
         await _redditCreators.createUntrustedReadOnlyInstance();
