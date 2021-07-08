@@ -3,7 +3,7 @@
 ### Code
 If you can code, new features and code patching and improvements are always welcome!
 You can make a new pull request [here.](https://github.com/hiocas/GWA-App/pulls)
-If you're new to Dart and Flutter, don't fret. So was I before I started this project. While I'm definetly not that great at it yet you can always just try to make your changes and see how it goes. And of course you can always dm me on reddit for help!
+If you're new to Dart and Flutter, don't fret. So was I before I started this project. While I'm definitely not that great at it yet you can always just try to make your changes and see how it goes. And of course you can always dm me on reddit for help!
 
 ### Other Stuff
 If you're not a programmer or can't code very well, there are a lot of other things you can help with!
@@ -30,7 +30,7 @@ UI/UX and Graphic Design. You can always take a look at our app and see if there
 
 
 #### Small Stuff
-Please note that for modifying any of the existing content in the next catagories we will need some votes to help us decide if it's actually wanted.
+Please note that for modifying any of the existing content in the next categories we will need some votes to help us decide if it's actually wanted.
 For new content it's a lot more loose.
 <details>
 <summary>Tag Icons</summary>
@@ -41,9 +41,9 @@ If you've noticed, some tags in the app display an image or some emojis instead 
 
 **Make sure to put [TAG] in your issue's title.**
   
-**If you have multiple ideas please put them all in the same issue so we won't get flodded.**
+**If you have multiple ideas please put them all in the same issue so we won't get flooded.**
   
-  **If you're using an image make sure it's from a reputable source and that there are no copywrite issues with it.**
+  **If you're using an image make sure it's from a reputable source and that there are no copyright issues with it.**
   
 **These are the currently supported icons you can choose:**
 - A single Emoji character
@@ -59,11 +59,11 @@ If you think you can do these manually, you can always head to the code base. Th
 <details>
 <summary>Placeholder Images</summary>
   If a post in GoneWildAudio doesn't have an image preview, we use one of our own.
-  There are currently 2 packs abvailable for the user (from which he can choose from the setting): Gradients and Abstract.
+  There are currently 2 packs available for the user (from which he can choose from the setting): Gradients and Abstract.
   
   You can modify the existing packs (add or change ones in it) if you think they don't look good or fit in the app, or you can create completely new packs.
   
-  **When choosing images to add, please make sure that there are no copywrite problems with them and that the source is reputable.**
+  **When choosing images to add, please make sure that there are no copyright problems with them and that the source is reputable.**
   
   To start, go to the [issues page](https://github.com/hiocas/GWA-App/issues) and create a new Feature Improvement if you're changing existing content or a Feature Request if you're making a new pack.
   
@@ -83,7 +83,7 @@ You can vote on existing feature request and improvements that you want to see i
 
 You can do so by heading to the [issues](https://github.com/hiocas/GWA-App/issues) or [pull requests](https://github.com/hiocas/GWA-App/pulls) page on the GitHub repo for this app and finding feature requests and improvements you like.
 
-*(Issues are basically like forum posts while pull requests contain code. It shouldn't really matter, just know that there could be new features and improvents on both).*
+*(Issues are basically like forum posts while pull requests contain code. It shouldn't really matter, just know that there could be new features and improvements on both).*
 
 To sort issues and pull requests by their votes, click on Sort and choose either 👍 or 👎.
 
