@@ -18,26 +18,26 @@ class FirstTimeScreen extends StatelessWidget {
         title: 'Welcome!',
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Material(
-              color: Theme.of(context).backgroundColor,
-              elevation: 15.0,
-              borderRadius: BorderRadius.circular(32.0),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Material(
+            color: Theme.of(context).backgroundColor,
+            elevation: 15.0,
+            borderRadius: BorderRadius.circular(32.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Welcome to the GoneWildAudio Browser App!',
+                      'Welcome to EavesDrop!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 22.0),
+                          fontSize: 26.0),
                     ),
                     SizedBox(height: 15.0),
                     MarkdownViewer(
@@ -82,7 +82,8 @@ class FirstTimeScreen extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             final RedditClientService _redditClientService =
-                                Provider.of<GlobalState>(context, listen: false)
+                                Provider.of<GlobalState>(context,
+                                        listen: false)
                                     .redditClientService;
                             pushLogin(context,
                                 redditClientService: _redditClientService);
