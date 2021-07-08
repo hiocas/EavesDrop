@@ -280,14 +280,14 @@ class _LoginState extends State<Login> {
         elevation: 15.0,
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Material(
-              elevation: 15.0,
-              color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.circular(32.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Material(
+            elevation: 15.0,
+            color: Theme.of(context).backgroundColor,
+            borderRadius: BorderRadius.circular(32.0),
+            child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: FutureBuilder<bool>(
