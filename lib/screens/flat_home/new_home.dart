@@ -68,6 +68,7 @@ class _NewHomeState extends State<NewHome> {
                     showAuthors: true,
                     authorTextSize: 14.0,
                     textSize: 15.5,
+                    animate: AnimateOnce.animate,
                     waitDuration: Duration(milliseconds: 600),
                     contentStream:
                         Provider.of<GlobalState>(context, listen: false)
@@ -82,6 +83,7 @@ class _NewHomeState extends State<NewHome> {
                     sizeRatio: 1.3,
                     showAuthors: true,
                     authorTextSize: 13.0,
+                    animate: AnimateOnce.animate,
                     waitDuration: Duration(milliseconds: 700),
                     contentStream:
                         Provider.of<GlobalState>(context, listen: false)
@@ -94,6 +96,7 @@ class _NewHomeState extends State<NewHome> {
                     title: 'Hot Posts',
                     size: 130,
                     sizeRatio: 1.2,
+                    animate: AnimateOnce.animate,
                     waitDuration: Duration(milliseconds: 800),
                     contentStream:
                         Provider.of<GlobalState>(context, listen: false)
@@ -110,4 +113,9 @@ class _NewHomeState extends State<NewHome> {
       ),
     );
   }
+}
+
+// I know this is fucked but for now it'll do the trick.
+class AnimateOnce {
+  static bool animate = true;
 }

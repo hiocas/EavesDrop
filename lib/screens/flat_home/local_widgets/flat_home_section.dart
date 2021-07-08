@@ -3,6 +3,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gwa_app/screens/flat_home/local_widgets/flat_home_list_view.dart';
+import 'package:gwa_app/screens/flat_home/new_home.dart';
 import 'package:gwa_app/screens/home_section_page/home_section_page.dart';
 import 'package:gwa_app/widgets/animations%20and%20transitions/transitions.dart';
 
@@ -11,6 +12,7 @@ class FlatHomeSection extends StatefulWidget {
     Key key,
     @required this.title,
     @required this.contentStream,
+    @required this.animate,
     this.animationDuration = const Duration(milliseconds: 500),
     this.waitDuration = const Duration(seconds: 1),
     @required this.homeSectionPageContentStream,
@@ -33,6 +35,7 @@ class FlatHomeSection extends StatefulWidget {
   final double size;
   final double sizeRatio;
 
+  final bool animate;
   final Duration animationDuration;
   final Duration waitDuration;
 
@@ -52,13 +55,19 @@ class _FlatHomeSectionState extends State<FlatHomeSection>
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: widget.animationDuration);
-    Timer(widget.waitDuration, () => _animationController.forward());
+    _animationController = AnimationController(
+        vsync: this,
+        duration: widget.animate ? widget.animationDuration : Duration.zero);
+    Timer(widget.animate ? widget.waitDuration : Duration.zero, () {
+      _animationController.forward();
+    });
   }
 
   @override
   void dispose() {
+    if (AnimateOnce.animate) {
+      AnimateOnce.animate = false;
+    }
     _animationController.dispose();
     _animationController = null;
     super.dispose();
