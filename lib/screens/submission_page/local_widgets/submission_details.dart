@@ -39,6 +39,7 @@ class SubmissionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rwidth = MediaQuery.of(context).size.width - 140;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -58,14 +59,23 @@ class SubmissionDetails extends StatelessWidget {
         Provider.of<GlobalState>(context, listen: false).eligiblePrefs
             // The LayoutBuilder is here to prevent overflow.
             ? LayoutBuilder(builder: (context, constraints) {
-                if (constraints.maxWidth < this.maxWidth) {
+                print(constraints.maxWidth);
+                print(rwidth);
+                if (constraints.maxWidth < rwidth) {
                   return Container();
                 }
                 return Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: ElevatedButton.icon(
                       icon: Icon(Icons.launch),
-                      label: Text('Open Post in Browser/Reddit'),
+                      label: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: rwidth - 24),
+                        child: Text(
+                          'Open Post in Browser',
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
                       style: ButtonStyle(
                           elevation: MaterialStateProperty.all(15.0),
                           backgroundColor: MaterialStateProperty.all(

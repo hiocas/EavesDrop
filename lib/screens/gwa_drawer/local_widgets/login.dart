@@ -280,26 +280,28 @@ class _LoginState extends State<Login> {
         elevation: 15.0,
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Material(
-            elevation: 15.0,
-            color: Theme.of(context).backgroundColor,
-            borderRadius: BorderRadius.circular(32.0),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: FutureBuilder<bool>(
-                future: widget.redditClientService.eligiblePreferences(),
-                builder: (context, futureEligible) {
-                  if (!futureEligible.hasData)
-                    return CircularProgressIndicator();
-                  eligible = futureEligible.data;
-                  if (widget.redditClientService.loggedIn) {
-                    return _makeLoggedInView();
-                  }
-                  return _makeLoggedOutView();
-                },
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Material(
+              elevation: 15.0,
+              color: Theme.of(context).backgroundColor,
+              borderRadius: BorderRadius.circular(32.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FutureBuilder<bool>(
+                  future: widget.redditClientService.eligiblePreferences(),
+                  builder: (context, futureEligible) {
+                    if (!futureEligible.hasData)
+                      return CircularProgressIndicator();
+                    eligible = futureEligible.data;
+                    if (widget.redditClientService.loggedIn) {
+                      return _makeLoggedInView();
+                    }
+                    return _makeLoggedOutView();
+                  },
+                ),
               ),
             ),
           ),

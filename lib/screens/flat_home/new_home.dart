@@ -57,51 +57,53 @@ class _NewHomeState extends State<NewHome> {
           },
           drawer: GwaDrawer(),
           backgroundColor: Colors.transparent,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FlatHomeSection(
-                  title: 'Top Posts of The Month',
-                  size: 175,
-                  showAuthors: true,
-                  authorTextSize: 14.0,
-                  textSize: 15.5,
-                  waitDuration: Duration(milliseconds: 600),
-                  contentStream:
-                      Provider.of<GlobalState>(context, listen: false)
-                          .getTopStream(TimeFilter.month, 21),
-                  homeSectionPageContentStream:
-                      Provider.of<GlobalState>(context, listen: false)
-                          .getTopStream(TimeFilter.month, 99),
-                ),
-                FlatHomeSection(
-                  title: 'Top Posts of The Week',
-                  size: 150,
-                  sizeRatio: 1.3,
-                  showAuthors: true,
-                  authorTextSize: 13.0,
-                  waitDuration: Duration(milliseconds: 700),
-                  contentStream:
-                      Provider.of<GlobalState>(context, listen: false)
-                          .getTopStream(TimeFilter.week, 21),
-                  homeSectionPageContentStream:
-                      Provider.of<GlobalState>(context, listen: false)
-                          .getTopStream(TimeFilter.week, 99),
-                ),
-                FlatHomeSection(
-                  title: 'Hot Posts',
-                  size: 130,
-                  sizeRatio: 1.2,
-                  waitDuration: Duration(milliseconds: 800),
-                  contentStream:
-                      Provider.of<GlobalState>(context, listen: false)
-                          .getHotStream(21),
-                  homeSectionPageContentStream:
-                      Provider.of<GlobalState>(context, listen: false)
-                          .getHotStream(99),
-                ),
-              ],
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatHomeSection(
+                    title: 'Top Posts of The Month',
+                    size: 175,
+                    showAuthors: true,
+                    authorTextSize: 14.0,
+                    textSize: 15.5,
+                    waitDuration: Duration(milliseconds: 600),
+                    contentStream:
+                        Provider.of<GlobalState>(context, listen: false)
+                            .getTopStream(TimeFilter.month, 21),
+                    homeSectionPageContentStream:
+                        Provider.of<GlobalState>(context, listen: false)
+                            .getTopStream(TimeFilter.month, 99),
+                  ),
+                  FlatHomeSection(
+                    title: 'Top Posts of The Week',
+                    size: 150,
+                    sizeRatio: 1.3,
+                    showAuthors: true,
+                    authorTextSize: 13.0,
+                    waitDuration: Duration(milliseconds: 700),
+                    contentStream:
+                        Provider.of<GlobalState>(context, listen: false)
+                            .getTopStream(TimeFilter.week, 21),
+                    homeSectionPageContentStream:
+                        Provider.of<GlobalState>(context, listen: false)
+                            .getTopStream(TimeFilter.week, 99),
+                  ),
+                  FlatHomeSection(
+                    title: 'Hot Posts',
+                    size: 130,
+                    sizeRatio: 1.2,
+                    waitDuration: Duration(milliseconds: 800),
+                    contentStream:
+                        Provider.of<GlobalState>(context, listen: false)
+                            .getHotStream(21),
+                    homeSectionPageContentStream:
+                        Provider.of<GlobalState>(context, listen: false)
+                            .getHotStream(99),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
