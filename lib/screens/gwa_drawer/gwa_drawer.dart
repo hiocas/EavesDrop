@@ -101,12 +101,6 @@ class GwaDrawer extends StatelessWidget {
                       )),
                 ),
                 _GwaDrawerListTile(
-                  icon: Icons.info,
-                  title: 'About',
-                  onTap: () => Navigator.push(context,
-                      CupertinoPageRoute(builder: (context) => About())),
-                ),
-                _GwaDrawerListTile(
                   icon: Icons.help,
                   title: 'Help',
                   onTap: () => Navigator.push(
