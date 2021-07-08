@@ -124,10 +124,8 @@ class _SubmissionPageButtonsAndTagsState
                   gwaSubmission: widget.submission,
                   selectedTags: _selectedTags,
                   onSelected: (bool value, int index) {
-                    print(widget.submission.tags[index]);
                     setState(() {
                       _selectedTags[index] = value;
-                      print(_selectedTags[index]);
                     });
                   },
                   usePlaceholder: true,
@@ -148,7 +146,6 @@ class _SubmissionPageButtonsAndTagsState
                         onSelected: (value) {
                           setState(() {
                             _selectedTags[index] = value;
-                            print(_selectedTags[index]);
                           });
                         },
                       );

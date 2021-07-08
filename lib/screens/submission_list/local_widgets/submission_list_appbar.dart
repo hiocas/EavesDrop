@@ -317,7 +317,6 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
               icon: Icon(Icons.menu),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
-                print('The app bar leading button has been pressed.');
               }),
       actions: _makeAppBarActions(),
     );

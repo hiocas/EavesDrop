@@ -204,7 +204,6 @@ class GlobalState with ChangeNotifier {
           } else {
             contentLimit = limit;
           }
-          print('content limit: $contentLimit');
           _searchResultsStream = stream.call(contentLimit);
 
           _isBusy = true;
@@ -232,7 +231,6 @@ class GlobalState with ChangeNotifier {
   /// searchResults list. Do this when wanting to load more submissions.
   updateLastSeenSubmission() {
     _lastSeenSubmission = _searchResults.last.fullname;
-    print(_lastSeenSubmission);
   }
 
   /// Clears the current search in preparation for a new one.
@@ -261,12 +259,9 @@ class GlobalState with ChangeNotifier {
         this._isBusy = false;
         this._searchEmpty = this._searchResults.isEmpty;
         this._subscription.cancel();
-        print('received: $_requestsReceived');
         if (_requestsReceived < requestsNum) {
           this._outOfSearchData = true;
         }
-        print('Out of search data: ${this.outOfSearchData}');
-        print(this._searchResults.length);
         notifyListeners();
       });
     }

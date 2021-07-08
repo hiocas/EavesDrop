@@ -33,7 +33,6 @@ class GwaTag extends StatelessWidget {
         side: BorderSide(width: 0.0),
         avatar: avatar,
         onSelected: (bool value) {
-          print(tag);
           onSelected.call(value);
         },
       ),

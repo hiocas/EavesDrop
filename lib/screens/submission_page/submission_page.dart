@@ -100,7 +100,6 @@ class SubmissionPageState extends State<SubmissionPage> {
                           child: GestureDetector(
                         behavior: HitTestBehavior.deferToChild,
                         onTap: () {
-                          print('Hide button');
                           if (_showFPB &&
                               _floatingPlayButtonKey.currentState.animates) {
                             _floatingPlayButtonKey.currentState.animateButton();

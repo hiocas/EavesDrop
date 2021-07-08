@@ -162,7 +162,6 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
       for (var i = 0; i < _inLists.length; i++) {
         if (_inLists[i]) lists.add(HiveBoxes.listTags[i]);
       }
-      print(lists.toString());
       _libraryGwaSubmission.lists = lists;
       _libraryGwaSubmission.save();
     });
@@ -190,7 +189,6 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
       for (var i = 0; i < _inLists.length; i++) {
         _inLists[i] = false;
       }
-      print(_inLists.toString());
     });
   }
 

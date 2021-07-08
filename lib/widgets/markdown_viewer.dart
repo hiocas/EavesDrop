@@ -13,6 +13,7 @@ class MarkdownViewer extends StatelessWidget {
   final String text;
   final Color bodyTextColor;
   final double bodyTextFontSize;
+  final TextStyle subtitle1TextStyle;
   final Color tableBorderColor;
   final BoxDecoration blockQuoteDecoration;
   final BoxDecoration horizontalRuleDecoration;
@@ -25,6 +26,7 @@ class MarkdownViewer extends StatelessWidget {
     @required this.text,
     this.bodyTextColor,
     this.bodyTextFontSize,
+    this.subtitle1TextStyle,
     this.tableBorderColor,
     this.blockQuoteDecoration,
     this.horizontalRuleDecoration,
@@ -44,7 +46,6 @@ class MarkdownViewer extends StatelessWidget {
       child: MarkdownBody(
         data: markdown,
         onTapLink: (text, url, title) {
-          print(url);
           if (url.contains('reddit.com/r/gonewildaudio/comments/')) {
             String fullname = SubmissionRef.idFromUrl(url);
             pushSubmissionPageWithReturnData(context, fullname);
@@ -65,7 +66,7 @@ class MarkdownViewer extends StatelessWidget {
                 headline5:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                 headline6: TextStyle(color: Colors.grey[200]),
-                subtitle1: TextStyle(
+                subtitle1: subtitle1TextStyle ?? TextStyle(
                     color: Colors.grey[300],
                     fontSize: 18,
                     fontWeight: FontWeight.w500),

@@ -41,7 +41,6 @@ class SubmissionListState extends State<SubmissionList> {
 
   @override
   void initState() {
-    print('initial sort ${widget.initialSort}');
     super.initState();
     scrollController.addListener(() {
       if (scrollController.offset ==
@@ -53,7 +52,6 @@ class SubmissionListState extends State<SubmissionList> {
     });
 
     if (widget.initialQuery == null || widget.initialQuery.isEmpty) {
-      print('cool');
       searchSort = Sort.newest;
       Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
       Provider.of<GlobalState>(context, listen: false).loadNewest();
@@ -174,7 +172,6 @@ class SubmissionListState extends State<SubmissionList> {
           },
         ),
         onDrawerChanged: (open) {
-          print('Drawer Changed $open');
           // In case a setting change occurred that requires a rebuild.
           if (!open && GwaDrawerManager.updateOnReturn) {
             GwaDrawerManager.updateOnReturn = false;

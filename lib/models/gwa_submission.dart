@@ -75,7 +75,6 @@ class GwaSubmission {
     var exp = RegExp(r'(?<=\[)(.*?)(?=\])');
     var matches = exp.allMatches(this.fullTitle);
     List<String> tags = [];
-    print(matches.length);
     if (matches.length > 0) {
       tags = ['{author:}${this.author}'];
       for (RegExpMatch match in matches) {

@@ -210,7 +210,6 @@ class RedirectToHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('pushed');
     return HomeScaffold(
       initialIndex: 1,
     );

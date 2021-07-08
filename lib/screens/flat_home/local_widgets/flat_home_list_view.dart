@@ -150,7 +150,6 @@ class _FlatHomeListViewState extends State<FlatHomeListView> {
   int _findClosestIndex(double offset, {ScrollDirection scrollDirection}) {
     final int defaultIndex = (offset / itemSize).ceil();
     if (scrollDirection != null && _currentIndex == defaultIndex) {
-      print(scrollDirection);
       if (scrollDirection == ScrollDirection.forward && defaultIndex != 0) {
         return defaultIndex - 1;
       }

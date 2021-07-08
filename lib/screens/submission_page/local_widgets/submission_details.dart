@@ -46,6 +46,7 @@ class SubmissionDetails extends StatelessWidget {
           text: _makeMarkdownDetails(),
           inPopupCard: true,
           bodyTextColor: Colors.black,
+          subtitle1TextStyle: TextStyle(color: Colors.black),
           blockQuoteDecoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             color: Theme.of(context).primaryColor,

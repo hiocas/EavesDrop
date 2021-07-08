@@ -161,11 +161,8 @@ class RedditClientService {
   init() async {
     try {
       uriLinkStream.listen((link) async {
-        print('Got: $link');
         if (link != null && link.queryParameters['code'] != null) {
           String authCode = link.queryParameters['code'];
-          print('Auth Code Stream: $authCode');
-
           /// If the user accepted, set [_reddit] to the reddit instance that
           /// generated the auth link, saved in [_oauthReddit] to authorise
           /// in [_authorizeClient].
