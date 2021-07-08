@@ -2,6 +2,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gwa_app/models/hive_boxes.dart';
+import 'package:gwa_app/models/placeholders_options.dart';
 import 'package:gwa_app/screens/flat_home/new_home.dart';
 import 'package:gwa_app/screens/library/library.dart';
 import 'package:gwa_app/screens/submission_list/submission_list.dart';
@@ -24,7 +25,11 @@ Future main() async {
   await globalState.initApp();
 
   final appSettings = await HiveBoxes.getAppSettings();
-  GwaFunctions.setPlaceholders(appSettings.placeholdersOptions);
+  if (appSettings == null) {
+    GwaFunctions.setPlaceholders(PlaceholdersOptions.Gradients);
+  } else {
+    GwaFunctions.setPlaceholders(appSettings.placeholdersOptions);
+  }
 
   runApp(MyApp(
     globalState: globalState,

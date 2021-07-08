@@ -7,7 +7,7 @@ import 'package:gwa_app/models/app_settings.dart';
 import 'package:flutter/material.dart';
 
 class HiveBoxes {
-  static List<String> listTags = ['Favorites', 'Planned'];
+  static List<String> listTags = ['Favorites', 'Planned', 'Session'];
 
   static void initHive() {
     Hive.registerAdapter(LibraryGwaSubmissionAdapter());
