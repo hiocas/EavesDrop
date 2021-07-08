@@ -59,8 +59,6 @@ class SubmissionDetails extends StatelessWidget {
         Provider.of<GlobalState>(context, listen: false).eligiblePrefs
             // The LayoutBuilder is here to prevent overflow.
             ? LayoutBuilder(builder: (context, constraints) {
-                print(constraints.maxWidth);
-                print(rwidth);
                 if (constraints.maxWidth < rwidth) {
                   return Container();
                 }
