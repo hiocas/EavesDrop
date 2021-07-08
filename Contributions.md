@@ -7,13 +7,27 @@ If you're new to Dart and Flutter, don't fret. So was I before I started this pr
 
 ### Other Stuff
 If you're not a programmer or can't code very well, there are a lot of other things you can help with!
-Generally, most none-code related changes can be started by creating a new Feature Request or Feature Improvement on the [issues](https://github.com/hiocas/GWA-App/issues) page of this repo. If you already have one of these in mind, just click on New Issue and follow the templates that already exist there.
+Generally, most none-code related changes can be started by creating a new Feature Request or Feature Improvement on the [issues page](https://github.com/hiocas/GWA-App/issues) of this repo. If you already have one of these in mind, here's a quick tutorial to get started:
+<details>
+  <summary>I have a Feature Request or a Feature Improvement</summary>
+  
+  After heading to the [issues page](https://github.com/hiocas/GWA-App/issues) of this repo, click on New Issue and choose the relevant template.
+  
+  Let's say that you don't like the name of the app and you have another one in mind. This means changing an existing thing so it's a Feature Improvement.
+  
+  After clicking the template just follow the instructions there. Please note that for some Feature Improvements (like the one in the example above) we may need some votes to see that this is actually a wanted "improvement" and not just a personal thing.
+</details>
+
+
 Regardless, here are some general things you can help with!
+
 #### Big Stuff
 <details>
   <summary>Design</summary>
+  
 UI/UX and Graphic Design. You can always take a look at our app and see if there's something in that area that could use some work. If you found one you can create a new Feature Improvement and describe everything there.
 </details>
+
 
 #### Small Stuff
 Please note that for modifying any of the existing content in the next catagories we will need some votes to help us decide if it's actually wanted.
