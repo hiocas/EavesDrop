@@ -5,21 +5,14 @@ EavesDrop is a browser app for the GoneWildAudio subreddit. It's built with the 
 
 It's currently available for Android, but since it's built with Flutter cross platform support is possible.
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshots+Here)
+![App Screenshot](screenshots/Screenshots2.png)
 
 ## Features
 Features Include:
 - GoneWildAudio Content Focused UI
 - Tag Querying
 - User Library
-## Contributing
-
-Be it patching, new code, a feature request, ui designs and anything else (does not have to be coding related!), contributions are always welcome!
-
-Additionally, you can always vote on existing new feature requests or general app ideas that you'd like to see implemented!
-
-See [Contributions.md](Contributions.md) for how to vote, what you can help with and how to get started.
-  
+ 
 ## Submitting Issues
 
 You can submit a new issue here: {issue flag}.
@@ -29,7 +22,14 @@ You can submit a new issue here: {issue flag}.
 
 **Bugs:** Try to define the bug clearly and provide steps to reproduce it.
 If you can, providing screenshots from  the app will also be helpful.
+  
+## Contributing
 
+Be it patching, new code, a feature request, ui designs and anything else (does not have to be coding related!), contributions are always welcome!
+
+Additionally, you can always vote on existing new feature requests or general app ideas that you'd like to see implemented!
+
+See [Contributions.md](Contributions.md) for how to vote, what you can help with and how to get started.
   
 ## Roadmap
 
