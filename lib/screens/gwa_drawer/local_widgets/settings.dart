@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/app_settings.dart';
-import 'package:gwa_app/models/audio_launch_options.dart';
-import 'package:gwa_app/models/hive_boxes.dart';
-import 'package:gwa_app/models/placeholders_options.dart';
-import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
-import 'package:gwa_app/utils/gwa_functions.dart';
-import 'package:gwa_app/widgets/gradient_title_appbar.dart';
-import 'package:gwa_app/utils/util_functions.dart'
+import 'package:eavesdrop/models/app_settings.dart';
+import 'package:eavesdrop/models/audio_launch_options.dart';
+import 'package:eavesdrop/models/hive_boxes.dart';
+import 'package:eavesdrop/models/placeholders_options.dart';
+import 'package:eavesdrop/screens/gwa_drawer/gwa_drawer.dart';
+import 'package:eavesdrop/utils/gwa_functions.dart';
+import 'package:eavesdrop/widgets/gradient_title_appbar.dart';
+import 'package:eavesdrop/utils/util_functions.dart'
     show audioLaunchOptionToString, placeholdersOptionsToString;
-import 'package:gwa_app/widgets/markdown_viewer.dart';
+import 'package:eavesdrop/widgets/markdown_viewer.dart';
 import 'package:hive/hive.dart';
 
 class Settings extends StatefulWidget {

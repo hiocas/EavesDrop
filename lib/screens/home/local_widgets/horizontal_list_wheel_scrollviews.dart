@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
 import 'package:draw/draw.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/widgets/gwa_list_item.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/widgets/gwa_list_item.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 
 import 'dummy_list.dart';
 

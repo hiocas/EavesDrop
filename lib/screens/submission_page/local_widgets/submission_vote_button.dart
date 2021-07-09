@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:draw/draw.dart';
 import 'package:confetti/confetti.dart';
-import 'package:gwa_app/widgets/icon_text_button.dart';
+import 'package:eavesdrop/widgets/icon_text_button.dart';
 
 class SubmissionVoteButton extends StatefulWidget {
   final String label;

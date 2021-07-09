@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/gwa_submission.dart';
-import 'package:gwa_app/states/global_state.dart';
-import 'package:gwa_app/widgets/markdown_viewer.dart';
+import 'package:eavesdrop/models/gwa_submission.dart';
+import 'package:eavesdrop/states/global_state.dart';
+import 'package:eavesdrop/widgets/markdown_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 

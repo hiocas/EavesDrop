@@ -2,8 +2,8 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gwa_app/states/global_state.dart';
-import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
+import 'package:eavesdrop/states/global_state.dart';
+import 'package:eavesdrop/widgets/gradient_appbar_flexible_space.dart';
 import 'package:provider/provider.dart';
 
 class SubmissionListAppBar extends StatefulWidget

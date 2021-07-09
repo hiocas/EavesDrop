@@ -2,12 +2,12 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/models/hive_boxes.dart';
-import 'package:gwa_app/widgets/markdown_viewer.dart';
-import 'package:gwa_app/models/gwa_submission.dart';
+import 'package:eavesdrop/models/hive_boxes.dart';
+import 'package:eavesdrop/widgets/markdown_viewer.dart';
+import 'package:eavesdrop/models/gwa_submission.dart';
 import 'local_widgets/all_page_local.dart';
 import 'package:provider/provider.dart';
-import 'package:gwa_app/states/global_state.dart';
+import 'package:eavesdrop/states/global_state.dart';
 
 class SubmissionPage extends StatefulWidget {
   final String submissionFullname;

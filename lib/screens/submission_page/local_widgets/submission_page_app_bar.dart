@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/gwa_submission.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/gwa_link_flair_button.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/popup_image_gradient_button.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/popup_text_button.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:eavesdrop/models/gwa_submission.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/gwa_link_flair_button.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/popup_image_gradient_button.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/popup_text_button.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 import 'package:draw/draw.dart' as Draw;
-import 'package:gwa_app/widgets/gwa_author_flair.dart';
+import 'package:eavesdrop/widgets/gwa_author_flair.dart';
 
 class SubmissionPageAppBar extends StatelessWidget {
   const SubmissionPageAppBar({

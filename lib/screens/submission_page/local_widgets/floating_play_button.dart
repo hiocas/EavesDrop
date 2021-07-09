@@ -2,12 +2,12 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/models/audio_launch_options.dart';
-import 'package:gwa_app/models/gwa_submission.dart';
-import 'package:gwa_app/models/hive_boxes.dart';
-import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/widgets/navigator_routes/hero_dialog_route.dart';
-import 'package:gwa_app/widgets/rect_tweens/calm_rect_tween.dart';
+import 'package:eavesdrop/models/audio_launch_options.dart';
+import 'package:eavesdrop/models/gwa_submission.dart';
+import 'package:eavesdrop/models/hive_boxes.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
+import 'package:eavesdrop/widgets/navigator_routes/hero_dialog_route.dart';
+import 'package:eavesdrop/widgets/rect_tweens/calm_rect_tween.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart'
     show
         ChromeSafariBrowser,
@@ -16,7 +16,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart'
         IOSSafariOptions;
 import 'dart:math' as Math;
 
-import 'package:gwa_app/widgets/website_viewer.dart';
+import 'package:eavesdrop/widgets/website_viewer.dart';
 
 class MyChromeSafariBrowser extends ChromeSafariBrowser {
   @override

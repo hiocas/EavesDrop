@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:gwa_app/screens/home_section_page/home_section_page.dart';
-import 'package:gwa_app/widgets/animations%20and%20transitions/transitions.dart';
+import 'package:eavesdrop/screens/home_section_page/home_section_page.dart';
+import 'package:eavesdrop/widgets/animations%20and%20transitions/transitions.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

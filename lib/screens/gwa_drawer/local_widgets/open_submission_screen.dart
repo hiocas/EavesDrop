@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/states/global_state.dart';
+import 'package:eavesdrop/states/global_state.dart';
 
-import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/widgets/gradient_title_appbar.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
+import 'package:eavesdrop/widgets/gradient_title_appbar.dart';
 import 'package:provider/provider.dart';
 
 class OpenSubmissionScreen extends StatelessWidget {

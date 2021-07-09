@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/utils/util_functions.dart' show getTagName;
+import 'package:eavesdrop/utils/util_functions.dart' show getTagName;
 
 class GwaTag extends StatelessWidget {
   const GwaTag({

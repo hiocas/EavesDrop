@@ -1,6 +1,6 @@
 import 'package:markdown/markdown.dart' as md;
 import 'package:draw/draw.dart';
-import 'package:gwa_app/utils/gwa_functions.dart';
+import 'package:eavesdrop/utils/gwa_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart' show parse;

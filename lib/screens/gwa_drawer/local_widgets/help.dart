@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/widgets/gradient_title_appbar.dart';
+import 'package:eavesdrop/widgets/gradient_title_appbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Help extends StatelessWidget {

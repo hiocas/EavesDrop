@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/models/gwa_submission.dart';
-import 'package:gwa_app/models/hive_boxes.dart';
-import 'package:gwa_app/models/library_gwa_submission.dart';
-import 'package:gwa_app/widgets/custom_popup_widget_button.dart';
+import 'package:eavesdrop/models/gwa_submission.dart';
+import 'package:eavesdrop/models/hive_boxes.dart';
+import 'package:eavesdrop/models/library_gwa_submission.dart';
+import 'package:eavesdrop/widgets/custom_popup_widget_button.dart';
 import 'package:hive/hive.dart';
 import 'dart:math' as math;
 

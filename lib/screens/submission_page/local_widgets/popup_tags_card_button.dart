@@ -2,10 +2,10 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/models/gwa_submission.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/gwa_tag.dart';
-import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/widgets/custom_popup_widget_button.dart';
+import 'package:eavesdrop/models/gwa_submission.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/gwa_tag.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
+import 'package:eavesdrop/widgets/custom_popup_widget_button.dart';
 
 class PopupTagsCardButton extends StatelessWidget {
   final String label;

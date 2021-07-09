@@ -2,8 +2,8 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
-import 'package:gwa_app/states/global_state.dart';
+import 'package:eavesdrop/screens/gwa_drawer/gwa_drawer.dart';
+import 'package:eavesdrop/states/global_state.dart';
 import 'package:provider/provider.dart';
 import 'local_widgets/flat_home_section.dart';
 

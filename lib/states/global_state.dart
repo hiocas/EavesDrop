@@ -1,9 +1,9 @@
 import 'package:draw/draw.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:gwa_app/models/audio_launch_options.dart';
-import 'package:gwa_app/services/reddit_client_service.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/models/audio_launch_options.dart';
+import 'package:eavesdrop/services/reddit_client_service.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
 
 /*TODO: Make the load functions more clear or maybe change them. I'm not sure
     if I did lazy loading correctly and I don't know if the current way

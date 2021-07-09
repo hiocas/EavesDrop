@@ -1,9 +1,9 @@
-import 'package:gwa_app/models/audio_launch_options.dart';
-import 'package:gwa_app/models/placeholders_options.dart';
-import 'package:gwa_app/screens/first_time_screen/first_time_screen.dart';
+import 'package:eavesdrop/models/audio_launch_options.dart';
+import 'package:eavesdrop/models/placeholders_options.dart';
+import 'package:eavesdrop/screens/first_time_screen/first_time_screen.dart';
 import 'package:hive/hive.dart';
-import 'package:gwa_app/models/library_gwa_submission.dart';
-import 'package:gwa_app/models/app_settings.dart';
+import 'package:eavesdrop/models/library_gwa_submission.dart';
+import 'package:eavesdrop/models/app_settings.dart';
 import 'package:flutter/material.dart';
 
 class HiveBoxes {

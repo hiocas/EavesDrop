@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/screens/flat_home/local_widgets/flat_home_list_view.dart';
-import 'package:gwa_app/screens/flat_home/new_home.dart';
-import 'package:gwa_app/screens/home_section_page/home_section_page.dart';
-import 'package:gwa_app/widgets/animations%20and%20transitions/transitions.dart';
+import 'package:eavesdrop/screens/flat_home/local_widgets/flat_home_list_view.dart';
+import 'package:eavesdrop/screens/flat_home/new_home.dart';
+import 'package:eavesdrop/screens/home_section_page/home_section_page.dart';
+import 'package:eavesdrop/widgets/animations%20and%20transitions/transitions.dart';
 
 class FlatHomeSection extends StatefulWidget {
   const FlatHomeSection({

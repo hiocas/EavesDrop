@@ -1,11 +1,11 @@
 import 'package:flutter/services.dart';
-import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
-import 'package:gwa_app/states/global_state.dart';
+import 'package:eavesdrop/screens/gwa_drawer/gwa_drawer.dart';
+import 'package:eavesdrop/states/global_state.dart';
 import 'package:provider/provider.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
+import 'package:eavesdrop/widgets/gradient_appbar_flexible_space.dart';
 
 import 'local_widgets/home_section.dart';
 

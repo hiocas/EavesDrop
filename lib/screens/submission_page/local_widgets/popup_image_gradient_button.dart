@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/widgets/navigator_routes/hero_dialog_route.dart';
-import 'package:gwa_app/widgets/rect_tweens/calm_rect_tween.dart';
+import 'package:eavesdrop/widgets/navigator_routes/hero_dialog_route.dart';
+import 'package:eavesdrop/widgets/rect_tweens/calm_rect_tween.dart';
 
 //FIXME: Fix the return animation of the image.
 class PopupImageGradientButton extends StatelessWidget {

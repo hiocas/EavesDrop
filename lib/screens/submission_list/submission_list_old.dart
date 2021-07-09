@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/rendering.dart';
 import '../../widgets/gwa_list_item.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 
 /*TODO: Implement lazy loading and a "show more" in search so that the user can
    search for more than 1000 (I think that's the limit) submissions. */

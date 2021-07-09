@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/widgets/gwa_list_item.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/widgets/gwa_list_item.dart';
 
 class SubmissionList extends StatelessWidget {
   const SubmissionList({

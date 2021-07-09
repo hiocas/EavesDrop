@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/widgets/gwa_author_flair.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
+import 'package:eavesdrop/widgets/gwa_author_flair.dart';
 
 // THIS IS NOT MY DESIGN AND CODE I LOOKED AT A TUTORIAL BY Marcus Ng.
 class HomeSectionPageView extends StatefulWidget {

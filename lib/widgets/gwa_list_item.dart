@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/utils/gwa_functions.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/utils/gwa_functions.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 
 class GwaListItem extends StatelessWidget {
   final GwaSubmissionPreview submission;

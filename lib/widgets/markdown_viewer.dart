@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'website_viewer.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 import 'package:markdown/markdown.dart' as md;
 
 //TODO: This doesn't handle spoilers ('>!...<' I think). Try to extend it.

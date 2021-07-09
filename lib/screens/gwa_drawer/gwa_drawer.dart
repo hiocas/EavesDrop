@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/services/reddit_client_service.dart';
-import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/states/global_state.dart';
-import 'package:gwa_app/widgets/GwaGradientShaderMask.dart';
+import 'package:eavesdrop/services/reddit_client_service.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
+import 'package:eavesdrop/states/global_state.dart';
+import 'package:eavesdrop/widgets/GwaGradientShaderMask.dart';
 import 'package:provider/provider.dart';
 import 'local_widgets/all_local_widgets.dart';
 

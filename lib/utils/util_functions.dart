@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:gwa_app/models/audio_launch_options.dart';
-import 'package:gwa_app/models/placeholders_options.dart';
-import 'package:gwa_app/screens/gwa_drawer/local_widgets/login.dart';
-import 'package:gwa_app/screens/submission_page/submission_page.dart';
-import 'package:gwa_app/services/reddit_client_service.dart';
+import 'package:eavesdrop/models/audio_launch_options.dart';
+import 'package:eavesdrop/models/placeholders_options.dart';
+import 'package:eavesdrop/screens/gwa_drawer/local_widgets/login.dart';
+import 'package:eavesdrop/screens/submission_page/submission_page.dart';
+import 'package:eavesdrop/services/reddit_client_service.dart';
 
 import '../main.dart';
 

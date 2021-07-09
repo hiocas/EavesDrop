@@ -1,15 +1,15 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/gwa_submission.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/gwa_tag.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/popup_add_card_button.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/popup_tags_card_button.dart';
-import 'package:gwa_app/screens/submission_page/local_widgets/submission_details.dart';
-import 'package:gwa_app/states/global_state.dart';
-import 'package:gwa_app/widgets/particles_icon_text_button.dart';
+import 'package:eavesdrop/models/gwa_submission.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/gwa_tag.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/popup_add_card_button.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/popup_tags_card_button.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/submission_details.dart';
+import 'package:eavesdrop/states/global_state.dart';
+import 'package:eavesdrop/widgets/particles_icon_text_button.dart';
 import 'submission_vote_button.dart';
-import 'package:gwa_app/widgets/popup_card_button.dart';
+import 'package:eavesdrop/widgets/popup_card_button.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' show launch;
 

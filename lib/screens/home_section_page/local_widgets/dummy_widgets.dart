@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/widgets/animations%20and%20transitions/transitions.dart';
-import 'package:gwa_app/widgets/gwa_list_item.dart';
+import 'package:eavesdrop/widgets/animations%20and%20transitions/transitions.dart';
+import 'package:eavesdrop/widgets/gwa_list_item.dart';
 
 class DummyPage extends StatefulWidget {
   const DummyPage({

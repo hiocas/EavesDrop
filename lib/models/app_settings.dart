@@ -1,5 +1,5 @@
-import 'package:gwa_app/models/audio_launch_options.dart';
-import 'package:gwa_app/models/placeholders_options.dart';
+import 'package:eavesdrop/models/audio_launch_options.dart';
+import 'package:eavesdrop/models/placeholders_options.dart';
 import 'package:hive/hive.dart';
 
 part 'app_settings.g.dart';

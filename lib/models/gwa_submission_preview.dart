@@ -1,5 +1,5 @@
 import 'package:draw/draw.dart';
-import 'package:gwa_app/utils/gwa_functions.dart';
+import 'package:eavesdrop/utils/gwa_functions.dart';
 
 /* I'm separating the full submission model with this model, so that the app
 won't crash when trying to save all of the details for a submission.

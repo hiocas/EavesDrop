@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
-import 'package:gwa_app/models/app_settings.dart';
+import 'package:eavesdrop/models/app_settings.dart';
 import 'package:draw/draw.dart';
-import 'package:gwa_app/models/hive_boxes.dart';
-import 'package:gwa_app/states/global_state.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:eavesdrop/models/hive_boxes.dart';
+import 'package:eavesdrop/states/global_state.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';

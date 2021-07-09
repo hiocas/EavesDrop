@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/widgets/gradient_title_appbar.dart';
-import 'package:gwa_app/widgets/gwa_scrollbar.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/widgets/gradient_title_appbar.dart';
+import 'package:eavesdrop/widgets/gwa_scrollbar.dart';
 import 'local_widgets/dummy_widgets.dart';
 import 'local_widgets/home_section_page_submission_list.dart';
 import 'local_widgets/home_section_page_view.dart';

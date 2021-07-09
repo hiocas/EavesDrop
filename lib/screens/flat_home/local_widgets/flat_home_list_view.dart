@@ -3,9 +3,9 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/models/gwa_submission_preview.dart';
-import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/widgets/gwa_author_flair.dart';
+import 'package:eavesdrop/models/gwa_submission_preview.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
+import 'package:eavesdrop/widgets/gwa_author_flair.dart';
 import 'dummy_flat_home_list_view.dart';
 
 class FlatHomeListViewStream extends StatefulWidget {

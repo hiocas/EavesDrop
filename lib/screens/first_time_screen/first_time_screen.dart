@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/services/reddit_client_service.dart';
-import 'package:gwa_app/states/global_state.dart';
-import 'package:gwa_app/utils/util_functions.dart' show pushLogin;
-import 'package:gwa_app/widgets/gradient_title_appbar.dart';
-import 'package:gwa_app/widgets/markdown_viewer.dart';
+import 'package:eavesdrop/services/reddit_client_service.dart';
+import 'package:eavesdrop/states/global_state.dart';
+import 'package:eavesdrop/utils/util_functions.dart' show pushLogin;
+import 'package:eavesdrop/widgets/gradient_title_appbar.dart';
+import 'package:eavesdrop/widgets/markdown_viewer.dart';
 import 'package:provider/provider.dart';
 
 class FirstTimeScreen extends StatelessWidget {

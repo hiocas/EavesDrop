@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gwa_app/widgets/navigator_routes/hero_dialog_route.dart';
-import 'package:gwa_app/widgets/rect_tweens/calm_rect_tween.dart';
+import 'package:eavesdrop/widgets/navigator_routes/hero_dialog_route.dart';
+import 'package:eavesdrop/widgets/rect_tweens/calm_rect_tween.dart';
 
 //TODO(Design): Make an actual animation for this.
 class PopupTextButton extends StatelessWidget {

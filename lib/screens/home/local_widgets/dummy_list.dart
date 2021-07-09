@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gwa_app/widgets/gwa_list_item.dart';
+import 'package:eavesdrop/widgets/gwa_list_item.dart';
 
 class DummyList extends StatefulWidget {
   const DummyList({

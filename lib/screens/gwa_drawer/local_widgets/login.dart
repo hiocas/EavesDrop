@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gwa_app/services/reddit_client_service.dart';
-import 'package:gwa_app/utils/util_functions.dart';
-import 'package:gwa_app/widgets/gradient_title_appbar.dart';
+import 'package:eavesdrop/services/reddit_client_service.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
+import 'package:eavesdrop/widgets/gradient_title_appbar.dart';
 
 class Login extends StatefulWidget {
   final RedditClientService redditClientService;

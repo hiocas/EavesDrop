@@ -1,6 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
-import 'package:gwa_app/utils/util_functions.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 
 class GwaLinkFlairButton extends StatelessWidget {
   const GwaLinkFlairButton({

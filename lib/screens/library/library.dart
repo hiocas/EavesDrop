@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gwa_app/models/hive_boxes.dart';
-import 'package:gwa_app/models/library_gwa_submission.dart';
-import 'package:gwa_app/screens/gwa_drawer/gwa_drawer.dart';
-import 'package:gwa_app/widgets/gradient_appbar_flexible_space.dart';
-import 'package:gwa_app/widgets/gwa_list_item.dart';
-import 'package:gwa_app/widgets/gwa_scrollbar.dart';
+import 'package:eavesdrop/models/hive_boxes.dart';
+import 'package:eavesdrop/models/library_gwa_submission.dart';
+import 'package:eavesdrop/screens/gwa_drawer/gwa_drawer.dart';
+import 'package:eavesdrop/widgets/gradient_appbar_flexible_space.dart';
+import 'package:eavesdrop/widgets/gwa_list_item.dart';
+import 'package:eavesdrop/widgets/gwa_scrollbar.dart';
 import 'package:hive/hive.dart';
 
 class Library extends StatefulWidget {
