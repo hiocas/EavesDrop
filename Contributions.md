@@ -2,7 +2,41 @@
 Whether you can code or not, there's probably something you can help us with :)
 ## Code
 If you can code, new features and code patching and improvements are always welcome!
-You can make a new pull request [here.](https://github.com/hiocas/EavesDrop/pulls)
+
+<details>
+  <summary>Start Contributing Code</summary>
+
+  After forking this repository, you'll need to register an api app in your reddit account for testing.
+  You can head [here](https://github.com/reddit-archive/reddit/wiki/OAuth2) to see how to do it.
+  
+  **You'll need to choose "installed app" when creating the reddit api app.**
+  
+  **You'll also need to change your redirect uri to this: `gwa-app://cornet.dev`.**
+  
+  After doing so, in your project files create a new json file in `lib/assets` named `reddit.json`.
+  
+  The file path should look like this: `lib/assets/reddit.json`.
+  
+  This is the template for reddit.json:
+  ```
+  {
+  "CLIENT_ID": YOUR-CLIENT-ID,
+  "REDIRECT_URI": gwa-app://cornet.dev,
+  "USER_AGENT": A-USER-AGENT
+}
+  ```
+  
+  `YOUR-CLIENT-ID` is your client id from the new reddit api app you've created.
+  
+  `A-USER-AGENT` is a custom user agent, look at the [rules](https://github.com/reddit-archive/reddit/wiki/api#rules) for what can be used as one
+  (You don't need exactly what's wirtten there since you're just testing things but just make sure it's unique enough).
+  
+  If you're having any troubles with this, you can always ask a question in the [issues page](https://github.com/hiocas/EavesDrop/issues) or dm me on Reddit! If not, you can now start coding!
+  
+  After you're done, make a new pull request [here.](https://github.com/hiocas/EavesDrop/pulls).
+  
+</details>
+  
 If you're new to Dart and Flutter, don't fret. So was I before I started this project. While I'm definitely not that great at it yet you can always just try to make your changes and see how it goes. And of course you can always dm me on reddit for help!
 
 ## Other Stuff
@@ -14,9 +48,10 @@ Generally, most none-code related changes can be started by creating a new Featu
   
   First of all, browse through the [issues](https://github.com/hiocas/EavesDrop/issues?q=is%3Aissue) in this repo and make sure your feature isn't already suggested (make sure to look at closed issues as well as open ones). If your feature is already there, make sure to vote 👍 for it!
   
-  If not, click on New Issue and choose the relevant template.
+  If not, click on **New Issue** and choose the relevant template.
   
-  Let's say that you don't like the name of the app and you have another one in mind. This means changing an existing thing so it's a Feature Improvement.
+  Let's say that you don't like the name of the app and you have another one in mind. This means changing an existing thing so it's a **Feature Improvement**.
+  If your feature is completley new, choose **Feature Request**.
   
   After clicking the template just follow the instructions there. Please note that for some Feature Improvements (like the one in the example above) we may need some votes to see that this is actually a wanted "improvement" and not just a personal thing.
 </details>
