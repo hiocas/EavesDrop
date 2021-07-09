@@ -1,4 +1,6 @@
 # EavesDrop
+[![GitHub Release](https://img.shields.io/github/downloads/hiocas/EavesDrop/total)](https://github.com/hiocas/EavesDrop/releases)
+
 A browser for the GoneWildAudio subreddit.
 
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshots+Here)
