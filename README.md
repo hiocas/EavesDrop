@@ -1,4 +1,4 @@
-# EavesDrop
+# <img src="/screenshots/App-Logo.png" width="40">EavesDrop
 [![GitHub Release](https://img.shields.io/github/downloads/hiocas/EavesDrop/total)](https://github.com/hiocas/EavesDrop/releases)
 
 EavesDrop is a browser app for the GoneWildAudio subreddit. It's built with the Flutter framework.
