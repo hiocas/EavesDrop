@@ -1,40 +1,88 @@
 # Contributions
-## What can you help with and how?
-### Code
+Whether you can code or not, there's probably something you can help us with :)
+## Code
 If you can code, new features and code patching and improvements are always welcome!
-You can make a new pull request [here.](https://github.com/hiocas/EavesDrop/pulls)
+
+<details>
+  <summary>Start Contributing Code</summary>
+
+  ---
+  After forking this repository, you'll need to register an api app in your reddit account for testing.
+  You can head [here](https://github.com/reddit-archive/reddit/wiki/OAuth2) to see how to do it.
+  
+  **You'll need to choose "installed app" when creating the reddit api app.**
+  
+  **You'll also need to change your redirect uri to this: `gwa-app://cornet.dev`.**
+  
+  After doing so, in your project files create a new json file in `lib/assets` named `reddit.json`.
+  
+  The file path should look like this: `lib/assets/reddit.json`.
+  
+  This is the template for reddit.json:
+  ```
+  {
+  "CLIENT_ID": YOUR-CLIENT-ID,
+  "REDIRECT_URI": gwa-app://cornet.dev,
+  "USER_AGENT": A-USER-AGENT
+}
+  ```
+  
+  `YOUR-CLIENT-ID` is your client id from the new reddit api app you've created.
+  
+  `A-USER-AGENT` is a custom user agent, look at the [rules](https://github.com/reddit-archive/reddit/wiki/api#rules) for what can be used as one
+  (You don't need exactly what's wirtten there since you're just testing things but just make sure it's unique enough).
+  
+  If you're having any troubles with this, you can always ask a question in the [issues page](https://github.com/hiocas/EavesDrop/issues) or dm me on Reddit! If not, you can now start coding!
+  
+  After you're done, make a new pull request [here.](https://github.com/hiocas/EavesDrop/pulls).
+  
+  ---
+</details>
+  
 If you're new to Dart and Flutter, don't fret. So was I before I started this project. While I'm definitely not that great at it yet you can always just try to make your changes and see how it goes. And of course you can always dm me on reddit for help!
 
-### Other Stuff
-If you're not a programmer or can't code very well, there are a lot of other things you can help with!
+## Other Stuff
+If you're not a programmer, there are a lot of other things you can help us with!
+
 Generally, most none-code related changes can be started by creating a new Feature Request or Feature Improvement on the [issues page](https://github.com/hiocas/EavesDrop/issues) of this repo. If you already have one of these in mind, here's a quick tutorial to get started:
 <details>
   <summary>I have a Feature Request or a Feature Improvement</summary>
   
-  After heading to the [issues page](https://github.com/hiocas/EavesDrop/issues) of this repo, click on New Issue and choose the relevant template.
   
-  Let's say that you don't like the name of the app and you have another one in mind. This means changing an existing thing so it's a Feature Improvement.
+ ---
+  First of all, browse through the [issues](https://github.com/hiocas/EavesDrop/issues?q=is%3Aissue) in this repo and make sure your feature isn't already suggested (make sure to look at closed issues as well as open ones). If your feature is already there, make sure to vote 👍 for it!
+  
+  If not, click on **New Issue** and choose the relevant template.
+  
+  Let's say that you don't like the name of the app and you have another one in mind. This means changing an existing thing so it's a **Feature Improvement**.
+  If your feature is completley new, choose **Feature Request**.
   
   After clicking the template just follow the instructions there. Please note that for some Feature Improvements (like the one in the example above) we may need some votes to see that this is actually a wanted "improvement" and not just a personal thing.
+  
+  ---
 </details>
 
 
 Regardless, here are some general things you can help with!
 
-#### Big Stuff
+### Things You Can Help With
+**Please note that for most feature improvements you'll suggest you'll need to gain some votes before we can actually implement them.**
+
+This will help us decide if it's actually a wanted "improvement", so we'll only implement changes the community actually wants.
+For feature requests it's a lot more loose.
 <details>
   <summary>Design</summary>
   
+---
 UI/UX and Graphic Design. You can always take a look at our app and see if there's something in that area that could use some work. If you found one you can create a new Feature Improvement and describe everything there.
+  
+  ---
 </details>
 
-
-#### Small Stuff
-Please note that for modifying any of the existing content in the next categories we will need some votes to help us decide if it's actually wanted.
-For new content it's a lot more loose.
 <details>
 <summary>Tag Icons</summary>
 
+  ---
 If you've noticed, some tags in the app display an image or some emojis instead of the default tag icons. You can add to these yourself or change existing ones! These do require some bit of coding but for most cases it can be very simple so that none-programmers can do it too.
 
   I'll be working on a guide to do it manually but for now, you can just create a new Feature Improvement [issue](https://github.com/hiocas/EavesDrop/issues) and provide the word or word combination for the tag and the icon for it.
@@ -54,10 +102,14 @@ If you've noticed, some tags in the app display an image or some emojis instead 
 >Word - Fdom, Emoji - 😈 (this one sucks tho so make a good one :) ). 
 
 If you think you can do these manually, you can always head to the code base. The specific code for this is in [lib/screens/submission_page/local_widgets/gwa_tag.dart](lib/screens/submission_page/local_widgets/gwa_tag.dart).
+  
+  ---
 </details>
 
 <details>
 <summary>Placeholder Images</summary>
+  
+  ---
   If a post in GoneWildAudio doesn't have an image preview, we use one of our own.
   There are currently 2 packs available for the user (from which he can choose from the setting): Gradients and Abstract.
   
@@ -75,6 +127,7 @@ If you think you can do these manually, you can always head to the code base. Th
   
   You can also always just create a new pull request and add these manually (it's in [lib/utils/gwa_functions.dart](lib/utils/gwa_functions.dart)) This is a bit more complicated then the tag icons since this also has a setting that needs to be saved so expect some back and fourth between us (until I create a guide).
   
+  ---
  </details>
  
 
