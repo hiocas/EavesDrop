@@ -3,6 +3,8 @@ Whether you can code or not, there's probably something you can help us with :)
 ## Code
 If you can code, new features and code patching and improvements are always welcome!
 
+You can head [here](https://github.com/hiocas/EavesDrop/discussions/3) to see new features we very much need help with.
+
 <details>
   <summary>Start Contributing Code</summary>
 
