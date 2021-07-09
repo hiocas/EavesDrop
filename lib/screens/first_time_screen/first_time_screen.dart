@@ -14,7 +14,6 @@ class FirstTimeScreen extends StatelessWidget {
     return Scaffold(
       appBar: GradientTitleAppBar(
         context,
-        // FIXME: New Name Flag.
         title: 'Welcome!',
       ),
       backgroundColor: Theme.of(context).backgroundColor,
@@ -82,8 +81,7 @@ class FirstTimeScreen extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             final RedditClientService _redditClientService =
-                                Provider.of<GlobalState>(context,
-                                        listen: false)
+                                Provider.of<GlobalState>(context, listen: false)
                                     .redditClientService;
                             pushLogin(context,
                                 redditClientService: _redditClientService);

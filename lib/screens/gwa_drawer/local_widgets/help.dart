@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gwa_app/widgets/gradient_title_appbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Help extends StatelessWidget {
   const Help({Key key}) : super(key: key);
@@ -96,7 +97,8 @@ class Help extends StatelessWidget {
           ]),
       _HelpSectionTextOnly(
           title: 'How do I downvote posts?',
-          content: "If the post isn't archived, just long-press the Vote "
+          content: "First, make sure you're logged in."
+              "\n\nIf the post isn't archived, just long-press the \"Vote\" "
               "button."),
       _HelpSectionTextOnly(
           title: 'Searching outputs only a small amounts of posts',
@@ -118,8 +120,60 @@ class Help extends StatelessWidget {
               "\n\nThank you for reading this, have a great day!"
               "\n\ntldr: reddit bad limits results uwu (but not really since "
               "they're holding a lot of data that needs to be supplied to a "
-              "lot of users).")
-      //TODO: Add an "My Issue isn't on here" help section
+              "lot of users)."),
+      _HelpSection(
+        title: "My issue isn't on here",
+        headerColor: Theme.of(context).primaryColor,
+        content: [
+          ListTile(
+            title: Text(
+              "If you're issue isn't in here, you can report it on our GitHub "
+              "repository."
+              "\n\nBefore doing so, please make sure your issue isn't already "
+              "reported"
+              "\n\nIf it hasn't been reported yet, click on \"New Issue\", "
+              "choose \"Bug Report\" and follow the instructions there."
+              "\n\nThank You!",
+              style: _Styles.contentStyle,
+            ),
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.launch),
+            label: Text('Open Issues'),
+            onPressed: () => launch(
+                'https://github.com/hiocas/EavesDrop/issues?q=is%3Aissue'),
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Theme.of(context).primaryColor)),
+          )
+        ],
+      ),
+      _HelpSection(
+        title: "I wanna help! How can I contribute?",
+        headerColor: Theme.of(context).primaryColor,
+        content: [
+          ListTile(
+            title: Text(
+              "Whether you can code or not, there are things you can help us "
+              "improve in and any kind of contribution is always welcomed!"
+              "\n\nYou can head to Contributions.md on our GitHub repository "
+              "to get started!"
+              "\n",
+              style: _Styles.contentStyle,
+            ),
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.launch),
+            label: Text('Open Contributions.md'),
+            onPressed: () => launch(
+              'https://github.com/hiocas/EavesDrop/blob/master/Contributions.md',
+            ),
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Theme.of(context).primaryColor)),
+          )
+        ],
+      )
     ];
     return Scaffold(
       appBar: GradientTitleAppBar(context, title: 'Help'),
@@ -141,13 +195,14 @@ class Help extends StatelessWidget {
 class _HelpSectionTextOnly extends ExpansionTile {
   _HelpSectionTextOnly({
     @required String title,
+    Color headerColor,
     @required String content,
   }) : super(
-          iconColor: Colors.white,
-          collapsedIconColor: Colors.white,
+          iconColor: headerColor ?? Colors.white,
+          collapsedIconColor: headerColor ?? Colors.white,
           title: Text(
             title,
-            style: _Styles.titleStyle,
+            style: _Styles.titleStyle.copyWith(color: headerColor),
           ),
           children: [
             ListTile(
@@ -163,13 +218,14 @@ class _HelpSectionTextOnly extends ExpansionTile {
 class _HelpSection extends ExpansionTile {
   _HelpSection({
     @required String title,
+    Color headerColor,
     @required List<Widget> content,
   }) : super(
-          iconColor: Colors.white,
-          collapsedIconColor: Colors.white,
+          iconColor: headerColor ?? Colors.white,
+          collapsedIconColor: headerColor ?? Colors.white,
           title: Text(
             title,
-            style: _Styles.titleStyle,
+            style: _Styles.titleStyle.copyWith(color: headerColor),
           ),
           children: content,
         );
