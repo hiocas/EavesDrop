@@ -29,7 +29,7 @@ Be it patching, new code, a feature request, ui designs and anything else (does 
 
 Additionally, you can always vote on existing new feature requests or general app ideas that you'd like to see implemented!
 
-See [Contributions.md](Contributions.md) for how to vote, what you can help with and how to get started.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to vote, what you can help with and how to get started.
   
 ## Roadmap
 

@@ -155,7 +155,7 @@ class Help extends StatelessWidget {
             title: Text(
               "Whether you can code or not, there are things you can help us "
               "improve in and any kind of contribution is always welcomed!"
-              "\n\nYou can head to Contributions.md on our GitHub repository "
+              "\n\nYou can head to CONTRIBUTING.md on our GitHub repository "
               "to get started!"
               "\n",
               style: _Styles.contentStyle,
@@ -163,9 +163,9 @@ class Help extends StatelessWidget {
           ),
           ElevatedButton.icon(
             icon: Icon(Icons.launch),
-            label: Text('Open Contributions.md'),
+            label: Text('Open CONTRIBUTING.md'),
             onPressed: () => launch(
-              'https://github.com/hiocas/EavesDrop/blob/master/Contributions.md',
+              'https://github.com/hiocas/EavesDrop/blob/master/CONTRIBUTING.md',
             ),
             style: ButtonStyle(
                 backgroundColor:
