@@ -50,7 +50,6 @@ class FirstTimeScreen extends StatelessWidget {
                           "that's not very important to you.\nYou can read more "
                           "about this in the Help page -> \"Why do I need to log "
                           "into my Reddit account?\""
-                          // FIXME: Where to contribute flag
                           "\n\n* This project is open sourced, so if you see "
                           "anything here that you think you can improve or help with "
                           "(doesn't have to be programming related!) please consider "

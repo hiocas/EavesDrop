@@ -113,10 +113,9 @@ class Help extends StatelessWidget {
               " but for now this is what's implemented, sorry!"
               "\n\nIf you're looking for a specific post, try to search for it "
               "more specifically (include more of it's title etc...)."
-              // FIXME: Report issue flag.
               "\n\nIn case you got less results than 250-ish and you know for "
               "sure you're supposed to get more, please report this as an "
-              "issue (see how in REPORT-ISSUE-FLAG)."
+              "issue (see how in \"My issue isn't on here\")."
               "\n\nThank you for reading this, have a great day!"
               "\n\ntldr: reddit bad limits results uwu (but not really since "
               "they're holding a lot of data that needs to be supplied to a "
