@@ -41,7 +41,7 @@ You can head [here](https://github.com/hiocas/EavesDrop/discussions/3) to see ne
   ---
 </details>
   
-If you're new to Dart and Flutter, don't fret. So was I before I started this project. While I'm definitely not that great at it yet you can always just try to make your changes and see how it goes. And of course you can always dm me on reddit for help!
+If you're new to Dart and Flutter, don't fret. So was I before I started this project. While I'm definitely not that great at it yet you can always just try to make your changes and see how it goes. And of course, you can always dm me on reddit for help!
 
 ## Other Stuff
 If you're not a programmer, there are a lot of other things you can help us with!
@@ -71,7 +71,7 @@ Regardless, here are some general things you can help with!
 **Please note that for most feature improvements you'll suggest you'll need to gain some votes before we can actually implement them.**
 
 This will help us decide if it's actually a wanted "improvement", so we'll only implement changes the community actually wants.
-For feature requests it's a lot more loose.
+For feature requests it's a lot looser.
 <details>
   <summary>Design</summary>
   
@@ -91,9 +91,9 @@ If you've noticed, some tags in the app display an image or some emojis instead 
 
 **Make sure to put [TAG] in your issue's title.**
   
-**If you have multiple ideas please put them all in the same issue so we won't get flooded.**
+**If you have multiple ideas, please put them all in the same issue so we won't get flooded.**
   
-  **If you're using an image make sure it's from a reputable source and that there are no copyright issues with it.**
+  **If you're using an image, make sure it's from a reputable source and that there are no copyright issues with it.**
   
 **These are the currently supported icons you can choose:**
 - A single Emoji character
@@ -127,7 +127,7 @@ If you think you can do these manually, you can always head to the code base. Th
   
   **Make sure to include [PLACEHOLDER] in your issue's title.**
   
-  You can also always just create a new pull request and add these manually (it's in [lib/utils/gwa_functions.dart](lib/utils/gwa_functions.dart)) This is a bit more complicated then the tag icons since this also has a setting that needs to be saved so expect some back and fourth between us (until I create a guide).
+  You can also always just create a new pull request and add these manually (it's in [lib/utils/gwa_functions.dart](lib/utils/gwa_functions.dart)) This is a bit more complicated than the tag icons since this also has a setting that needs to be saved so expect some back and forth between us (until I create a guide).
   
   ---
  </details>
