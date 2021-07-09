@@ -30,7 +30,7 @@ If you can code, new features and code patching and improvements are always welc
   `YOUR-CLIENT-ID` is your client id from the new reddit api app you've created.
   
   `A-USER-AGENT` is a custom user agent, look at the [rules](https://github.com/reddit-archive/reddit/wiki/api#rules) for what can be used as one
-  (You don't need exactly what's wirtten there since you're just testing things but just make sure it's unique enough).
+  (You don't need exactly what's written there since you're just testing things but just make sure it's unique enough).
   
   If you're having any troubles with this, you can always ask a question in the [issues page](https://github.com/hiocas/EavesDrop/issues) or dm me on Reddit! If not, you can now start coding!
   
@@ -55,7 +55,7 @@ Generally, most none-code related changes can be started by creating a new Featu
   If not, click on **New Issue** and choose the relevant template.
   
   Let's say that you don't like the name of the app and you have another one in mind. This means changing an existing thing so it's a **Feature Improvement**.
-  If your feature is completley new, choose **Feature Request**.
+  If your feature is completely new, choose **Feature Request**.
   
   After clicking the template just follow the instructions there. Please note that for some Feature Improvements (like the one in the example above) we may need some votes to see that this is actually a wanted "improvement" and not just a personal thing.
   
