@@ -12,7 +12,7 @@ If you can code, new features and code patching and improvements are always welc
   
   **You'll need to choose "installed app" when creating the reddit api app.**
   
-  **You'll also need to change your redirect uri to this: `gwa-app://cornet.dev`.**
+  **You'll also need to change your redirect uri to this: `eavesdrop://gwa-app.dev`.**
   
   After doing so, in your project files create a new json file in `lib/assets` named `reddit.json`.
   
@@ -22,7 +22,7 @@ If you can code, new features and code patching and improvements are always welc
   ```
   {
   "CLIENT_ID": YOUR-CLIENT-ID,
-  "REDIRECT_URI": gwa-app://cornet.dev,
+  "REDIRECT_URI": eavesdrop://gwa-app.dev,
   "USER_AGENT": A-USER-AGENT
 }
   ```
