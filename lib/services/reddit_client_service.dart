@@ -141,13 +141,12 @@ class RedditClientService {
       );
       try {
         var _me = await redditClientService.reddit.user.me();
-      redditClientService.displayName = _me.displayName;
-      redditClientService.iconImg =
-          _me.data["icon_img"].toString().replaceAll('&amp;', '&');
-      await redditClientService.eligiblePreferences();
-      return redditClientService;
-      }
-      catch (e) {
+        redditClientService.displayName = _me.displayName;
+        redditClientService.iconImg =
+            _me.data["icon_img"].toString().replaceAll('&amp;', '&');
+        await redditClientService.eligiblePreferences();
+        return redditClientService;
+      } catch (e) {
         print('Error $e');
         redditClientService.logout();
       }
@@ -169,6 +168,7 @@ class RedditClientService {
       uriLinkStream.listen((link) async {
         if (link != null && link.queryParameters['code'] != null) {
           String authCode = link.queryParameters['code'];
+
           /// If the user accepted, set [_reddit] to the reddit instance that
           /// generated the auth link, saved in [_oauthReddit] to authorise
           /// in [_authorizeClient].
@@ -234,7 +234,7 @@ class RedditClientService {
   /// Returns an auth url relevant to [reddit], which must be an instance of
   /// [Reddit] with a [WebAuthenticator].
   Uri _generateAuthUrl(Reddit reddit) {
-    return reddit.auth.url(['read', 'account', 'identity', 'vote'], 'gwa-app',
+    return reddit.auth.url(['read', 'account', 'identity', 'vote'], 'eavesdrop',
         compactLogin: true);
   }
 

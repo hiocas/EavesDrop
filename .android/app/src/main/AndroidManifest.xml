@@ -36,8 +36,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:scheme="gwa-app"
-                    android:host="cornet.dev" />
+                    android:scheme="eavesdrop"
+                    android:host="gwa-app.dev" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
