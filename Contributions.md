@@ -1,17 +1,20 @@
 # Contributions
-## What can you help with and how?
-### Code
+Whether you can code or not, there's probably something you can help us with :)
+## Code
 If you can code, new features and code patching and improvements are always welcome!
 You can make a new pull request [here.](https://github.com/hiocas/EavesDrop/pulls)
 If you're new to Dart and Flutter, don't fret. So was I before I started this project. While I'm definitely not that great at it yet you can always just try to make your changes and see how it goes. And of course you can always dm me on reddit for help!
 
-### Other Stuff
-If you're not a programmer or can't code very well, there are a lot of other things you can help with!
+## Other Stuff
+If you're not a programmer, there are a lot of other things you can help us with!
+
 Generally, most none-code related changes can be started by creating a new Feature Request or Feature Improvement on the [issues page](https://github.com/hiocas/EavesDrop/issues) of this repo. If you already have one of these in mind, here's a quick tutorial to get started:
 <details>
   <summary>I have a Feature Request or a Feature Improvement</summary>
   
-  After heading to the [issues page](https://github.com/hiocas/EavesDrop/issues) of this repo, click on New Issue and choose the relevant template.
+  First of all, browse through the [issues](https://github.com/hiocas/EavesDrop/issues?q=is%3Aissue) in this repo and make sure your feature isn't already suggested (make sure to look at closed issues as well as open ones). If your feature is already there, make sure to vote 👍 for it!
+  
+  If not, click on New Issue and choose the relevant template.
   
   Let's say that you don't like the name of the app and you have another one in mind. This means changing an existing thing so it's a Feature Improvement.
   
@@ -21,17 +24,17 @@ Generally, most none-code related changes can be started by creating a new Featu
 
 Regardless, here are some general things you can help with!
 
-#### Big Stuff
+### Things You Can Help With
+**Please note that for most feature improvements you'll suggest you'll need to gain some votes before we can actually implement them.**
+
+This will help us decide if it's actually a wanted "improvement", so we'll only implement changes the community actually wants.
+For feature requests it's a lot more loose.
 <details>
   <summary>Design</summary>
   
 UI/UX and Graphic Design. You can always take a look at our app and see if there's something in that area that could use some work. If you found one you can create a new Feature Improvement and describe everything there.
 </details>
 
-
-#### Small Stuff
-Please note that for modifying any of the existing content in the next categories we will need some votes to help us decide if it's actually wanted.
-For new content it's a lot more loose.
 <details>
 <summary>Tag Icons</summary>
 
