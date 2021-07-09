@@ -1,7 +1,7 @@
 # EavesDrop
 [![GitHub Release](https://img.shields.io/github/downloads/hiocas/EavesDrop/total)](https://github.com/hiocas/EavesDrop/releases)
 
-EavesDrop is a broweser app for the GoneWildAudio subreddit. It's built with the Flutter framework.
+EavesDrop is a browser app for the GoneWildAudio subreddit. It's built with the Flutter framework.
 
 It's currently available for Android, but since it's built with Flutter cross platform support is possible.
 
