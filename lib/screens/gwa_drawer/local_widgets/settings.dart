@@ -1,3 +1,4 @@
+import 'package:eavesdrop/screens/flat_home/new_home.dart';
 import 'package:flutter/material.dart';
 import 'package:eavesdrop/models/app_settings.dart';
 import 'package:eavesdrop/models/audio_launch_options.dart';
@@ -61,6 +62,7 @@ class _SettingsState extends State<Settings> {
       await HiveBoxes.editAppSettings(placeholdersOptions: v);
       GwaFunctions.setPlaceholders(v);
       GwaDrawerManager.updateOnReturn = true;
+      AnimateOnce.animate = true;
       setState(() {
         _placeholdersOptions = v;
       });
