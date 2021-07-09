@@ -8,6 +8,7 @@ It's currently available for Android, but since it's built with Flutter cross pl
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshots+Here)
 
 ## Features
+Features Include:
 - GoneWildAudio Content Focused UI
 - Tag Querying
 - User Library
