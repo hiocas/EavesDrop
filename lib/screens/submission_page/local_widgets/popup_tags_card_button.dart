@@ -108,17 +108,23 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
 
   String _makeHardTagQuery() {
     String query = 'title:';
+    String specialQueries = '';
+    bool onlySpecials = true;
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.selectedTags[i]) {
         String _specialQuery =
             _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
         if (_specialQuery.isEmpty) {
+          onlySpecials = false;
           query += '"${widget.gwaSubmission.tags[i]}" ';
         } else {
-          query = _specialQuery + query;
+          specialQueries = specialQueries + _specialQuery;
         }
       }
     }
+    if (onlySpecials)
+      return specialQueries;
+    query = specialQueries + query;
     return query;
   }
 
@@ -141,7 +147,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
   String _findSpecialTagNameQuery(String tag) {
     String query = '';
     if (tag.startsWith('{author:}')) {
-      query += tag.substring(1, 8) + tag.substring(9) + ' ';
+      query += tag.substring(1, 8) + '"' + tag.substring(9) + '" ';
     }
     return query;
   }
