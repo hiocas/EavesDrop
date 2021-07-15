@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:eavesdrop/models/placeholders_options.dart';
 
 class GwaFunctions {
@@ -83,4 +85,31 @@ class GwaFunctions {
     final int index = sum % placeholders.length;
     return placeholders[index];
   }
+
+  static Color getLinkFlairTextColor(String linkFlairText) {
+    if (linkFlairText == null || linkFlairText.isEmpty) return null;
+    switch (linkFlairText) {
+      case 'MOD ANNOUNCEMENT':
+        return Color.fromARGB(255, 10, 161, 143);
+      case 'Improvisation':
+        return Color.fromARGB(255, 2, 102, 179);
+      case 'Script offer':
+        return Color.fromARGB(255, 99, 76, 76);
+      case 'OC':
+        return Color.fromARGB(255, 204, 172, 43);
+      case 'Script Fill':
+        return Color.fromARGB(255, 80, 76, 99);
+      case 'Ramblefap':
+        return Color.fromARGB(255, 0, 115, 115);
+      case 'Verification':
+        return Color.fromARGB(255, 13, 211, 187);
+      case 'Pride Month! 🏳️‍🌈':
+        return Color.fromARGB(255, 204, 82, 137);
+      case 'Request':
+        return Color.fromARGB(255, 73, 73, 73);
+      default:
+        return null;
+    }
+  }
+
 }

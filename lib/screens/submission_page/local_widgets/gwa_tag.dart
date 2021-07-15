@@ -7,11 +7,13 @@ class GwaTag extends StatelessWidget {
     @required this.tag,
     @required this.selected,
     @required this.onSelected,
+    this.labelColor = Colors.black,
   }) : super(key: key);
 
   final String tag;
   final bool selected;
   final void Function(bool) onSelected;
+  final Color labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class GwaTag extends StatelessWidget {
         padding: multipleChars ? const EdgeInsets.only(left: 4.0) : null,
         visualDensity: VisualDensity.compact,
         selected: selected,
-        label: Text(getTagName(tag)),
+        label: Text(getTagName(tag), style: TextStyle(color: this.labelColor)),
         backgroundColor: Theme.of(context).primaryColor,
         selectedColor: Theme.of(context).accentColor,
         side: BorderSide(width: 0.0),

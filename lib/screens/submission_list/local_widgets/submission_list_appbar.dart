@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'package:eavesdrop/utils/search_functions.dart';
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/screens/submission_list/local_widgets/search_filters.dart';
+import 'package:eavesdrop/widgets/navigator_routes/hero_dialog_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,70 +48,51 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   TimeFilter _timeFilter = TimeFilter.all;
   TextEditingController _textFieldController;
 
-  String _sortToString(Sort sort) {
-    switch (sort) {
-      case Sort.relevance:
-        return 'Relevance';
-      case Sort.hot:
-        return 'Hot';
-      case Sort.top:
-        return 'Top';
-      case Sort.newest:
-        return 'Newest';
-      case Sort.comments:
-        return 'Comments';
-      default:
-        return '';
-    }
-  }
-
-  String _timeFilterToString(TimeFilter timeFilter) {
-    switch (timeFilter) {
-      case TimeFilter.all:
-        return 'All';
-      case TimeFilter.day:
-        return 'Day';
-      case TimeFilter.hour:
-        return 'Hour';
-      case TimeFilter.month:
-        return 'Month';
-      case TimeFilter.week:
-        return 'Week';
-      case TimeFilter.year:
-        return 'Year';
-      default:
-        return '';
-    }
-  }
-
-  bool _timeFilterRelevant() {
-    return _sort == Sort.top ||
-        _sort == Sort.relevance ||
-        _sort == Sort.comments;
-  }
-
-  TimeFilter _getSortedTimeFilterValue(int index) {
-    switch (index) {
-      case 0:
-        return TimeFilter.all;
-      case 1:
-        return TimeFilter.year;
-      case 2:
-        return TimeFilter.month;
-      case 3:
-        return TimeFilter.week;
-      case 4:
-        return TimeFilter.day;
-      case 5:
-        return TimeFilter.hour;
-      default:
-        return TimeFilter.values[index];
-    }
+  Consumer<GlobalState> _searchFiltersButton() {
+    return Consumer<GlobalState>(
+      builder: (context, state, child) {
+        return IconButton(
+          icon: Icon(Icons.manage_search_outlined),
+          onPressed: !state.isBusy ? () async {
+            final result = await Navigator.push(
+                context,
+                HeroDialogRoute(
+                    builder: (context) => AnimatedSearchFiltersCard(
+                          initialQuery: _textFieldController.text,
+                          sort: _sort,
+                          timeFilter: _timeFilter,
+                        )));
+            if (result != null) {
+              Map<String, dynamic> results = jsonDecode(result);
+              _textFieldController.text = results['query'];
+              Sort newSort = Sort.values[results['sort']];
+              if (_sort != newSort) {
+                setState(() {
+                  _sort = newSort;
+                  widget.onSelectedItem(_sort);
+                });
+              }
+              TimeFilter newTimeFilter =
+                  SearchFunctions.getSortedTimeFilterValue(results['time_filter']);
+              if (_timeFilter != newTimeFilter) {
+                setState(() {
+                  _timeFilter = newTimeFilter;
+                  widget.onSelectedFilter(_timeFilter);
+                });
+              }
+              if (results['new_query']) {
+                widget.onSubmitted(_textFieldController.text);
+              }
+            }
+          } : null,
+        );
+      }
+    );
   }
 
   List<Widget> _makeAppBarActions() {
     if (_isSearching) {
-      if (_timeFilterRelevant()) {
+      if (SearchFunctions.timeFilterRelevant(_sort)) {
         return [
           Consumer<GlobalState>(builder: (context, state, child) {
             return Theme(
@@ -134,9 +119,9 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                 itemBuilder: (context) {
                   return List<PopupMenuEntry<TimeFilter>>.generate(6, (index) {
                     return PopupMenuItem(
-                        value: _getSortedTimeFilterValue(index),
-                        child: Text(
-                            _timeFilterToString(_getSortedTimeFilterValue(index))));
+                        value: SearchFunctions.getSortedTimeFilterValue(index),
+                        child: Text(SearchFunctions.timeFilterToString(
+                            SearchFunctions.getSortedTimeFilterValue(index))));
                   });
                 },
                 elevation: 15.0,
@@ -145,6 +130,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
               ),
             );
           }),
+          _searchFiltersButton(),
           IconButton(
             icon: Icon(Icons.close),
             tooltip: 'Close search',
@@ -157,6 +143,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
         ];
       } else {
         return [
+          _searchFiltersButton(),
           IconButton(
             icon: Icon(Icons.close),
             tooltip: 'Close search',
@@ -233,10 +220,10 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   @override
   void initState() {
     _isSearching = widget.initialIsSearching;
-    if (widget.initialSort != null){
+    if (widget.initialSort != null) {
       _sort = widget.initialSort;
     }
-    if (widget.initialTimeFilter != null){
+    if (widget.initialTimeFilter != null) {
       _timeFilter = widget.initialTimeFilter;
     }
     _textFieldController =
@@ -247,78 +234,79 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: _isSearching
-          ? Consumer<GlobalState>(builder: (context, state, child) {
-              return TextField(
-                enabled: !state.isBusy,
-                controller: _textFieldController,
-                decoration: InputDecoration(
-                  isDense: true,
-                  hintText: 'Search...',
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).accentColor)),
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).primaryColor)),
-                ),
-                onSubmitted: (value) {
-                  if (value != null && value.isNotEmpty)
-                    widget.onSubmitted(value);
-                },
-                onChanged: (value) {
-                  if (value != null) widget.onChanged(value);
-                },
-              );
-            })
-          : Text('Search Results'),
-      backgroundColor: Colors.transparent,
-      elevation: 15.0,
-      backwardsCompatibility: false,
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-      flexibleSpace: GradientAppBarFlexibleSpace(),
-      leading: _isSearching
-          ? Consumer<GlobalState>(builder: (context, state, child) {
-              return Theme(
-                data: Theme.of(context).copyWith(
-                  cardColor: Theme.of(context).primaryColor,
-                  iconTheme: IconThemeData(color: Colors.white),
-                ),
-                child: PopupMenuButton<Sort>(
-                  icon: Icon(Icons.sort_outlined),
+        title: _isSearching
+            ? Consumer<GlobalState>(builder: (context, state, child) {
+                return TextField(
                   enabled: !state.isBusy,
-                  tooltip: 'Sort results',
-                  initialValue: this._sort,
-                  /*FIXME: This is a really hacky solution. Like in
+                  controller: _textFieldController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: 'Search...',
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).accentColor)),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor)),
+                  ),
+                  onSubmitted: (value) {
+                    if (value != null && value.isNotEmpty)
+                      widget.onSubmitted(value);
+                  },
+                  onChanged: (value) {
+                    if (value != null) widget.onChanged(value);
+                  },
+                );
+              })
+            : Text('Search Results'),
+        backgroundColor: Colors.transparent,
+        elevation: 15.0,
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        flexibleSpace: GradientAppBarFlexibleSpace(),
+        leading: _isSearching
+            ? Consumer<GlobalState>(builder: (context, state, child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    cardColor: Theme.of(context).primaryColor,
+                    iconTheme: IconThemeData(color: Colors.white),
+                  ),
+                  child: PopupMenuButton<Sort>(
+                    icon: Icon(Icons.sort_outlined),
+                    enabled: !state.isBusy,
+                    tooltip: 'Sort results',
+                    initialValue: this._sort,
+                    /*FIXME: This is a really hacky solution. Like in
                       PopupTagsCardButton, the parent widget gets called with a
                       function to change it's value. Change this (maybe look into
                       keys). */
-                  onSelected: (Sort value) {
-                    widget.onSelectedItem(value);
-                    setState(() {
-                      _sort = value;
-                      _showSnackBar();
-                    });
-                  },
-                  itemBuilder: (context) {
-                    return List<PopupMenuEntry<Sort>>.generate(5, (index) {
-                      return PopupMenuItem(
-                          value: Sort.values[index],
-                          child: Text(_sortToString(Sort.values[index])));
-                    });
-                  },
-                  elevation: 15.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                ),
-              );
-            })
-          : IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              }),
-      actions: _makeAppBarActions(),
-    );
+                    onSelected: (Sort value) {
+                      widget.onSelectedItem(value);
+                      setState(() {
+                        _sort = value;
+                        _showSnackBar();
+                      });
+                    },
+                    itemBuilder: (context) {
+                      return List<PopupMenuEntry<Sort>>.generate(5, (index) {
+                        return PopupMenuItem(
+                            value: Sort.values[index],
+                            child: Text(SearchFunctions.sortToString(
+                                Sort.values[index])));
+                      });
+                    },
+                    elevation: 15.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  ),
+                );
+              })
+            : IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                }),
+        actions: _makeAppBarActions()
+        );
   }
 }
