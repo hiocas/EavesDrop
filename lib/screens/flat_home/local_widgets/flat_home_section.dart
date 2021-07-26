@@ -76,7 +76,7 @@ class _FlatHomeSectionState extends State<FlatHomeSection>
   @override
   Widget build(BuildContext context) {
     return SlideFadeTransition(
-      animationController: this._animationController,
+      animation: this._animationController,
       beginOffset: const Offset(0.0, -0.06),
       child: Padding(
         padding: const EdgeInsets.only(left: 4.0),

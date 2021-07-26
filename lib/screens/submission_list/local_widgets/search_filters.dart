@@ -46,7 +46,7 @@ class _AnimatedSearchFiltersCardState extends State<AnimatedSearchFiltersCard>
         return Future.value(true);
       },
       child: SlideFadeTransition(
-        animationController: _controller,
+        animation: _controller,
         beginOffset: Offset(0.0, 0.1),
         child: SearchFiltersCard(
           initialQuery: widget.initialQuery,

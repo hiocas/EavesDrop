@@ -40,7 +40,7 @@ class _DummyPageState extends State<DummyPage>
   @override
   Widget build(BuildContext context) {
     return SlideFadeTransition(
-      animationController: this._animationController,
+      animation: this._animationController,
       beginOffset: Offset(0.0, 0.02),
       child: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),

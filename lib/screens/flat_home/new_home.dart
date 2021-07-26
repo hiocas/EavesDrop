@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/screens/audio_player/expandable_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,47 +21,49 @@ class _NewHomeState extends State<NewHome> {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
       onWillPop: () async => false,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment.topLeft,
-            radius: 2.0,
-            stops: [0.07, 0.5, 1.0],
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).cardColor,
-              Theme.of(context).backgroundColor,
-            ],
-          ),
-        ),
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            title: Text('Home'),
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            backwardsCompatibility: false,
-            systemOverlayStyle: SystemUiOverlayStyle.light,
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                _scaffoldKey.currentState.openDrawer();
-              },
+      child: ExpandingAudioPlayer(
+        background: Container(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment.topLeft,
+              radius: 2.0,
+              stops: [0.07, 0.5, 1.0],
+              colors: [
+                Theme.of(context).primaryColor,
+                Theme.of(context).cardColor,
+                Theme.of(context).backgroundColor,
+              ],
             ),
           ),
-          onDrawerChanged: (open) {
-            // In case a setting change occurred that requires a rebuild.
-            if (!open && GwaDrawerManager.updateOnReturn) {
-              GwaDrawerManager.updateOnReturn = false;
-              setState(() {});
-            }
-          },
-          drawer: GwaDrawer(),
-          backgroundColor: Colors.transparent,
-          body: MediaQuery.of(context).size.height <=
-                  587 + kToolbarHeight + kBottomNavigationBarHeight
-              ? SingleChildScrollView(child: NewHomeLayout())
-              : NewHomeLayout(),
+          child: Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(
+              title: Text('Home'),
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              backwardsCompatibility: false,
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+              leading: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  _scaffoldKey.currentState.openDrawer();
+                },
+              ),
+            ),
+            onDrawerChanged: (open) {
+              // In case a setting change occurred that requires a rebuild.
+              if (!open && GwaDrawerManager.updateOnReturn) {
+                GwaDrawerManager.updateOnReturn = false;
+                setState(() {});
+              }
+            },
+            drawer: GwaDrawer(),
+            backgroundColor: Colors.transparent,
+            body: MediaQuery.of(context).size.height <=
+                    587 + kToolbarHeight + kBottomNavigationBarHeight
+                ? SingleChildScrollView(child: NewHomeLayout())
+                : NewHomeLayout(),
+          ),
         ),
       ),
     );

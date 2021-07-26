@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class SlideFadeTransition extends StatelessWidget {
   const SlideFadeTransition({
     Key key,
-    @required this.animationController,
+    @required this.animation,
     @required this.child,
     this.beginOffset = const Offset(0.0, 0.06),
     this.endOffset = Offset.zero,
     this.slideCurve = Curves.easeInOut,
   }) : super(key: key);
 
-  final AnimationController animationController;
+  final Animation<double> animation;
   final Widget child;
   final Offset beginOffset;
   final Offset endOffset;
@@ -23,9 +23,9 @@ class SlideFadeTransition extends StatelessWidget {
         begin: this.beginOffset,
         end: this.endOffset,
       ).animate(CurvedAnimation(
-          parent: this.animationController, curve: this.slideCurve)),
+          parent: this.animation, curve: this.slideCurve)),
       child: FadeTransition(
-        opacity: this.animationController,
+        opacity: this.animation,
         child: this.child,
       ),
     );

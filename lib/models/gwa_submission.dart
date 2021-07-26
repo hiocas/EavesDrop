@@ -36,7 +36,8 @@ class GwaSubmission {
 
   GwaSubmission(Submission submission) {
     this.fullTitle = submission.title ?? '';
-    this.title = GwaFunctions.findSubmissionTitle(this.fullTitle) ?? '';
+    // this.title = GwaFunctions.findSubmissionTitle(this.fullTitle) ?? '';
+    this.title = 'Hey there';
     this.shortlink = submission.shortlink;
     this.selftext = submission.selftext ?? '';
     this.author = submission.author ?? '';
@@ -55,9 +56,11 @@ class GwaSubmission {
       }
       this.audioUrls.add(urlStr);
     }
-    if (submission.preview.length > 0)
-      this.thumbnailUrl = submission.preview[0].source.url.toString();
-    this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
+    // if (submission.preview.length > 0)
+    //   this.thumbnailUrl = submission.preview[0].source.url.toString();
+    // this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
+    this.thumbnailUrl = GwaFunctions.getPlaceholderImageUrl(this.fullname);
+    this.firstImageOrGifUrl = GwaFunctions.getPlaceholderImageUrl(this.fullname);
     this.img = _getImg();
     this.hasAudioUrl = checkHasAudioUrl();
     this.fromNow = getTimeSinceCreated(submission.createdUtc);

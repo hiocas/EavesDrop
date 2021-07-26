@@ -68,7 +68,7 @@ class __HomeSectionState extends State<HomeSection>
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SlideFadeTransition(
-        animationController: this._animationController,
+        animation: this._animationController,
         child: Container(
           child: Material(
             color: Theme.of(context).backgroundColor,
