@@ -11,15 +11,14 @@ class GwaSubmissionPreview {
   String thumbnailUrl;
 
   GwaSubmissionPreview(Submission submission) {
-    // this.title = GwaFunctions.findSubmissionTitle(submission.title);
-    this.title = 'Hey there';
+    this.title = GwaFunctions.findSubmissionTitle(submission.title);
     this.fullname = submission.fullname;
     //Be careful! this only works if a certain setting in the reddit prefs (in the old prefs at the old reddit website) is checked. If it isn't we won't get nsfw previews.
-    // if (submission.preview.length > 0) {
-      // this.thumbnailUrl = submission.preview[0].source.url.toString();
-    // } else {
+    if (submission.preview.length > 0) {
+      this.thumbnailUrl = submission.preview[0].source.url.toString();
+    } else {
       this.thumbnailUrl = GwaFunctions.getPlaceholderImageUrl(this.fullname);
-    // }
+    }
   }
 
   GwaSubmissionPreview.fromData(

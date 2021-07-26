@@ -56,11 +56,9 @@ class GwaSubmission {
       }
       this.audioUrls.add(urlStr);
     }
-    // if (submission.preview.length > 0)
-    //   this.thumbnailUrl = submission.preview[0].source.url.toString();
-    // this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
-    this.thumbnailUrl = GwaFunctions.getPlaceholderImageUrl(this.fullname);
-    this.firstImageOrGifUrl = GwaFunctions.getPlaceholderImageUrl(this.fullname);
+    if (submission.preview.length > 0)
+      this.thumbnailUrl = submission.preview[0].source.url.toString();
+    this.firstImageOrGifUrl = findFirstImageOrGifURL(submission);
     this.img = _getImg();
     this.hasAudioUrl = checkHasAudioUrl();
     this.fromNow = getTimeSinceCreated(submission.createdUtc);
