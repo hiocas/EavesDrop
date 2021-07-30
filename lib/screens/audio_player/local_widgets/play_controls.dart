@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 
@@ -141,20 +142,8 @@ class SeekBar extends StatefulWidget {
 }
 
 class _SeekBarState extends State<SeekBar> {
-  SliderStyle _sliderStyle;
-
-  @override
-  void initState() {
-    _sliderStyle = SliderStyle(
-      depth: 16.0,
-      lightSource: LightSource.topLeft,
-      accent: widget.accent,
-      variant: widget.variant,
-    );
-    super.initState();
-  }
-
   String _audioDurationToString(Duration duration) {
+    if (duration == null) return '';
     if (duration.inHours < 1) {
       return '${duration.inMinutes}:${_doubleValue(duration.inSeconds % 60)}';
     }
@@ -182,22 +171,39 @@ class _SeekBarState extends State<SeekBar> {
           builder: (context, value, child) {
             return Column(
               children: [
-                NeumorphicSlider(
-                  height: 8.0,
-                  style: _sliderStyle,
-                  min: 0,
-                  max: state.currentIndexedAudioSource.duration.inSeconds
-                      .toDouble(),
-                  value: value.inSeconds.toDouble(),
-                  onChanged: (value) => setState(
+                FlutterSlider(
+                  values: [value.inSeconds.toDouble()],
+                  trackBar: FlutterSliderTrackBar(
+                      activeTrackBar: BoxDecoration(color: widget.accent),
+                      inactiveTrackBar: BoxDecoration(color: widget.variant)),
+                  handler: FlutterSliderHandler(
+                      child: Container(),
+                      decoration: BoxDecoration(
+                          color: widget.accent, shape: BoxShape.circle)),
+                  handlerWidth: 20,
+                  handlerAnimation: FlutterSliderHandlerAnimation(scale: 1.7),
+                  tooltip: FlutterSliderTooltip(
+                      boxStyle: FlutterSliderTooltipBox(
+                          decoration: BoxDecoration(
+                              color: widget.accent,
+                              borderRadius: BorderRadius.circular(8.0))),
+                      format: (val) => _audioDurationToString(value)),
+                  min: 0.0,
+                  max: state.currentIndexedAudioSource.duration == null
+                      ? 0.0
+                      : state.currentIndexedAudioSource.duration.inSeconds
+                          .toDouble(),
+                  // value: value.inSeconds.toDouble(),
+                  onDragging: (index, lowerVal, upperVal) => setState(
                     () {
-                      state.audioPlayer.seek(Duration(seconds: value.toInt()));
+                      print(lowerVal);
+                      state.audioPlayer
+                          .seek(Duration(seconds: lowerVal.toInt()));
                     },
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
