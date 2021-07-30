@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/states/gwa_player_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:eavesdrop/models/hive_boxes.dart';
@@ -24,6 +25,10 @@ Future main() async {
 
   await globalState.initApp();
 
+  GwaPlayerState playerState = GwaPlayerState();
+
+  await playerState.init();
+
   final appSettings = await HiveBoxes.getAppSettings();
   if (appSettings == null) {
     GwaFunctions.setPlaceholders(PlaceholdersOptions.Gradients);
@@ -33,13 +38,19 @@ Future main() async {
 
   runApp(MyApp(
     globalState: globalState,
+    playerState: playerState,
   ));
 }
 
 class MyApp extends StatefulWidget {
   final GlobalState globalState;
+  final GwaPlayerState playerState;
 
-  const MyApp({Key key, this.globalState}) : super(key: key);
+  const MyApp({
+    Key key,
+    this.globalState,
+    this.playerState,
+  }) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -49,15 +60,19 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     // TODO: Figure out the correct place for this, and if it's even needed.
-    Provider.of<GlobalState>(context, listen: false).dispose();
+    widget.globalState.dispose();
+    widget.playerState.dispose();
     Hive.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<GlobalState>.value(
-      value: widget.globalState,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<GlobalState>.value(value: widget.globalState),
+        ChangeNotifierProvider<GwaPlayerState>.value(value: widget.playerState),
+      ],
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,

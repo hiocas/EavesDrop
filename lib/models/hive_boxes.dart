@@ -114,7 +114,7 @@ class HiveBoxes {
   static Future<AppSettings> addAppSettings(
       {String credentials,
       AudioLaunchOptions audioLaunchOptions =
-          AudioLaunchOptions.ChromeCustomTabs,
+          AudioLaunchOptions.EavesDrop,
       bool miniButtons = false,
       bool librarySmallSubmissions = false,
       PlaceholdersOptions placeholdersOptions =

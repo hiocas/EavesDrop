@@ -51,7 +51,7 @@ class GlobalState with ChangeNotifier {
 
   bool get eligiblePrefs => _redditClientService.eligiblePrefs;
 
-  AudioLaunchOptions audioLaunchOptions = AudioLaunchOptions.ChromeCustomTabs;
+  AudioLaunchOptions audioLaunchOptions = AudioLaunchOptions.EavesDrop;
 
   /// Constructs [_redditClientService] and initialises it.
   Future<void> initApp() async {

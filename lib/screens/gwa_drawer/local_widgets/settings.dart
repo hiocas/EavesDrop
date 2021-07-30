@@ -133,6 +133,10 @@ class _SettingsState extends State<Settings> {
                       spaceHead: false,
                       options: [
                         _makeAudioLaunchOptionSettingOption(context,
+                            value: AudioLaunchOptions.EavesDrop,
+                            subtitle:
+                                "Use the in-app audio player."),
+                        _makeAudioLaunchOptionSettingOption(context,
                             value: AudioLaunchOptions.ChromeCustomTabs,
                             subtitle:
                                 "Allows you to play audio while your phone is "

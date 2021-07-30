@@ -1,7 +1,9 @@
+import 'package:html/parser.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:eavesdrop/models/audio_launch_options.dart';
 import 'package:eavesdrop/models/placeholders_options.dart';
@@ -104,6 +106,8 @@ String audioLaunchOptionToString(AudioLaunchOptions audioLaunchOptions) {
       return 'Chrome Custom Tabs';
     case AudioLaunchOptions.WebView:
       return 'WebView';
+    case AudioLaunchOptions.EavesDrop:
+      return 'EavesDrop';
   }
   return '';
 }
@@ -136,4 +140,17 @@ Color lighten(Color color, [double amount = .1]) {
   final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
 
   return hslLight.toColor();
+}
+
+Future<String> getAudioSource(String url) async {
+  if (url.contains('soundgasm.net')) {
+    //FIXME: This is kinda scuffed.
+    var response = await http.Client().get(Uri.parse(url));
+    var document = parse(response.body);
+    var html = document.body.innerHtml;
+    var script = html.substring(html.indexOf(r'$(document)'));
+    script = script.substring(script.indexOf(r'm4a: "') + 6);
+    return Future.value(script.substring(0, script.indexOf('"')));
+  }
+  return Future.value('');
 }

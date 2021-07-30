@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/states/gwa_player_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart'
 import 'dart:math' as Math;
 
 import 'package:eavesdrop/widgets/website_viewer.dart';
+import 'package:provider/provider.dart';
 
 class MyChromeSafariBrowser extends ChromeSafariBrowser {
   @override
@@ -141,7 +143,7 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
   Widget build(BuildContext context) {
     return SlideTransition(
       position:
-          Tween<Offset>(begin: Offset.zero, end: Offset(0.0, 2.0)).animate(
+          Tween<Offset>(begin: Offset(0.0, 0.0), end: Offset(0.0, 2.0)).animate(
         CurvedAnimation(
           parent: _animationController,
           curve: Curves.easeInOutQuint,
@@ -150,44 +152,53 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
       child: Hero(
         tag: this.widget.heroTag,
         createRectTween: (begin, end) => CalmRectTween(begin: begin, end: end),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            gradient: RadialGradient(
-              radius: 4.0,
-              colors: [
-                Theme.of(context).primaryColor,
-                Theme.of(context).cardColor,
-              ],
+        child: ValueListenableBuilder<bool>(
+            valueListenable: Provider.of<GwaPlayerState>(context, listen: false)
+                .playerActiveNotifier,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius:
+                    const BorderRadius.all(const Radius.circular(15.0)),
+                gradient: RadialGradient(
+                  radius: 4.0,
+                  colors: [
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).cardColor,
+                  ],
+                ),
+              ),
+              width: 220.0,
+              child: RawMaterialButton(
+                shape: const CircleBorder(),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(HeroDialogRoute(builder: (context) {
+                    return FloatingPlayButtonPopupCard(
+                      submission: this.widget.submission,
+                      heroTag: this.widget.heroTag,
+                    );
+                  }));
+                },
+                child: Icon(
+                  Icons.play_arrow,
+                  color: Colors.white,
+                ),
+              ),
             ),
-          ),
-          width: 220.0,
-          child: RawMaterialButton(
-            shape: new CircleBorder(),
-            onPressed: () {
-              Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                return _PopupCard(
-                  submission: this.widget.submission,
-                  heroTag: this.widget.heroTag,
-                );
-              }));
-            },
-            child: Icon(
-              Icons.play_arrow,
-              color: Colors.white,
-            ),
-          ),
-        ),
+            builder: (context, value, child) {
+              if (value) return Container();
+              return child;
+            }),
       ),
     );
   }
 }
 
-class _PopupCard extends StatelessWidget {
+class FloatingPlayButtonPopupCard extends StatelessWidget {
   final String heroTag;
   final GwaSubmission submission;
 
-  const _PopupCard({
+  const FloatingPlayButtonPopupCard({
     Key key,
     @required this.heroTag,
     @required this.submission,
@@ -262,12 +273,124 @@ class _PopupCard extends StatelessWidget {
                       Divider(color: Colors.black),
                   itemBuilder: (context, index) {
                     return Container(
-                      // decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black, width: 3.0))),
                       child: ListTile(
+                        onLongPress: () async {
+                          final appSettings = await HiveBoxes.getAppSettings();
+                          _audioLaunchOptions = appSettings.audioLaunchOptions;
+                          if (_audioLaunchOptions ==
+                              AudioLaunchOptions.EavesDrop) {
+                            final playerState = Provider.of<GwaPlayerState>(
+                                context,
+                                listen: false);
+                            final List<ListTile> tiles = [
+                              ListTile(
+                                leading: Icon(
+                                  CupertinoIcons.text_insert,
+                                  color: Colors.white,
+                                ),
+                                title: Text(
+                                  'Play Next',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                onTap: () async {
+                                  final source = await getAudioSource(
+                                      submission.audioUrls[index]);
+                                  playerState.insertAudioToPlaylist(
+                                      source,
+                                      AudioData(
+                                          submission.title,
+                                          getUrlTitle(
+                                              submission.audioUrls[index]),
+                                          submission.author,
+                                          submission.firstImageOrGifUrl,
+                                          submission.url));
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(
+                                  CupertinoIcons.text_append,
+                                  color: Colors.white,
+                                ),
+                                title: Text(
+                                  'Play Last',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                onTap: () async {
+                                  final source = await getAudioSource(
+                                      submission.audioUrls[index]);
+                                  await playerState.addAudioToPlaylist(
+                                      source,
+                                      AudioData(
+                                        submission.title,
+                                          getUrlTitle(
+                                              submission.audioUrls[index]),
+                                          submission.author,
+                                          submission.firstImageOrGifUrl,
+                                          submission.url));
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(
+                                  CupertinoIcons.globe,
+                                  color: Colors.white,
+                                ),
+                                title: Text(
+                                  'Open in Browser',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                onTap: () => browser.open(
+                                    url: Uri.parse(submission.audioUrls[index]),
+                                    options: ChromeSafariBrowserClassOptions(
+                                        android: AndroidChromeCustomTabsOptions(
+                                            addDefaultShareMenuItem: true),
+                                        ios: IOSSafariOptions(
+                                            barCollapsingEnabled: true))),
+                              ),
+                            ];
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor:
+                                  Theme.of(context).backgroundColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(32))),
+                              builder: (context) => Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: ListView.separated(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: tiles.length,
+                                  itemBuilder: (context, index) => tiles[index],
+                                  separatorBuilder: (context, index) => Divider(
+                                    color: Colors.grey[700],
+                                    thickness: 1.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         onTap: () async {
                           final appSettings = await HiveBoxes.getAppSettings();
                           _audioLaunchOptions = appSettings.audioLaunchOptions;
                           switch (_audioLaunchOptions) {
+                            case AudioLaunchOptions.EavesDrop:
+                              final playerState = Provider.of<GwaPlayerState>(
+                                  context,
+                                  listen: false);
+                              final source = await getAudioSource(
+                                  submission.audioUrls[index]);
+                              await playerState.addAudioToPlaylist(
+                                  source,
+                                  AudioData(
+                                    submission.title,
+                                      getUrlTitle(submission.audioUrls[index]),
+                                      submission.author,
+                                      submission.firstImageOrGifUrl,
+                                      submission.url));
+                              playerState.seekToNext();
+                              playerState.play();
+                              break;
                             case AudioLaunchOptions.ChromeCustomTabs:
                               browser.open(
                                   url: Uri.parse(submission.audioUrls[index]),
@@ -283,8 +406,7 @@ class _PopupCard extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) => WebsiteViewer(
                                       title: submission.title,
-                                      url: submission.audioUrls[index]
-                                      ),
+                                      url: submission.audioUrls[index]),
                                 ),
                               );
                               break;

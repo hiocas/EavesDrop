@@ -17,6 +17,8 @@ class AudioLaunchOptionsAdapter extends TypeAdapter<AudioLaunchOptions> {
         return AudioLaunchOptions.ChromeCustomTabs;
       case 1:
         return AudioLaunchOptions.WebView;
+      case 2:
+        return AudioLaunchOptions.EavesDrop;
       default:
         return AudioLaunchOptions.ChromeCustomTabs;
     }
@@ -30,6 +32,9 @@ class AudioLaunchOptionsAdapter extends TypeAdapter<AudioLaunchOptions> {
         break;
       case AudioLaunchOptions.WebView:
         writer.writeByte(1);
+        break;
+      case AudioLaunchOptions.EavesDrop:
+        writer.writeByte(2);
         break;
     }
   }

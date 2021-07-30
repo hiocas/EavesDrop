@@ -9,4 +9,7 @@ enum AudioLaunchOptions {
 
   @HiveField(1)
   WebView,
+
+  @HiveField(2)
+  EavesDrop,
 }
