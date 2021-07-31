@@ -92,7 +92,9 @@ class ExpandablePlayerImage extends AnimatedWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
-                        width: 130,
+                        width: audioListButtonSubmissionFullname == null
+                            ? 173
+                            : 123,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -116,7 +118,9 @@ class ExpandablePlayerImage extends AnimatedWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 150,
+                        width: audioListButtonSubmissionFullname == null
+                            ? 98
+                            : 147,
                         child: FadeTransition(
                           opacity: Tween<double>(begin: 1.0, end: 0.0)
                               .animate(playControlsAnimation ?? animation),
