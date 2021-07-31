@@ -102,8 +102,7 @@ class _HomeSectionPageViewState extends State<HomeSectionPageView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.previews[index].title +
-                              ' asdaaaaaahhhhhhhhhhhhhdgfffffffff',
+                          widget.previews[index].title,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
