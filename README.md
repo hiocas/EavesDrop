@@ -12,10 +12,25 @@ Features Include:
 - GoneWildAudio Content Focused UI
 - Tag Querying
 - User Library
- 
-## Submitting Issues
 
-You can submit a new issue here: {issue flag}.
+## Content
+**All content featured on this app is directly streamed from r/gonewildaudio.**
+EavesDrop is simply a client for it. All credit over any content featured on EavesDrop goes to its creator.
+
+We do not own or re-host any of the content here:
+- If a creator removes a post from r/gonewildaudio, **their post will not exist on EavesDrop as well.**
+- If a creator edits a post from r/gonewildaudio, **their changes will immediately reflect on EavesDrop as well.**
+
+**This app is just a client for r/gonewildaudio, meaning it reflects the content there exactly.** Any posts that do not exist on r/gonewildaudio will not exist on this app. Any edited posts will immediately change.
+
+I hope this helps explain how this app functions better. If you have any additional questions, please be sure to ask! (you can see how below).
+
+ 
+## Submitting Issues or Questions
+
+You can [submit a new issue here](https://github.com/hiocas/EavesDrop/issues.)
+
+Questions can be submitted by opening a new issue with the question tag.
 
 ### Guidelines
 **Questions:** Try to define the question clearly.
@@ -34,6 +49,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to vote, what you can help with a
 ## Roadmap
 
 - Built In Audio Player
+
+If I could get the right permissions for it, I'd love to have an in-app audio player which will hopefully support audio playlists and background notifications interactions.
 
 - IOS Support
 
