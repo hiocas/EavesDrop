@@ -23,7 +23,7 @@ We do not own or re-host any of the content here:
 
 **This app is just a client for r/gonewildaudio, meaning it reflects the content there exactly.** Any posts that do not exist on r/gonewildaudio will not exist on this app. Any edited posts will immediately change.
 
-I hope this helps explain how this app functions better. If you have any additional questions, please be sure to ask! (you can see how below).
+I hope this helps explain how this app functions better. If you have any additional questions, please be sure to ask! (you can see how [below](https://github.com/hiocas/EavesDrop#guidelines)).
 
  
 ## Submitting Issues
