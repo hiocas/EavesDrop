@@ -1,3 +1,4 @@
+import 'package:eavesdrop/models/reddit_award.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:draw/draw.dart';
 import 'package:eavesdrop/utils/gwa_functions.dart';
@@ -19,6 +20,7 @@ class GwaSubmission {
   List<String> audioUrls = [];
   String firstImageOrGifUrl = '';
   Image img;
+
   /// The thumbnail url of the first submission preview. Will be an empty
   /// string if there are no previews in the submission or if we failed to
   /// get them.
@@ -33,6 +35,7 @@ class GwaSubmission {
   String linkFlairText;
   String authorFlairText;
   int numComments;
+  RedditAllAwardings allAwardings;
 
   GwaSubmission(Submission submission) {
     this.fullTitle = submission.title ?? '';
@@ -69,6 +72,7 @@ class GwaSubmission {
     this.linkFlairText = submission.linkFlairText ?? '';
     this.authorFlairText = submission.authorFlairText ?? '';
     this.numComments = submission.numComments ?? 0;
+    this.allAwardings = RedditAllAwardings.fromSubmission(submission);
   }
 
   List<String> findSubmissionTags() {
@@ -151,7 +155,7 @@ class GwaSubmission {
             child: CircularProgressIndicator(
               value: loadingProgress.expectedTotalBytes != null
                   ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes
+                  loadingProgress.expectedTotalBytes
                   : null,
             ),
           ),
@@ -172,7 +176,7 @@ class GwaSubmission {
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null
                       ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes
+                      loadingProgress.expectedTotalBytes
                       : null,
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:eavesdrop/widgets/reddit_award_count.dart';
 import 'package:flutter/material.dart';
 import 'package:eavesdrop/models/gwa_submission.dart';
 import 'package:eavesdrop/screens/submission_page/local_widgets/gwa_link_flair_button.dart';
@@ -72,12 +73,24 @@ class SubmissionPageAppBar extends StatelessWidget {
                         ? CrossAxisAlignment.start
                         : CrossAxisAlignment.center,
                     children: [
+                      Visibility(
+                        visible: top > maxTitleAlignTop,
+                        child: RedditAwardCounts(
+                          awards: submission.allAwardings.awards,
+                          size: 10.0,
+                          maxAwards: 8,
+                        ),
+                      ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
                             maxWidth: top >= maxTitleAlignTop ? 2000 : 310),
                         child: PopupTextButton(
                           heroTag: 'popup-fulltitle-card',
-                          fullText: submission.fullTitle,
+                          fullText: Text(submission.fullTitle,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              )),
                           text: Text(
                             submission.title,
                             maxLines: top >= maxTitleTop

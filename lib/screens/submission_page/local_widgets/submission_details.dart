@@ -1,3 +1,4 @@
+import 'package:eavesdrop/widgets/reddit_award_count.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eavesdrop/models/gwa_submission.dart';
@@ -30,10 +31,6 @@ class SubmissionDetails extends StatelessWidget {
         '\n\n'
         '>Upvotes: ${gwaSubmission.upvotes}.'
         '\n\n'
-        '>Platinum: ${gwaSubmission.platinum}. '
-        'Gold: ${gwaSubmission.gold}. '
-        'Silver: ${gwaSubmission.silver}.'
-        '\n\n'
         '>Number of Comments: ${gwaSubmission.numComments}.';
   }
 
@@ -62,25 +59,52 @@ class SubmissionDetails extends StatelessWidget {
                 if (constraints.maxWidth < rwidth) {
                   return Container();
                 }
-                return Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: ElevatedButton.icon(
-                      icon: Icon(Icons.launch),
-                      label: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: rwidth - 24),
-                        child: Text(
-                          'Open Post in Browser',
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Material(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(5.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RedditAwardCountsWrap(
+                              awards: gwaSubmission.allAwardings.awards,
+                              size: 12.0,
+                              spacing: 4.0,
+                              leading: Text(
+                                'Awards: ',
+                                style: TextStyle(fontSize: 12.0),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(15.0),
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).primaryColor)),
-                      onPressed: () {
-                        launch(gwaSubmission.shortlink.toString());
-                      }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: ElevatedButton.icon(
+                          icon: Icon(Icons.launch),
+                          label: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: rwidth - 24),
+                            child: Text(
+                              'Open Post in Browser',
+                              maxLines: 1,
+                              overflow: TextOverflow.clip,
+                            ),
+                          ),
+                          style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(15.0),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColor)),
+                          onPressed: () {
+                            launch(gwaSubmission.shortlink.toString());
+                          }),
+                    ),
+                  ],
                 );
               })
             : Container()
