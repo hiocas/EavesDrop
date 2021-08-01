@@ -35,6 +35,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to vote, what you can help with a
 
 - Built In Audio Player
 
+If I could get the right permissions for it, I'd love to have an in-app audio player which will hopefully support audio playlists and background notifications interactions.
+
 - IOS Support
 
 - Library Lists Creation and Management
