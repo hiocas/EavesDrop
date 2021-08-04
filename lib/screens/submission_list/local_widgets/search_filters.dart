@@ -33,8 +33,7 @@ class _AnimatedSearchFiltersCardState extends State<AnimatedSearchFiltersCard>
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: widget.duration);
+    _controller = AnimationController(vsync: this, duration: widget.duration);
     _controller.forward();
   }
 
@@ -99,224 +98,235 @@ class _SearchFiltersCardState extends State<SearchFiltersCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Material(
-          color: Theme.of(context).backgroundColor,
-          elevation: 2.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                color: Theme.of(context).backgroundColor,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: Text(
-                          'Search Filters',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24.0),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: TextField(
-                        controller: controller,
-                        maxLines: null,
-                        textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          hintText: 'Search...',
-                          hintStyle: TextStyle(color: Colors.white),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).accentColor)),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor)),
-                        ),
-                        onSubmitted: (value) => popCard(context),
-                      ),
-                    ),
-                    Container(
-                      height: 45,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: Sort.values.length,
-                        itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.only(right: 6.0),
-                          child: ChoiceChip(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            selectedColor: Theme.of(context).accentColor,
-                            labelStyle: TextStyle(color: Colors.white),
-                            side: BorderSide(width: 0.0),
-                            label: Text(
-                              SearchFunctions.sortToString(
-                                Sort.values[index],
-                              ),
-                            ),
-                            selected: _searchSort == Sort.values[index],
-                            onSelected: (selected) {
-                              _searchSort = Sort.values[index];
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: SearchFunctions.timeFilterRelevant(_searchSort),
-                      child: Container(
-                        height: 45,
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: TimeFilter.values.length,
-                          itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.only(right: 6.0),
-                            child: ChoiceChip(
-                              backgroundColor: Theme.of(context).primaryColor,
-                              selectedColor: Theme.of(context).accentColor,
-                              disabledColor:
-                                  darken(Theme.of(context).primaryColor, 0.1),
-                              labelStyle: TextStyle(color: Colors.white),
-                              side: BorderSide(width: 0.0),
-                              label: Text(
-                                SearchFunctions.timeFilterToString(
-                                  SearchFunctions.getSortedTimeFilterValue(
-                                      index),
-                                ),
-                              ),
-                              selected: _searchTimeFilter ==
-                                  SearchFunctions.getSortedTimeFilterValue(
-                                      index),
-                              onSelected: SearchFunctions.timeFilterRelevant(
-                                      _searchSort)
-                                  ? (selected) {
-                                      _searchTimeFilter = SearchFunctions
-                                          .getSortedTimeFilterValue(index);
-                                      setState(() {});
-                                    }
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: ElevatedButton.icon(
-                        icon: Icon(Icons.search),
-                        label: Text('Filter'),
-                        style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(15.0),
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor)),
-                        onPressed: () => popCard(context),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 365,
-          child: Material(
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Material(
             color: Theme.of(context).backgroundColor,
             elevation: 2.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32.0)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: CommonTagsList(
-                  tags: [
-                    'f4[gender]',
-                    'm4[gender]',
-                    'tf4[gender]',
-                    'tm4[gender]',
-                    'nb4[gender]',
-                    '[gender]dom',
-                    '[gender]sub',
-                    'aftercare',
-                    'asmr',
-                    'blowjob',
-                    'cannilingus',
-                    'cheating',
-                    'cockwarming',
-                    'creampie',
-                    'cuddling',
-                    'deepthroat',
-                    'enemies to lovers',
-                    'fingering',
-                    'friends to lovers',
-                    'good boy',
-                    'good girl',
-                    'grinding',
-                    'handjob',
-                    'hypnosis',
-                    'kissing',
-                    'l-bombs',
-                    'massage',
-                    'missionary',
-                    'orgasm',
-                    'possessive',
-                    'public',
-                    'riding',
-                    'rough',
-                    'script fill',
-                    'sfx',
-                    'spanking',
-                    'teasing',
-                    'threesome',
-                    'tomboy',
-                    'tsundere',
-                    'virgin',
-                    'whispering',
-                    'yandere'
-                  ],
-                  initialText: controller.text,
-                  onSelected: (value, chosenTag) {
-                    print('chosenTag:$chosenTag');
-                    final SearchDetails current =
-                        SearchDetails.fromQuery(controller.text);
-                    final String currentTag = '"' + chosenTag + '"';
-                    if (value) {
-                      print(current.includedTags);
-                      current.includedTags = current.includedTags + currentTag;
-                      print(current.includedTags);
-                    } else {
-                      print(current.includedTags);
-                      current.includedTags =
-                          current.includedTags.replaceFirst(currentTag, '');
-                      print(current.includedTags);
-                    }
-                    current.formatIncludedTags();
-                    controller.text =
-                        SearchDetails.toQuery(controller.text, current);
-                    print('type:${this.runtimeType}');
-                    this.setState(() {});
-                  },
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  color: Theme.of(context).backgroundColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: Text(
+                            'Search Filters',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24.0),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxHeight: 175.0),
+                          child: TextField(
+                            controller: controller,
+                            maxLines: null,
+                            textInputAction: TextInputAction.done,
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              hintStyle: TextStyle(color: Colors.white),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).accentColor)),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor)),
+                            ),
+                            onSubmitted: (value) => popCard(context),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 45,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: Sort.values.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.only(right: 6.0),
+                            child: ChoiceChip(
+                              backgroundColor:
+                                  Theme.of(context).primaryColor,
+                              selectedColor: Theme.of(context).accentColor,
+                              labelStyle: TextStyle(color: Colors.white),
+                              side: BorderSide(width: 0.0),
+                              label: Text(
+                                SearchFunctions.sortToString(
+                                  Sort.values[index],
+                                ),
+                              ),
+                              selected: _searchSort == Sort.values[index],
+                              onSelected: (selected) {
+                                _searchSort = Sort.values[index];
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible:
+                            SearchFunctions.timeFilterRelevant(_searchSort),
+                        child: Container(
+                          height: 45,
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: TimeFilter.values.length,
+                            itemBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.only(right: 6.0),
+                              child: ChoiceChip(
+                                backgroundColor:
+                                    Theme.of(context).primaryColor,
+                                selectedColor:
+                                    Theme.of(context).accentColor,
+                                disabledColor: darken(
+                                    Theme.of(context).primaryColor, 0.1),
+                                labelStyle: TextStyle(color: Colors.white),
+                                side: BorderSide(width: 0.0),
+                                label: Text(
+                                  SearchFunctions.timeFilterToString(
+                                    SearchFunctions
+                                        .getSortedTimeFilterValue(index),
+                                  ),
+                                ),
+                                selected: _searchTimeFilter ==
+                                    SearchFunctions
+                                        .getSortedTimeFilterValue(index),
+                                onSelected: SearchFunctions
+                                        .timeFilterRelevant(_searchSort)
+                                    ? (selected) {
+                                        _searchTimeFilter = SearchFunctions
+                                            .getSortedTimeFilterValue(
+                                                index);
+                                        setState(() {});
+                                      }
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: ElevatedButton.icon(
+                          icon: Icon(Icons.search),
+                          label: Text('Filter'),
+                          style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(15.0),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColor)),
+                          onPressed: () => popCard(context),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+          SizedBox(
+            height: 365,
+            child: Material(
+              color: Theme.of(context).backgroundColor,
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: CommonTagsList(
+                    tags: [
+                      'f4[gender]',
+                      'm4[gender]',
+                      'tf4[gender]',
+                      'tm4[gender]',
+                      'nb4[gender]',
+                      '[gender]dom',
+                      '[gender]sub',
+                      'aftercare',
+                      'asmr',
+                      'blowjob',
+                      'cannilingus',
+                      'cheating',
+                      'cockwarming',
+                      'creampie',
+                      'cuddling',
+                      'deepthroat',
+                      'enemies to lovers',
+                      'fingering',
+                      'friends to lovers',
+                      'good boy',
+                      'good girl',
+                      'grinding',
+                      'handjob',
+                      'hypnosis',
+                      'kissing',
+                      'l-bombs',
+                      'massage',
+                      'missionary',
+                      'orgasm',
+                      'possessive',
+                      'public',
+                      'riding',
+                      'rough',
+                      'script fill',
+                      'sfx',
+                      'spanking',
+                      'teasing',
+                      'threesome',
+                      'tomboy',
+                      'tsundere',
+                      'virgin',
+                      'whispering',
+                      'yandere'
+                    ],
+                    initialText: controller.text,
+                    onSelected: (value, chosenTag) {
+                      print('chosenTag:$chosenTag');
+                      final SearchDetails current =
+                          SearchDetails.fromQuery(controller.text);
+                      final String currentTag = '"' + chosenTag + '"';
+                      if (value) {
+                        print(current.includedTags);
+                        current.includedTags =
+                            current.includedTags + currentTag;
+                        print(current.includedTags);
+                      } else {
+                        print(current.includedTags);
+                        current.includedTags = current.includedTags
+                            .replaceFirst(currentTag, '');
+                        print(current.includedTags);
+                      }
+                      current.formatIncludedTags();
+                      controller.text =
+                          SearchDetails.toQuery(controller.text, current);
+                      print('type:${this.runtimeType}');
+                      this.setState(() {});
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
