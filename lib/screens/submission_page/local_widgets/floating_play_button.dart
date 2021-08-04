@@ -153,42 +153,42 @@ class FloatingPlayButtonState extends State<FloatingPlayButton>
         tag: this.widget.heroTag,
         createRectTween: (begin, end) => CalmRectTween(begin: begin, end: end),
         child: ValueListenableBuilder<bool>(
-            valueListenable: Provider.of<GwaPlayerState>(context, listen: false)
-                .playerActiveNotifier,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius:
-                    const BorderRadius.all(const Radius.circular(15.0)),
-                gradient: RadialGradient(
-                  radius: 4.0,
-                  colors: [
-                    Theme.of(context).primaryColor,
-                    Theme.of(context).cardColor,
-                  ],
-                ),
-              ),
-              width: 220.0,
-              child: RawMaterialButton(
-                shape: const CircleBorder(),
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(HeroDialogRoute(builder: (context) {
-                    return FloatingPlayButtonPopupCard(
-                      submission: this.widget.submission,
-                      heroTag: this.widget.heroTag,
-                    );
-                  }));
-                },
-                child: Icon(
-                  Icons.play_arrow,
-                  color: Colors.white,
-                ),
+          valueListenable: Provider.of<GwaPlayerState>(context, listen: false)
+              .playerActiveNotifier,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(const Radius.circular(15.0)),
+              gradient: RadialGradient(
+                radius: 4.0,
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Theme.of(context).cardColor,
+                ],
               ),
             ),
-            builder: (context, value, child) {
-              if (value) return Container();
-              return child;
-            }),
+            width: 220.0,
+            child: RawMaterialButton(
+              shape: const CircleBorder(),
+              onPressed: () {
+                Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                  return FloatingPlayButtonPopupCard(
+                    submission: this.widget.submission,
+                    heroTag: this.widget.heroTag,
+                  );
+                }));
+              },
+              child: Icon(
+                Icons.play_arrow,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          builder: (context, value, child) {
+            return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: value ? Container() : child);
+          },
+        ),
       ),
     );
   }
@@ -302,8 +302,9 @@ class FloatingPlayButtonPopupCard extends StatelessWidget {
                                           getUrlTitle(
                                               submission.audioUrls[index]),
                                           submission.author,
+                                          submission.authorFlairText,
                                           submission.firstImageOrGifUrl,
-                                          submission.url));
+                                          submission.fullname));
                                 },
                               ),
                               ListTile(
@@ -321,12 +322,13 @@ class FloatingPlayButtonPopupCard extends StatelessWidget {
                                   await playerState.addAudioToPlaylist(
                                       source,
                                       AudioData(
-                                        submission.title,
+                                          submission.title,
                                           getUrlTitle(
                                               submission.audioUrls[index]),
                                           submission.author,
+                                          submission.authorFlairText,
                                           submission.firstImageOrGifUrl,
-                                          submission.url));
+                                          submission.fullname));
                                 },
                               ),
                               ListTile(
@@ -375,6 +377,7 @@ class FloatingPlayButtonPopupCard extends StatelessWidget {
                           _audioLaunchOptions = appSettings.audioLaunchOptions;
                           switch (_audioLaunchOptions) {
                             case AudioLaunchOptions.EavesDrop:
+                              Navigator.of(context).pop('launch-audio-player');
                               final playerState = Provider.of<GwaPlayerState>(
                                   context,
                                   listen: false);
@@ -383,11 +386,12 @@ class FloatingPlayButtonPopupCard extends StatelessWidget {
                               await playerState.addAudioToPlaylist(
                                   source,
                                   AudioData(
-                                    submission.title,
+                                      submission.title,
                                       getUrlTitle(submission.audioUrls[index]),
                                       submission.author,
+                                      submission.authorFlairText,
                                       submission.firstImageOrGifUrl,
-                                      submission.url));
+                                      submission.fullname));
                               playerState.seekToNext();
                               playerState.play();
                               break;

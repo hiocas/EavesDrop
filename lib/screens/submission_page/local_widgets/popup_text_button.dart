@@ -8,7 +8,7 @@ import 'package:eavesdrop/widgets/rect_tweens/calm_rect_tween.dart';
 class PopupTextButton extends StatelessWidget {
   final String heroTag;
   final Widget text;
-  final String fullText;
+  final Widget fullText;
   final Color cardColor;
 
   const PopupTextButton({
@@ -56,7 +56,7 @@ class PopupTextButton extends StatelessWidget {
 
 class _PopupTextCard extends StatelessWidget {
   final String heroTag;
-  final String fullText;
+  final Widget fullText;
   final Color color;
 
   const _PopupTextCard({
@@ -83,13 +83,7 @@ class _PopupTextCard extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  this.fullText,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
+                child: this.fullText,
               ),
             ),
           ),

@@ -1,4 +1,3 @@
-import 'package:eavesdrop/screens/audio_player/expandable_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -139,8 +138,7 @@ class SubmissionListState extends State<SubmissionList> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: ExpandingAudioPlayer(
-        background: Scaffold(
+      child: Scaffold(
           appBar: SubmissionListAppBar(
             initialIsSearching:
                 widget.initialQuery != null && widget.initialQuery.isNotEmpty,
@@ -339,7 +337,6 @@ class SubmissionListState extends State<SubmissionList> {
             ),
           ),
         ),
-      ),
     );
   }
 }

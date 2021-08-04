@@ -13,12 +13,14 @@ class PlaylistView extends StatefulWidget {
     @required this.paletteGenerator,
     @required this.onTapPlaylistButton,
     this.audioListButtonSubmissionFullname,
+    this.inCurrentSubmissionPage,
   }) : super(key: key);
 
   final Animation<double> expansionProgress;
   final PaletteGenerator paletteGenerator;
   final void Function() onTapPlaylistButton;
   final String audioListButtonSubmissionFullname;
+  final bool Function() inCurrentSubmissionPage;
 
   @override
   _PlaylistViewState createState() => _PlaylistViewState();
@@ -107,6 +109,7 @@ class _PlaylistViewState extends State<PlaylistView> {
             inPlaylistView: true,
             paletteGenerator: widget.paletteGenerator,
             onTapPlaylistButton: widget.onTapPlaylistButton,
+            inCurrentSubmissionPage: widget.inCurrentSubmissionPage,
           ),
         ],
       ),

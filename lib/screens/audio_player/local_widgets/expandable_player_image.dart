@@ -1,5 +1,6 @@
 import 'package:draw/draw.dart' show Submission;
 import 'package:eavesdrop/models/gwa_submission.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/all_page_local.dart';
 import 'package:eavesdrop/screens/submission_page/local_widgets/floating_play_button.dart';
 import 'package:eavesdrop/states/global_state.dart';
 import 'package:eavesdrop/states/gwa_player_state.dart';
@@ -95,9 +96,9 @@ class ExpandablePlayerImage extends AnimatedWidget {
                         width: audioListButtonSubmissionFullname == null
                             ? 173
                             : 123,
+                        height: 50,
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(

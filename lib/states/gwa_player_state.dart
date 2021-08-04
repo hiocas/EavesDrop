@@ -28,9 +28,19 @@ class GwaPlayerState with ChangeNotifier {
     return (currentIndexedAudioSource.tag as AudioData).title;
   }
 
+  String get currentAudioSourceFileTitle {
+    if (currentIndexedAudioSource == null) return null;
+    return (currentIndexedAudioSource.tag as AudioData).fileTitle;
+  }
+
   String get currentAudioSourceAuthor {
     if (currentIndexedAudioSource == null) return null;
     return (currentIndexedAudioSource.tag as AudioData).author;
+  }
+
+  String get currentAudioSourceAuthorFlairText {
+    if (currentIndexedAudioSource == null) return null;
+    return (currentIndexedAudioSource.tag as AudioData).authorFlairText;
   }
 
   String get currentAudioSourceCoverUrl {
@@ -38,9 +48,9 @@ class GwaPlayerState with ChangeNotifier {
     return (currentIndexedAudioSource.tag as AudioData).coverUrl;
   }
 
-  Uri get currentAudioSourceSubmissionUrl {
-    if (currentIndexedAudioSource == null) return null;
-    return (currentIndexedAudioSource.tag as AudioData).submissionUrl;
+  String get currentAudioSourceSubmissionFullname {
+    if (currentIndexedAudioSource == null) return '';
+    return (currentIndexedAudioSource.tag as AudioData).submissionFullname;
   }
 
   init() async {
@@ -111,9 +121,10 @@ class AudioData {
   final String title;
   final String fileTitle;
   final String author;
+  final String authorFlairText;
   final String coverUrl;
-  final Uri submissionUrl;
+  final String submissionFullname;
 
-  const AudioData(this.title, this.fileTitle, this.author, this.coverUrl,
-      this.submissionUrl);
+  const AudioData(this.title, this.fileTitle, this.author, this.authorFlairText,
+      this.coverUrl, this.submissionFullname);
 }

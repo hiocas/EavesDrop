@@ -1,8 +1,8 @@
 import 'package:eavesdrop/screens/audio_player/local_widgets/player_icon_button.dart';
 import 'package:eavesdrop/states/gwa_player_state.dart';
+import 'package:eavesdrop/utils/util_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -14,11 +14,13 @@ class PlayControls extends StatelessWidget {
     @required this.paletteGenerator,
     @required this.onTapPlaylistButton,
     @required this.inPlaylistView,
+    this.inCurrentSubmissionPage,
   }) : super(key: key);
 
   final PaletteGenerator paletteGenerator;
   final void Function() onTapPlaylistButton;
   final bool inPlaylistView;
+  final bool Function() inCurrentSubmissionPage;
 
   @override
   Widget build(BuildContext context) {
@@ -95,19 +97,16 @@ class PlayControls extends StatelessWidget {
                   onPressed: onTapPlaylistButton,
                 ),
                 PlayerIconButton(
-                  icon: CupertinoIcons.globe,
+                  icon: CupertinoIcons.doc_richtext,
                   iconSize: 35,
                   paletteGenerator: paletteGenerator,
                   onPressed: () {
-                    final ChromeSafariBrowser browser =
-                        new ChromeSafariBrowser();
-                    browser.open(
-                        url: Provider.of<GwaPlayerState>(context, listen: false)
-                            .currentAudioSourceSubmissionUrl,
-                        options: ChromeSafariBrowserClassOptions(
-                            android: AndroidChromeCustomTabsOptions(
-                                addDefaultShareMenuItem: true),
-                            ios: IOSSafariOptions(barCollapsingEnabled: true)));
+                    if (inCurrentSubmissionPage == null || !inCurrentSubmissionPage.call()) {
+                      pushSubmissionPageWithReturnData(
+                          context,
+                          Provider.of<GwaPlayerState>(context, listen: false)
+                              .currentAudioSourceSubmissionFullname);
+                    }
                   },
                 ),
                 PlayerIconButton(
@@ -160,7 +159,7 @@ class _SeekBarState extends State<SeekBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0),
+      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 8.0),
       child: Consumer<GwaPlayerState>(builder: (context, state, _) {
         return ValueListenableBuilder<Duration>(
           valueListenable: state.audioProgressNotifier,

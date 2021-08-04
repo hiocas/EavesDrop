@@ -1,5 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:eavesdrop/screens/audio_player/expandable_audio_player.dart';
+import 'package:eavesdrop/states/gwa_player_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -59,26 +60,30 @@ class SubmissionPageState extends State<SubmissionPage> {
     /* This keeps track of how many times the user tapped the author name
     so that if it's multiple times we can show them a Snackbar that tells them
     to long press on the author's name if they want to see their submissions. */
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: ExpandingAudioPlayer(
-        audioListButtonSubmissionFullname: widget.submissionFullname,
-        background: SafeArea(
-          child: FutureBuilder(
-            future: _initSubmissionPage(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (!snapshot.hasData) {
-                return Scaffold(
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              } else {
-                _submission = new GwaSubmission(snapshot.data);
-                _showFPB =
-                    _submission.hasAudioUrl || _submission.tags.length > 0;
-                return Scaffold(
+    return FutureBuilder(
+      future: _initSubmissionPage(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (!snapshot.hasData) {
+          return Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          _submission = new GwaSubmission(snapshot.data);
+          _showFPB = _submission.hasAudioUrl || _submission.tags.length > 0;
+          return Scaffold(
+            backgroundColor: Theme.of(context).primaryColor,
+            body: ExpandingAudioPlayer(
+              audioListButtonSubmissionFullname: widget.submissionFullname,
+              inCurrentSubmissionPage:
+              Provider.of<GwaPlayerState>(context, listen: false)
+                  .currentAudioSourceSubmissionFullname
+                  .replaceFirst('t3_', '') ==
+                  _fullname,
+              background: SafeArea(
+                child: Scaffold(
                   backgroundColor: Theme.of(context).backgroundColor,
                   body: CustomScrollView(
                     controller: _scrollController,
@@ -105,10 +110,8 @@ class SubmissionPageState extends State<SubmissionPage> {
                           behavior: HitTestBehavior.deferToChild,
                           onTap: () {
                             if (_showFPB &&
-                                _floatingPlayButtonKey
-                                    .currentState.animates) {
-                              _floatingPlayButtonKey.currentState
-                                  .animateButton();
+                                _floatingPlayButtonKey.currentState.animates) {
+                              _floatingPlayButtonKey.currentState.animateButton();
                             }
                           },
                           child: Material(
@@ -148,15 +151,14 @@ class SubmissionPageState extends State<SubmissionPage> {
                           scrollController: _scrollController,
                         )
                       : null,
-                  floatingActionButtonLocation: _showFPB
-                      ? FloatingActionButtonLocation.centerFloat
-                      : null,
-                );
-              }
-            },
-          ),
-        ),
-      ),
+                  floatingActionButtonLocation:
+                      _showFPB ? FloatingActionButtonLocation.centerFloat : null,
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }

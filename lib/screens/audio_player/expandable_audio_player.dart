@@ -17,10 +17,12 @@ class ExpandingAudioPlayer extends StatefulWidget {
     Key key,
     @required this.background,
     this.audioListButtonSubmissionFullname,
+    this.inCurrentSubmissionPage = false,
   }) : super(key: key);
 
   final Widget background;
   final String audioListButtonSubmissionFullname;
+  final bool inCurrentSubmissionPage;
 
   @override
   _ExpandingAudioPlayerState createState() => _ExpandingAudioPlayerState();
@@ -47,20 +49,21 @@ class _ExpandingAudioPlayerState extends State<ExpandingAudioPlayer>
     );
     _rubberAnimationController.animationState.addListener(() {
       if (_rubberAnimationController.animationState.value ==
-              AnimationState.expanded &&
+          AnimationState.expanded &&
           !expanded) {
         setState(() {
           expanded = true;
         });
       } else if (_rubberAnimationController.animationState.value ==
-              AnimationState.collapsed &&
+          AnimationState.collapsed &&
           expanded) {
         setState(() {
           expanded = false;
         });
       }
     });
-    Provider.of<GwaPlayerState>(context, listen: false)
+    Provider
+        .of<GwaPlayerState>(context, listen: false)
         .sequenceStateStream
         .listen((SequenceState sequenceState) {
       _setPaletteGenerator(
@@ -72,7 +75,7 @@ class _ExpandingAudioPlayerState extends State<ExpandingAudioPlayer>
 
   _setPaletteGenerator(String imageUrl) async {
     _paletteGenerator =
-        await PaletteGenerator.fromImageProvider(NetworkImage(imageUrl));
+    await PaletteGenerator.fromImageProvider(NetworkImage(imageUrl));
     setState(() {});
   }
 
@@ -86,11 +89,11 @@ class _ExpandingAudioPlayerState extends State<ExpandingAudioPlayer>
   @override
   Widget build(BuildContext context) {
     final Animation<double> expansionProgress =
-        Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: _rubberAnimationController,
-            curve: Interval(
-                _rubberAnimationController.lowerBoundValue.percentage,
-                _rubberAnimationController.upperBoundValue.percentage)));
+    Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        parent: _rubberAnimationController,
+        curve: Interval(
+            _rubberAnimationController.lowerBoundValue.percentage,
+            _rubberAnimationController.upperBoundValue.percentage)));
 
     //TODO: Use a complimentary color palette.
 
@@ -99,7 +102,9 @@ class _ExpandingAudioPlayerState extends State<ExpandingAudioPlayer>
       lowerLayer: widget.background,
       upperLayer: ValueListenableBuilder<bool>(
           valueListenable:
-              Provider.of<GwaPlayerState>(context).playerActiveNotifier,
+          Provider
+              .of<GwaPlayerState>(context)
+              .playerActiveNotifier,
           builder: (context, value, child) {
             if (value)
               return Container(
@@ -113,14 +118,16 @@ class _ExpandingAudioPlayerState extends State<ExpandingAudioPlayer>
                       _rubberAnimationController.collapse();
                   },
                   expandedColor: _paletteGenerator.dominantColor.color,
-                  collapsedColor: Theme.of(context).backgroundColor,
+                  collapsedColor: Theme
+                      .of(context)
+                      .backgroundColor,
                   iconColor: _paletteGenerator.dominantColor.titleTextColor,
                   child: NeumorphicTheme(
                     theme: NeumorphicThemeData(
                       depth: 16,
                       lightSource: LightSource.topLeft,
                       shadowLightColor:
-                          lighten(_paletteGenerator.dominantColor.color, 0.18),
+                      lighten(_paletteGenerator.dominantColor.color, 0.18),
                       baseColor: _paletteGenerator.dominantColor.color,
                       boxShape: NeumorphicBoxShape.roundRect(
                           BorderRadius.circular(16)),
@@ -133,23 +140,37 @@ class _ExpandingAudioPlayerState extends State<ExpandingAudioPlayer>
                           duration: const Duration(milliseconds: 500),
                           child: _playlist
                               ? PlaylistView(
-                                  paletteGenerator: _paletteGenerator,
-                                  expansionProgress: expansionProgress,
-                                  onTapPlaylistButton: () => setState(() {
-                                    _playlist = false;
-                                  }),
-                                  audioListButtonSubmissionFullname:
-                                      widget.audioListButtonSubmissionFullname,
-                                )
+                            paletteGenerator: _paletteGenerator,
+                            expansionProgress: expansionProgress,
+                            onTapPlaylistButton: () =>
+                                setState(() {
+                                  _playlist = false;
+                                }),
+                            audioListButtonSubmissionFullname:
+                            widget.audioListButtonSubmissionFullname,
+                            inCurrentSubmissionPage: () {
+                              if (widget.inCurrentSubmissionPage) {
+                                _rubberAnimationController.collapse();
+                              }
+                              return widget.inCurrentSubmissionPage;
+                            },
+                          )
                               : PlayerView(
-                                  paletteGenerator: _paletteGenerator,
-                                  expansionProgress: expansionProgress,
-                                  onTapPlaylistButton: () => setState(() {
-                                    _playlist = true;
-                                  }),
-                                  audioListButtonSubmissionFullname:
-                                      widget.audioListButtonSubmissionFullname,
-                                ),
+                            paletteGenerator: _paletteGenerator,
+                            expansionProgress: expansionProgress,
+                            onTapPlaylistButton: () =>
+                                setState(() {
+                                  _playlist = true;
+                                }),
+                            audioListButtonSubmissionFullname:
+                            widget.audioListButtonSubmissionFullname,
+                            inCurrentSubmissionPage: () {
+                              if (widget.inCurrentSubmissionPage) {
+                                _rubberAnimationController.collapse();
+                              }
+                              return widget.inCurrentSubmissionPage;
+                            },
+                          ),
                         ),
                       ),
                     ),

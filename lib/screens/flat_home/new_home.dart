@@ -1,5 +1,4 @@
 import 'package:draw/draw.dart';
-import 'package:eavesdrop/screens/audio_player/expandable_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,8 +20,7 @@ class _NewHomeState extends State<NewHome> {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
       onWillPop: () async => false,
-      child: ExpandingAudioPlayer(
-        background: Container(
+      child: Container(
           decoration: BoxDecoration(
             gradient: RadialGradient(
               center: Alignment.topLeft,
@@ -65,7 +63,6 @@ class _NewHomeState extends State<NewHome> {
                 : NewHomeLayout(),
           ),
         ),
-      ),
     );
   }
 }

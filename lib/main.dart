@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/screens/audio_player/expandable_audio_player.dart';
 import 'package:eavesdrop/states/gwa_player_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -156,16 +157,18 @@ class _HomeScaffoldState extends State<HomeScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: AnimatedSwitcher(
-        duration: Duration(milliseconds: 400),
-        transitionBuilder: (child, animation) {
-          //TODO(Design): Make a better transition.
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-        child: _screens.elementAt(_currentPageIndex),
+      body: ExpandingAudioPlayer(
+        background: AnimatedSwitcher(
+          duration: Duration(milliseconds: 400),
+          transitionBuilder: (child, animation) {
+            //TODO(Design): Make a better transition.
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          child: _screens.elementAt(_currentPageIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentPageIndex,
@@ -189,7 +192,8 @@ class _HomeScaffoldState extends State<HomeScaffold> {
         ],
         onTap: (index) {
           setState(() {
-            Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
+            Provider.of<GlobalState>(context, listen: false)
+                .prepareNewSearch();
             _currentPageIndex = index;
           });
         },
