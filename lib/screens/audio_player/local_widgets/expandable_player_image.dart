@@ -96,8 +96,8 @@ class ExpandablePlayerImage extends AnimatedWidget {
                         width: audioListButtonSubmissionFullname == null
                             ? 173
                             : 123,
-                        height: 50,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

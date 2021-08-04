@@ -39,9 +39,9 @@ class ExpandablePlayerContainer extends AnimatedWidget {
                   .animate(animation)
                   .value,
               color: ColorTween(
-                      begin: collapsedColor ?? Colors.white, end: expandedColor)
-                  .animate(animation)
-                  .value,
+                begin: collapsedColor ?? Colors.white,
+                end: expandedColor,
+              ).animate(animation).value,
             ),
             child: GestureDetector(
               onTap: animation.value <= 0.08 ? onTap : null,

@@ -65,40 +65,64 @@ class _PlaylistViewState extends State<PlaylistView> {
                         int fromIndex = oldIndex;
                         int toIndex = newIndex;
                         if (toIndex == state.playlist.length) toIndex--;
-                        if (fromIndex != 0 && toIndex != 0) {
-                          state.playlist.move(fromIndex, toIndex);
-                        }
+                        state.playlist.move(fromIndex, toIndex);
                       },
                       itemBuilder: (context, index) {
                         AudioData audioData =
                             state.effectiveSequence[index].tag;
-                        return ListTile(
+                        GwaPlayerState gwaPlayerState =
+                            Provider.of<GwaPlayerState>(context, listen: false);
+                        return Dismissible(
                           key: ValueKey(
                               audioData.title.toString() + index.toString()),
-                          dense: true,
-                          leading: Container(
-                            width: 40.0,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              image: DecorationImage(
-                                image: NetworkImage(audioData.coverUrl),
-                                fit: BoxFit.cover,
+                          direction: DismissDirection.startToEnd,
+                          background: Container(
+                            color: Colors.black54,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Icon(CupertinoIcons.xmark_circle_fill),
                               ),
                             ),
                           ),
-                          title: Text(
-                            audioData.title,
-                            style: const TextStyle(fontSize: 14.0),
-                            overflow: TextOverflow.ellipsis,
+                          confirmDismiss: (direction) => Future.value(
+                              gwaPlayerState.audioPlayer.currentIndex != index),
+                          onDismissed: (direction) {
+                            gwaPlayerState.playlist.removeAt(index);
+                          },
+                          child: ListTile(
+                            key: ValueKey(
+                                audioData.title.toString() + index.toString()),
+                            dense: true,
+                            leading: Container(
+                              width: 40.0,
+                              height: 40.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                image: DecorationImage(
+                                  image: NetworkImage(audioData.coverUrl),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              audioData.title,
+                              style: const TextStyle(fontSize: 14.0),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: Icon(CupertinoIcons.text_justify),
+                            tileColor: state.audioPlayer.currentIndex == index
+                                ? Colors.black26
+                                : null,
+                            onTap: () {
+                              if (gwaPlayerState.audioPlayer.currentIndex !=
+                                  index) {
+                                gwaPlayerState.audioPlayer
+                                    .seek(Duration.zero, index: index);
+                              }
+                            },
                           ),
-                          trailing: Icon(CupertinoIcons.text_justify),
-                          tileColor: state.audioPlayer.currentIndex == index
-                              ? Colors.black26
-                              : null,
-                          onTap: () => Provider.of<GwaPlayerState>(context,
-                                  listen: false)
-                              .play(),
                         );
                       },
                     );
