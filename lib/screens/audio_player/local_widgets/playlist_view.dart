@@ -27,6 +27,20 @@ class PlaylistView extends StatefulWidget {
 }
 
 class _PlaylistViewState extends State<PlaylistView> {
+  ScrollController _scrollController;
+
+  @override
+  void initState() {
+    int currentIndex = Provider.of<GwaPlayerState>(context, listen: false)
+        .audioPlayer
+        .currentIndex;
+    _scrollController = ScrollController(
+        initialScrollOffset: _calcIndexScrollOffset(currentIndex));
+    super.initState();
+  }
+
+  double _calcIndexScrollOffset(int index) => 16.0 * index;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,6 +73,7 @@ class _PlaylistViewState extends State<PlaylistView> {
                   child: Consumer<GwaPlayerState>(
                       builder: (context, state, child) {
                     return ReorderableListView.builder(
+                      scrollController: _scrollController,
                       itemCount: state.effectiveSequence.length,
                       shrinkWrap: true,
                       onReorder: (int oldIndex, int newIndex) {
@@ -73,8 +88,7 @@ class _PlaylistViewState extends State<PlaylistView> {
                         GwaPlayerState gwaPlayerState =
                             Provider.of<GwaPlayerState>(context, listen: false);
                         return Dismissible(
-                          key: ValueKey(
-                              audioData.title.toString() + index.toString()),
+                          key: ValueKey(audioData.id),
                           direction: DismissDirection.startToEnd,
                           background: Container(
                             color: Colors.black54,
@@ -115,11 +129,13 @@ class _PlaylistViewState extends State<PlaylistView> {
                             tileColor: state.audioPlayer.currentIndex == index
                                 ? Colors.black26
                                 : null,
-                            onTap: () {
+                            onTap: () async {
                               if (gwaPlayerState.audioPlayer.currentIndex !=
                                   index) {
-                                gwaPlayerState.audioPlayer
+                                await gwaPlayerState.audioPlayer
                                     .seek(Duration.zero, index: index);
+                                if (!gwaPlayerState.isPlaying)
+                                  gwaPlayerState.play();
                               }
                             },
                           ),

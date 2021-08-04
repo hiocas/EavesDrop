@@ -124,7 +124,11 @@ class AudioData {
   final String authorFlairText;
   final String coverUrl;
   final String submissionFullname;
+  static int globalCount = 0;
+  final int id = globalCount;
 
-  const AudioData(this.title, this.fileTitle, this.author, this.authorFlairText,
-      this.coverUrl, this.submissionFullname);
+  AudioData(this.title, this.fileTitle, this.author, this.authorFlairText,
+      this.coverUrl, this.submissionFullname) {
+    globalCount++;
+  }
 }
