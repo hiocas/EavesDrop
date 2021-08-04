@@ -239,9 +239,11 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                 return TextField(
                   enabled: !state.isBusy,
                   controller: _textFieldController,
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     isDense: true,
                     hintText: 'Search...',
+                    hintStyle: const TextStyle(color: Colors.white),
                     focusedBorder: UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Theme.of(context).accentColor)),
@@ -258,7 +260,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                   },
                 );
               })
-            : Text('Search Results'),
+            : const Text('Search Results'),
         backgroundColor: Colors.transparent,
         elevation: 15.0,
         backwardsCompatibility: false,
