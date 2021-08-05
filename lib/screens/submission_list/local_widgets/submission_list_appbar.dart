@@ -49,45 +49,46 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
   TextEditingController _textFieldController;
 
   Consumer<GlobalState> _searchFiltersButton() {
-    return Consumer<GlobalState>(
-      builder: (context, state, child) {
-        return IconButton(
-          icon: Icon(Icons.manage_search_outlined),
-          onPressed: !state.isBusy ? () async {
-            final result = await Navigator.push(
-                context,
-                HeroDialogRoute(
-                    builder: (context) => AnimatedSearchFiltersCard(
-                          initialQuery: _textFieldController.text,
-                          sort: _sort,
-                          timeFilter: _timeFilter,
-                        )));
-            if (result != null) {
-              Map<String, dynamic> results = jsonDecode(result);
-              _textFieldController.text = results['query'];
-              Sort newSort = Sort.values[results['sort']];
-              if (_sort != newSort) {
-                setState(() {
-                  _sort = newSort;
-                  widget.onSelectedItem(_sort);
-                });
+    return Consumer<GlobalState>(builder: (context, state, child) {
+      return IconButton(
+        icon: Icon(Icons.manage_search_outlined),
+        onPressed: !state.isBusy
+            ? () async {
+                final result = await Navigator.push(
+                    context,
+                    HeroDialogRoute(
+                        builder: (context) => AnimatedSearchFiltersCard(
+                              initialQuery: _textFieldController.text,
+                              sort: _sort,
+                              timeFilter: _timeFilter,
+                            )));
+                if (result != null) {
+                  Map<String, dynamic> results = jsonDecode(result);
+                  _textFieldController.text = results['query'];
+                  Sort newSort = Sort.values[results['sort']];
+                  if (_sort != newSort) {
+                    setState(() {
+                      _sort = newSort;
+                      widget.onSelectedItem(_sort);
+                    });
+                  }
+                  TimeFilter newTimeFilter =
+                      SearchFunctions.getSortedTimeFilterValue(
+                          results['time_filter']);
+                  if (_timeFilter != newTimeFilter) {
+                    setState(() {
+                      _timeFilter = newTimeFilter;
+                      widget.onSelectedFilter(_timeFilter);
+                    });
+                  }
+                  if (results['new_query']) {
+                    widget.onSubmitted(_textFieldController.text);
+                  }
+                }
               }
-              TimeFilter newTimeFilter =
-                  SearchFunctions.getSortedTimeFilterValue(results['time_filter']);
-              if (_timeFilter != newTimeFilter) {
-                setState(() {
-                  _timeFilter = newTimeFilter;
-                  widget.onSelectedFilter(_timeFilter);
-                });
-              }
-              if (results['new_query']) {
-                widget.onSubmitted(_textFieldController.text);
-              }
-            }
-          } : null,
-        );
-      }
-    );
+            : null,
+      );
+    });
   }
 
   List<Widget> _makeAppBarActions() {
@@ -308,7 +309,6 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 }),
-        actions: _makeAppBarActions()
-        );
+        actions: _makeAppBarActions());
   }
 }

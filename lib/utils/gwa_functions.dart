@@ -16,9 +16,7 @@ class GwaFunctions {
     for (var title in results) {
       if (RegExp(r'[a-zA-Z]').hasMatch(title)) {
         if (title.contains('&amp;')) {
-          return title.substring(0, title.indexOf('&amp;')) +
-              '&' +
-              title.substring(title.indexOf('&amp;') + 5);
+          return title.replaceAll('&amp;', '&').trim();
         }
         return title.trim();
       }
