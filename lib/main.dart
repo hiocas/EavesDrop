@@ -77,25 +77,27 @@ class _MyAppState extends State<MyApp> {
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Color.fromARGB(255, 28, 18, 28),
+          systemNavigationBarColor: const Color.fromARGB(255, 28, 18, 28),
         ),
         child: MaterialApp(
           title: 'GoneWildAudio App',
           themeMode: ThemeMode.dark,
           theme: ThemeData(
-              primaryColor: Color.fromARGB(255, 119, 23, 45),
-              accentColor: Color.fromARGB(255, 62, 26, 92),
+              primaryColor: const Color.fromARGB(255, 119, 23, 45),
+              accentColor: const Color.fromARGB(255, 62, 26, 92),
               backgroundColor: Colors.grey[200],
-              cardColor: Color.fromARGB(255, 7, 13, 43),
-              textTheme: TextTheme(bodyText2: TextStyle(color: Colors.black))),
+              cardColor: const Color.fromARGB(255, 7, 13, 43),
+              textTheme:
+                  const TextTheme(bodyText2: TextStyle(color: Colors.black))),
           darkTheme: ThemeData(
-              primaryColor: Color.fromARGB(255, 119, 23, 45),
-              accentColor: Color.fromARGB(255, 62, 26, 92),
-              backgroundColor: Color.fromARGB(255, 28, 18, 28),
-              cardColor: Color.fromARGB(255, 7, 13, 43),
+              primaryColor: const Color.fromARGB(255, 119, 23, 45),
+              accentColor: const Color.fromARGB(255, 62, 26, 92),
+              backgroundColor: const Color.fromARGB(255, 28, 18, 28),
+              cardColor: const Color.fromARGB(255, 7, 13, 43),
+              errorColor: const Color.fromARGB(255, 110, 70, 110),
               scrollbarTheme: ScrollbarThemeData(
                 thumbColor: MaterialStateProperty.all(
-                    Color.fromARGB(255, 119, 23, 45).withOpacity(0.7)),
+                    const Color.fromARGB(255, 119, 23, 45).withOpacity(0.7)),
               )),
           home: HomeScaffold(),
           routes: {
@@ -192,8 +194,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
         ],
         onTap: (index) {
           setState(() {
-            Provider.of<GlobalState>(context, listen: false)
-                .prepareNewSearch();
+            Provider.of<GlobalState>(context, listen: false).prepareNewSearch();
             _currentPageIndex = index;
           });
         },
