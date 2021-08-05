@@ -1,3 +1,4 @@
+import 'package:eavesdrop/models/tag_list.dart';
 import 'package:eavesdrop/screens/submission_page/local_widgets/gwa_tag.dart';
 import 'package:eavesdrop/widgets/gwa_author_flair.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ Gender genderFromGenderLetter(String letter) {
 }
 
 class GenderTag extends StatefulWidget {
-  final String tag;
+  final Tag tag;
   final String genderTemplate;
   final String initialGender;
   final bool selected;
@@ -70,10 +71,11 @@ class GenderTag extends StatefulWidget {
   RegExp get regexp {
     String regexp = '';
     for (var i = 0; i < Gender.values.length - 1; i++) {
-      regexp += Gender.values[i].forTagTemplate(genderTemplate, tag) + r'|';
+      regexp +=
+          Gender.values[i].forTagTemplate(genderTemplate, tag.label) + r'|';
     }
     return RegExp(
-        regexp + Gender.values.last.forTagTemplate(genderTemplate, tag),
+        regexp + Gender.values.last.forTagTemplate(genderTemplate, tag.label),
         caseSensitive: false);
   }
 
@@ -90,18 +92,18 @@ class _GenderTagState extends State<GenderTag> {
   void initState() {
     if (widget.initialGender != null && widget.initialGender.isNotEmpty) {
       tag = widget.initialGender;
-      chosenGender = genderFromGenderLetter(
-          widget.initialGender.replaceFirst(widget.tag, ''));
+      chosenGender = genderFromGenderLetter(widget.initialGender
+          .replaceFirst(RegExp(widget.tag.label, caseSensitive: false), ''));
       print(chosenGender);
     } else {
-      tag = widget.tag;
+      tag = widget.tag.label;
     }
     selected = widget.selected;
     super.initState();
   }
 
   void setTag() {
-    tag = chosenGender.forTagTemplate(widget.genderTemplate, widget.tag);
+    tag = chosenGender.forTagTemplate(widget.genderTemplate, widget.tag.label);
   }
 
   @override
@@ -160,7 +162,7 @@ class _GenderTagState extends State<GenderTag> {
       },
       child: IgnorePointer(
         child: GwaTag(
-          tag: tag,
+          tag: widget.tag,
           selected: selected,
           onSelected: (value) {},
         ),

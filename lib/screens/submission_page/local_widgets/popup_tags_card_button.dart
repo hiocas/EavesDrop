@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/models/tag_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -16,7 +17,7 @@ class PopupTagsCardButton extends StatelessWidget {
   final String heroTag;
   final void Function(bool value, int index) onSelected;
   final GwaSubmission gwaSubmission;
-  final List<bool> selectedTags;
+  final TagList tagList;
 
   ///If this is true, the placeholder will be the default one I made unless the [placeholder] parameter is specified. If it isn't the placeholder will be the normal default placeholder.
   final bool usePlaceholder;
@@ -32,9 +33,9 @@ class PopupTagsCardButton extends StatelessWidget {
     this.color,
     this.subtextColor,
     @required this.heroTag,
+    @required this.tagList,
     @required this.onSelected,
     @required this.gwaSubmission,
-    @required this.selectedTags,
     this.usePlaceholder,
     this.placeholder,
     this.mini = false,
@@ -53,7 +54,7 @@ class PopupTagsCardButton extends StatelessWidget {
       widget: PopupStatefulTagsCard(
         onSelected: this.onSelected,
         gwaSubmission: this.gwaSubmission,
-        selectedTags: this.selectedTags,
+        tagList: this.tagList,
       ),
       usePlaceholder: this.usePlaceholder,
       placeholder: this.placeholder,
@@ -64,13 +65,13 @@ class PopupTagsCardButton extends StatelessWidget {
 class PopupStatefulTagsCard extends StatefulWidget {
   final void Function(bool value, int index) onSelected;
   final GwaSubmission gwaSubmission;
-  final List<bool> selectedTags;
+  final TagList tagList;
 
   const PopupStatefulTagsCard({
     Key key,
+    @required this.tagList,
     @required this.onSelected,
     @required this.gwaSubmission,
-    @required this.selectedTags,
   }) : super(key: key);
 
   @override
@@ -82,8 +83,8 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     List<Widget> chips = [];
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       chips.add(GwaTag(
-        tag: widget.gwaSubmission.tags[i],
-        selected: widget.selectedTags[i],
+        tag: widget.tagList.tags[i],
+        selected: widget.tagList.selectedTags[i],
         onSelected: (bool value) {
           /*Update the tags on the submission page, this is also where the
                   * selected bool list is so update it also.*/
@@ -100,7 +101,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
   }
 
   bool _isOneSelected() {
-    for (bool tag in widget.selectedTags) {
+    for (bool tag in widget.tagList.selectedTags) {
       if (tag) return true;
     }
     return false;
@@ -111,7 +112,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     String specialQueries = '';
     bool onlySpecials = true;
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
-      if (widget.selectedTags[i]) {
+      if (widget.tagList.selectedTags[i]) {
         String _specialQuery =
             _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
         if (_specialQuery.isEmpty) {
@@ -131,7 +132,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
   String _makeForgivingTagQuery() {
     String query = '';
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
-      if (widget.selectedTags[i]) {
+      if (widget.tagList.selectedTags[i]) {
         String _specialQuery =
             _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
         if (_specialQuery.isEmpty) {
@@ -232,8 +233,8 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
                     label: 'Clear Selected Tags',
                     icon: Icons.close,
                     onPressed: () {
-                      widget.selectedTags
-                          .fillRange(1, widget.selectedTags.length, false);
+                      widget.tagList.selectedTags
+                          .fillRange(1, widget.tagList.selectedTags.length, false);
                       //Just so we setState() in SubmissionPage.
                       widget.onSelected.call(false, 0);
                       setState(() {});

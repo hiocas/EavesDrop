@@ -161,8 +161,7 @@ class _SearchFiltersCardState extends State<SearchFiltersCard> {
                           itemBuilder: (context, index) => Padding(
                             padding: const EdgeInsets.only(right: 6.0),
                             child: ChoiceChip(
-                              backgroundColor:
-                                  Theme.of(context).primaryColor,
+                              backgroundColor: Theme.of(context).primaryColor,
                               selectedColor: Theme.of(context).accentColor,
                               labelStyle: TextStyle(color: Colors.white),
                               side: BorderSide(width: 0.0),
@@ -192,29 +191,26 @@ class _SearchFiltersCardState extends State<SearchFiltersCard> {
                             itemBuilder: (context, index) => Padding(
                               padding: const EdgeInsets.only(right: 6.0),
                               child: ChoiceChip(
-                                backgroundColor:
-                                    Theme.of(context).primaryColor,
-                                selectedColor:
-                                    Theme.of(context).accentColor,
-                                disabledColor: darken(
-                                    Theme.of(context).primaryColor, 0.1),
+                                backgroundColor: Theme.of(context).primaryColor,
+                                selectedColor: Theme.of(context).accentColor,
+                                disabledColor:
+                                    darken(Theme.of(context).primaryColor, 0.1),
                                 labelStyle: TextStyle(color: Colors.white),
                                 side: BorderSide(width: 0.0),
                                 label: Text(
                                   SearchFunctions.timeFilterToString(
-                                    SearchFunctions
-                                        .getSortedTimeFilterValue(index),
+                                    SearchFunctions.getSortedTimeFilterValue(
+                                        index),
                                   ),
                                 ),
                                 selected: _searchTimeFilter ==
-                                    SearchFunctions
-                                        .getSortedTimeFilterValue(index),
-                                onSelected: SearchFunctions
-                                        .timeFilterRelevant(_searchSort)
+                                    SearchFunctions.getSortedTimeFilterValue(
+                                        index),
+                                onSelected: SearchFunctions.timeFilterRelevant(
+                                        _searchSort)
                                     ? (selected) {
                                         _searchTimeFilter = SearchFunctions
-                                            .getSortedTimeFilterValue(
-                                                index);
+                                            .getSortedTimeFilterValue(index);
                                         setState(() {});
                                       }
                                     : null,
@@ -311,7 +307,8 @@ class _SearchFiltersCardState extends State<SearchFiltersCard> {
                       } else {
                         print(current.includedTags);
                         current.includedTags = current.includedTags
-                            .replaceFirst(currentTag, '');
+                            .replaceFirst(
+                                RegExp(currentTag, caseSensitive: false), '');
                         print(current.includedTags);
                       }
                       current.formatIncludedTags();

@@ -60,7 +60,7 @@ class SearchDetails {
         searchQuery = searchQuery.replaceRange(range[0], range[1], '');
       }
     }
-    return searchQuery;
+    return searchQuery.trim();
   }
 
   static List<int> getAuthorRange(String searchQuery) {

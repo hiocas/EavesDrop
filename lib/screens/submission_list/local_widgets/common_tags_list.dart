@@ -1,3 +1,4 @@
+import 'package:eavesdrop/models/tag_list.dart';
 import 'package:flutter/material.dart';
 import 'package:eavesdrop/models/search_details.dart';
 import 'gender_tag.dart';
@@ -20,16 +21,13 @@ class CommonTagsList extends StatefulWidget {
 }
 
 class _CommonTagsListState extends State<CommonTagsList> {
+  TagList tagList;
   final List<Widget> tagWidgets = [];
-  final List<bool> selectedTags = [];
   final List<String> initialGenders = [];
 
   @override
   void initState() {
-    this
-        .selectedTags
-        .addAll(List.generate(widget.tags.length, (index) => false));
-
+    this.tagList = TagList(widget.tags);
     this
         .initialGenders
         .addAll(List.generate(widget.tags.length, (index) => ''));
@@ -49,7 +47,7 @@ class _CommonTagsListState extends State<CommonTagsList> {
 
     for (var i = 0; i < _tags.length; i++) {
       for (var j = 0; j < this.length; j++) {
-        if (this.regExp(widget.tags[j]).hasMatch(_tags[i])) {
+        if (this.regExp(tagList.tags[j]).hasMatch(_tags[i])) {
           // TODO: Change gender tags to the tag if found.
           int _found = -1;
           for (var t = 0; t < widget.tags.length; t++) {
@@ -59,9 +57,9 @@ class _CommonTagsListState extends State<CommonTagsList> {
             }
           }
           if (_found != -1) {
-            this.selectedTags[_found] = true;
+            this.tagList.selectedTags[_found] = true;
           } else {
-            this.selectedTags[j] = true;
+            this.tagList.selectedTags[j] = true;
             this.initialGenders[j] = _tags[i];
           }
           _tags[i] = '';
@@ -71,14 +69,14 @@ class _CommonTagsListState extends State<CommonTagsList> {
     }
 
     for (var i = 0; i < widget.tags.length; i++) {
-      if (isGenderTag(widget.tags[i])) {
+      if (isGenderTag(tagList.tags[i])) {
         addGenderTag(
-          getGenderTag(widget.tags[i]),
-          genderTemplate: getGenderTemplate(widget.tags[i]),
+          getGenderTag(tagList.tags[i]),
+          genderTemplate: getGenderTemplate(tagList.tags[i]),
           initialGender: initialGenders[i],
         );
       } else {
-        addTag(widget.tags[i]);
+        addTag(tagList.tags[i]);
       }
     }
 
@@ -87,18 +85,23 @@ class _CommonTagsListState extends State<CommonTagsList> {
     super.initState();
   }
 
-  String getGenderTag(String tag) => tag.replaceFirst('[gender]', '');
+  Tag getGenderTag(Tag tag) => Tag(
+        label: tag.label.replaceFirst('[gender]', ''),
+        avatar: tag.avatar,
+        inWarning: tag.inWarning,
+        multipleChars: tag.multipleChars,
+      );
 
   int get length => widget.tags.length;
 
-  bool isGenderTag(String tag) {
-    return tag.contains(RegExp(r'\[gender\]'));
+  bool isGenderTag(Tag tag) {
+    return tag.label.contains(RegExp(r'\[gender\]'));
   }
 
-  String getGenderTemplate(String tag) =>
-      tag.indexOf('[') == 0 ? '{gender}{tag}' : '{tag}{gender}';
+  String getGenderTemplate(Tag tag) =>
+      tag.label.indexOf('[') == 0 ? '{gender}{tag}' : '{tag}{gender}';
 
-  RegExp regExp(String tag) {
+  RegExp regExp(Tag tag) {
     print(tag);
     if (this.isGenderTag(tag)) {
       final GenderTag tagWidget = GenderTag(
@@ -109,17 +112,18 @@ class _CommonTagsListState extends State<CommonTagsList> {
       );
       return tagWidget.regexp;
     } else {
-      return RegExp(tag, caseSensitive: false);
+      return RegExp(tag.label, caseSensitive: false);
     }
   }
 
-  addGenderTag(String tag, {String genderTemplate, String initialGender}) {
+  addGenderTag(Tag tag, {String genderTemplate, String initialGender}) {
     final int index = tagWidgets.length;
+    print('initial gender: $initialGender');
     tagWidgets.add(GenderTag(
       tag: tag,
-      selected: selectedTags[index],
+      selected: tagList.selectedTags[index],
       onSelected: (value, chosenTag) {
-        selectedTags[index] = value;
+        tagList.selectedTags[index] = value;
         widget.onSelected.call(value, chosenTag);
       },
       genderTemplate: genderTemplate,
@@ -127,22 +131,22 @@ class _CommonTagsListState extends State<CommonTagsList> {
     ));
   }
 
-  addTag(String tag) {
+  addTag(Tag tag) {
     final int index = tagWidgets.length;
     tagWidgets.add(StatefulGwaTag(
         tag: tag,
-        selected: selectedTags[index],
+        selected: tagList.selectedTags[index],
         onSelected: (value) {
-          selectedTags[index] = value;
-          widget.onSelected.call(value, tag);
+          tagList.selectedTags[index] = value;
+          widget.onSelected.call(value, tag.label);
         }));
   }
 
   addAll(List<String> tags, {bool Function(String) when}) =>
       tags.forEach((tag) {
         if (when != null && when.call(tag)) {
-          this.selectedTags.add(true);
-          this.addTag(tag);
+          this.tagList.add(tag);
+          this.addTag(this.tagList.tags.last);
         }
       });
 
@@ -164,7 +168,7 @@ class StatefulGwaTag extends StatefulWidget {
     @required this.onSelected,
   }) : super(key: key);
 
-  final String tag;
+  final Tag tag;
   final bool selected;
   final void Function(bool) onSelected;
 

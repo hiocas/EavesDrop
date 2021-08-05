@@ -1,8 +1,9 @@
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/models/tag_list.dart';
+import 'package:eavesdrop/screens/submission_page/local_widgets/submission_page_tags_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eavesdrop/models/gwa_submission.dart';
-import 'package:eavesdrop/screens/submission_page/local_widgets/gwa_tag.dart';
 import 'package:eavesdrop/screens/submission_page/local_widgets/popup_add_card_button.dart';
 import 'package:eavesdrop/screens/submission_page/local_widgets/popup_tags_card_button.dart';
 import 'package:eavesdrop/screens/submission_page/local_widgets/submission_details.dart';
@@ -34,14 +35,11 @@ class SubmissionPageButtonsAndTags extends StatefulWidget {
 
 class _SubmissionPageButtonsAndTagsState
     extends State<SubmissionPageButtonsAndTags> {
-  List<bool> _selectedTags = [];
+  TagList tagList;
 
   @override
   void initState() {
-    _selectedTags = List<bool>.generate(
-      widget.submission.tags.length,
-      (index) => false,
-    );
+    tagList = TagList(widget.submission.tags);
     super.initState();
   }
 
@@ -122,10 +120,10 @@ class _SubmissionPageButtonsAndTagsState
                   mini: widget.mini,
                   heroTag: 'submission-tags-popup',
                   gwaSubmission: widget.submission,
-                  selectedTags: _selectedTags,
+                  tagList: tagList,
                   onSelected: (bool value, int index) {
                     setState(() {
-                      _selectedTags[index] = value;
+                      tagList.selectedTags[index] = value;
                     });
                   },
                   usePlaceholder: true,
@@ -133,31 +131,9 @@ class _SubmissionPageButtonsAndTagsState
               ],
             ),
           ),
-          (widget.submission.tags.length > 0
-              ? Container(
-                  margin:
-                      const EdgeInsets.only(left: 10.0, top: 4.0, bottom: 4.0),
-                  height: 35,
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      return GwaTag(
-                        tag: widget.submission.tags[index],
-                        selected: _selectedTags[index],
-                        onSelected: (value) {
-                          setState(() {
-                            _selectedTags[index] = value;
-                          });
-                        },
-                      );
-                    },
-                    itemCount: widget.submission.tags.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                  /* This makes it so we won't show the tag list if the
-                        post has no tags. */
-                )
-              : Container()),
+          SubmissionPageTagsList(
+            tagList: tagList,
+          )
         ],
       ),
     );
