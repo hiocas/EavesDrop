@@ -1,5 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:eavesdrop/models/tag_list.dart';
+import 'package:eavesdrop/utils/gwa_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -114,7 +115,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.tagList.selectedTags[i]) {
         String _specialQuery =
-            _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
+            GwaFunctions.findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
         if (_specialQuery.isEmpty) {
           onlySpecials = false;
           query += '"${widget.gwaSubmission.tags[i]}" ';
@@ -134,21 +135,13 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
       if (widget.tagList.selectedTags[i]) {
         String _specialQuery =
-            _findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
+            GwaFunctions.findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
         if (_specialQuery.isEmpty) {
           query += '${widget.gwaSubmission.tags[i]} ';
         } else {
           query += _specialQuery;
         }
       }
-    }
-    return query;
-  }
-
-  String _findSpecialTagNameQuery(String tag) {
-    String query = '';
-    if (tag.startsWith('{author:}')) {
-      query += tag.substring(1, 8) + '"' + tag.substring(9) + '" ';
     }
     return query;
   }

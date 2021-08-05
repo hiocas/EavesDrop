@@ -39,7 +39,7 @@ class _SubmissionPageButtonsAndTagsState
 
   @override
   void initState() {
-    tagList = TagList(widget.submission.tags);
+    tagList = TagList(widget.submission.tags, sort: true);
     super.initState();
   }
 

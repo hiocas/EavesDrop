@@ -88,8 +88,8 @@ class _CommonTagsListState extends State<CommonTagsList> {
   Tag getGenderTag(Tag tag) => Tag(
         label: tag.label.replaceFirst('[gender]', ''),
         avatar: tag.avatar,
-        inWarning: tag.inWarning,
         multipleChars: tag.multipleChars,
+        inWarning: tag.inWarning,
       );
 
   int get length => widget.tags.length;

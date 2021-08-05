@@ -18,7 +18,7 @@ class SubmissionPageTagsList extends StatefulWidget {
 class _SubmissionPageTagsListState extends State<SubmissionPageTagsList> {
   @override
   Widget build(BuildContext context) {
-    if (widget.tagList.tagLabels.length == 0) return Container();
+    if (widget.tagList.tags.length == 0) return Container();
     return Container(
       margin: const EdgeInsets.only(left: 10.0, top: 4.0, bottom: 4.0),
       height: 35,
@@ -34,7 +34,7 @@ class _SubmissionPageTagsListState extends State<SubmissionPageTagsList> {
             },
           );
         },
-        itemCount: widget.tagList.tagLabels.length,
+        itemCount: widget.tagList.tags.length,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
       ),

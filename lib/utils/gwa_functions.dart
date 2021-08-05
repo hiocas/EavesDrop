@@ -3,6 +3,11 @@ import 'dart:ui';
 import 'package:eavesdrop/models/placeholders_options.dart';
 
 class GwaFunctions {
+  static final List<RegExp> specialTags = [
+    RegExp('{author:}'),
+    RegExp(r'^[a-z]{1,2}4[a-z]{1,2}$', caseSensitive: false),
+  ];
+
 //TODO: Make this work better as well as more efficient.
   /// Returns a string of the name of the submission.
   static String findSubmissionTitle(String fullTitle) {
@@ -68,7 +73,9 @@ class GwaFunctions {
         placeholders = gradientPlaceholders;
         break;
       case PlaceholdersOptions.GoneWildAudioLogo:
-        placeholders = ['https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9'];
+        placeholders = [
+          'https://styles.redditmedia.com/t5_2u463/styles/communityIcon_1lj5xecdisi31.png?width=256&s=98e8187f0403751b02c03e7ffb9f059ce0ce18d9'
+        ];
         break;
     }
   }
@@ -110,4 +117,18 @@ class GwaFunctions {
     }
   }
 
+  static String findSpecialTagNameQuery(String tag) {
+    String query = '';
+    if (tag.startsWith(specialTags[0])) {
+      query += tag.substring(1, 8) + '"' + tag.substring(9) + '" ';
+    }
+    return query;
+  }
+
+  static bool isTagSpecial(String tag) {
+    for (var specialTag in specialTags) {
+      if (tag.startsWith(specialTag)) return true;
+    }
+    return false;
+  }
 }

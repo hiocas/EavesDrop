@@ -1,18 +1,27 @@
+import 'package:eavesdrop/utils/gwa_functions.dart';
 import 'package:flutter/material.dart';
 
 class TagList {
-  final List<String> tagLabels;
   final List<bool> selectedTags = [];
   List<Tag> tags = [];
-  final List<String> warningTags = const ['daddy', 'incest'];
+  final List<String> warningTags = const ['daddy', 'incest', 'rape'];
 
-  TagList(this.tagLabels) {
-    for (String label in this.tagLabels) {
-      initialAdd(label);
+  /// Constructs a [TagList] object.
+  /// [tagLabels] are the tag labels from which the [Tag] list will be
+  /// constructed.
+  /// [sort] determines whether the list should be sorted (currently based on
+  /// warning tags) or not.
+  TagList(List<String> tagLabels, {bool sort = false}) {
+    for (String label in tagLabels) {
+      add(label);
     }
+    if (sort) {
+      this.tags.sort((Tag a, Tag b) => a.compareTo(b));
+    }
+    print(GwaFunctions.isTagSpecial('f4m'));
   }
 
-  initialAdd(String label, {bool selected = false}) {
+  add(String label, {bool selected = false}) {
     this.selectedTags.add(false);
 
     bool inWarning = false;
@@ -29,12 +38,8 @@ class TagList {
         label: label,
         avatar: avatarCreator[0],
         multipleChars: avatarCreator[1] == 2,
-        inWarning: inWarning));
-  }
-
-  add(String label, {bool selected = false}) {
-    this.tagLabels.add(label);
-    this.initialAdd(label, selected: selected);
+        inWarning: inWarning,
+        isSpecial: GwaFunctions.isTagSpecial(label)));
   }
 
   addAll(List<String> labels, {bool Function(String) when}) =>
@@ -139,16 +144,38 @@ class TagList {
   }
 }
 
-class Tag {
+class Tag implements Comparable<Tag> {
   final String label;
   final Widget avatar;
   final bool multipleChars;
   final bool inWarning;
+  final bool isSpecial;
 
   const Tag({
     @required this.label,
     @required this.avatar,
     @required this.multipleChars,
     @required this.inWarning,
+    this.isSpecial = false,
   });
+
+  @override
+  int compareTo(Tag other) {
+    if (this.isSpecial) {
+      if (other.isSpecial)
+        return 0;
+      else
+        return -1;
+    } else if (other.isSpecial) {
+      return 1;
+    } else if (this.inWarning) {
+      if (other.inWarning)
+        return 0;
+      else
+        return -1;
+    } else if (other.inWarning) {
+      return 1;
+    }
+    return 0;
+  }
 }
