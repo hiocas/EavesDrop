@@ -233,13 +233,13 @@ class _RedditSpoilerState extends State<RedditSpoiler> {
       }),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4.0),
+          borderRadius: BorderRadius.circular(6.0),
           color: _visible
-              ? Theme.of(context).errorColor.withOpacity(0.2)
+              ? Colors.black26
               : Theme.of(context).errorColor.withOpacity(0.7),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(2.0),
+          padding: const EdgeInsets.all(4.0),
           child: Text(
             widget.element.textContent,
             style: TextStyle(
