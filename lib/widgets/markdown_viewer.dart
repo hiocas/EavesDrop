@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:draw/draw.dart';
+import 'package:draw/draw.dart' hide Visibility;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -66,10 +66,11 @@ class MarkdownViewer extends StatelessWidget {
                 headline5:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                 headline6: TextStyle(color: Colors.grey[200]),
-                subtitle1: subtitle1TextStyle ?? TextStyle(
-                    color: Colors.grey[300],
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500),
+                subtitle1: subtitle1TextStyle ??
+                    TextStyle(
+                        color: Colors.grey[300],
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
                 bodyText2: TextStyle(
                   fontSize: this.bodyTextFontSize ?? 15.0,
                   color: this.bodyTextColor ?? Colors.grey[400],
@@ -104,9 +105,11 @@ class MarkdownViewer extends StatelessWidget {
                 sort: Sort.newest,
                 timeFilter: TimeFilter.all);
           }),
+          "spoiler": RedditSpoilerMarkdownElementBuilder(),
         },
         inlineSyntaxes: [
           RedditUserInlineSyntax(),
+          RedditSpoilerSyntax(),
           ZeroWidthSpaceSyntax(),
           NbspSyntax(),
           AmpersandSyntax(),
@@ -169,6 +172,19 @@ class ZeroWidthSpaceSyntax extends md.InlineSyntax {
   }
 }
 
+class RedditSpoilerSyntax extends md.InlineSyntax {
+  RedditSpoilerSyntax({String pattern = r'\>\!.*\!\<'}) : super(pattern);
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    final spoiler = match.group(0);
+    md.Element element =
+        md.Element.text("spoiler", spoiler.substring(2, spoiler.length - 2));
+    parser.addNode(element);
+    return true;
+  }
+}
+
 // FIXME: Handle usernames that are encased with hyperlink syntax.
 class RedditUserMarkdownElementBuilder extends MarkdownElementBuilder {
   final void Function(String username, String text) onTap;
@@ -185,5 +201,52 @@ class RedditUserMarkdownElementBuilder extends MarkdownElementBuilder {
       recognizer: new TapGestureRecognizer()
         ..onTap = () => onTap.call(username, element.textContent),
     ));
+  }
+}
+
+class RedditSpoilerMarkdownElementBuilder extends MarkdownElementBuilder {
+  RedditSpoilerMarkdownElementBuilder();
+
+  @override
+  Widget visitElementAfter(md.Element element, TextStyle preferredStyle) {
+    return RedditSpoiler(element: element);
+  }
+}
+
+class RedditSpoiler extends StatefulWidget {
+  final md.Element element;
+
+  const RedditSpoiler({Key key, @required this.element}) : super(key: key);
+
+  @override
+  _RedditSpoilerState createState() => _RedditSpoilerState();
+}
+
+class _RedditSpoilerState extends State<RedditSpoiler> {
+  bool _visible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => setState(() {
+        _visible = !_visible;
+      }),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.0),
+          color: _visible
+              ? Theme.of(context).errorColor.withOpacity(0.2)
+              : Theme.of(context).errorColor.withOpacity(0.7),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text(
+            widget.element.textContent,
+            style: TextStyle(
+                color: _visible ? Colors.grey[300] : Colors.transparent),
+          ),
+        ),
+      ),
+    );
   }
 }
