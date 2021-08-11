@@ -1,4 +1,6 @@
+import 'package:eavesdrop/models/tag_list.dart';
 import 'package:eavesdrop/screens/flat_home/new_home.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eavesdrop/models/app_settings.dart';
 import 'package:eavesdrop/models/audio_launch_options.dart';
@@ -9,8 +11,9 @@ import 'package:eavesdrop/utils/gwa_functions.dart';
 import 'package:eavesdrop/widgets/gradient_title_appbar.dart';
 import 'package:eavesdrop/utils/util_functions.dart'
     show audioLaunchOptionToString, placeholdersOptionsToString;
-import 'package:eavesdrop/widgets/markdown_viewer.dart';
 import 'package:hive/hive.dart';
+import 'local_widgets/default_settings.dart';
+import 'local_widgets/warning_tag_list.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key key}) : super(key: key);
@@ -25,6 +28,7 @@ class _SettingsState extends State<Settings> {
   bool _miniButtons;
   bool _librarySmallSubmissions;
   Box<AppSettings> _box;
+  TagList _warningTagList;
 
   @override
   void dispose() {
@@ -34,11 +38,11 @@ class _SettingsState extends State<Settings> {
     super.dispose();
   }
 
-  _SettingOption<AudioLaunchOptions> _makeAudioLaunchOptionSettingOption(
+  SettingOption<AudioLaunchOptions> _makeAudioLaunchOptionSettingOption(
       BuildContext context,
       {AudioLaunchOptions value,
       String subtitle}) {
-    return _SettingOption<AudioLaunchOptions>(context,
+    return SettingOption<AudioLaunchOptions>(context,
         value: value,
         title: audioLaunchOptionToString(value),
         subtitle: subtitle,
@@ -50,11 +54,11 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  _SettingOption<PlaceholdersOptions> _makePlaceholdersOptionsSettingOption(
+  SettingOption<PlaceholdersOptions> _makePlaceholdersOptionsSettingOption(
       BuildContext context,
       {PlaceholdersOptions value,
       String subtitle}) {
-    return _SettingOption<PlaceholdersOptions>(context,
+    return SettingOption<PlaceholdersOptions>(context,
         value: value,
         title: placeholdersOptionsToString(value),
         subtitle: subtitle,
@@ -69,9 +73,9 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  _SettingOption<bool> _makeMiniButtonsSettingOption(BuildContext context,
+  SettingOption<bool> _makeMiniButtonsSettingOption(BuildContext context,
       {bool value, String title, String subtitle}) {
-    return _SettingOption<bool>(context,
+    return SettingOption<bool>(context,
         value: value,
         title: title,
         subtitle: subtitle,
@@ -83,12 +87,12 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  _SettingOption<bool> _makeLibrarySmallSubmissionsSettingOption(
+  SettingOption<bool> _makeLibrarySmallSubmissionsSettingOption(
       BuildContext context,
       {bool value,
       String title,
       String subtitle}) {
-    return _SettingOption<bool>(context,
+    return SettingOption<bool>(context,
         value: value,
         title: title,
         subtitle: subtitle,
@@ -109,73 +113,60 @@ class _SettingsState extends State<Settings> {
         title: 'Settings',
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: FutureBuilder<Box<AppSettings>>(
-          future: HiveBoxes.openAppSettingsBox(),
+      body: FutureBuilder<AppSettings>(
+          future: HiveBoxes.getAppSettings(),
           builder: (context, futureBox) {
             if (futureBox.hasData) {
-              _box = futureBox.data;
-              AppSettings _appSettings = futureBox.data.getAt(0);
+              AppSettings _appSettings = futureBox.data;
               _audioLaunchOptions = _appSettings.audioLaunchOptions;
               _placeholdersOptions = _appSettings.placeholdersOptions;
               _miniButtons = _appSettings.miniButtons;
               _librarySmallSubmissions = _appSettings.librarySmallSubmissions;
+              final List<String> _warningTags = _appSettings.warningTags;
+              _warningTagList = TagList(_warningTags);
               return Center(
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
                   children: [
                     // AudioLaunchOption setting
-                    _Setting(
-                      icon: Icons.play_circle_filled_outlined,
-                      settingName:
-                          'Choose your preferred web launcher for detected audio '
-                          'links:',
-                      spaceHead: false,
-                      options: [
-                        _makeAudioLaunchOptionSettingOption(context,
-                            value: AudioLaunchOptions.EavesDrop,
-                            subtitle:
-                                "Use the in-app audio player."),
-                        _makeAudioLaunchOptionSettingOption(context,
-                            value: AudioLaunchOptions.ChromeCustomTabs,
-                            subtitle:
-                                "Allows you to play audio while your phone is "
-                                "locked but, since it's Chrome, your activity "
-                                "will be saved in your Chrome history."),
-                        _makeAudioLaunchOptionSettingOption(context,
-                            value: AudioLaunchOptions.WebView,
-                            subtitle: "Your activity will not be saved in your "
-                                "Chrome history but audio played while your "
-                                "phone is locked will be choppy and laggy (not "
-                                "a very pleasant experience).")
-                      ],
-                      explanation: ExpansionTile(
-                        title: Text('What is this?'),
-                        textColor: Colors.white,
-                        iconColor: Colors.white,
-                        collapsedTextColor: Colors.grey[400],
-                        collapsedIconColor: Colors.grey[400],
-                        children: [
-                          ListTile(
-                            title: MarkdownViewer(
-                              inPopupCard: false,
-                              text:
-                                  "When you click on the large play button after opening a post, this setting tells the app which browser to open the audio link with.\n\n"
-                                  "**Chrome Custom Tabs** is the default option. It's downside is that your browsing history in it is automatically saved to your Chrome history.\n\n"
-                                  "**WebView** is the other option. It won't save your history to your chrome history but if you lock your phone while listening to the audio it will be choppy (this is because WebView uses an older method to handle background audio tasks. If you're using an older version of Android, it may not be choppy and actually be usable).\n"
-                                  "This is the reason the WakeLock button exists on there. I know it's a very invasive solution but it's genuinely the only solution I've managed to find and implement in time.\n\n"
-                                  "Unfortunately, these are the only ways I managed to find to launch web content.\n\n"
-                                  "In the future, I'd like to have a custom made player for posts built into the app. This would hopefully solve most of these issues.\n\n"
-                                  "Also, if you know of a better way we can do this where both downsides are nonexistent, please contribute to this project on GitHub!",
-                              bodyTextFontSize: 14.0,
-                              bodyTextColor: Colors.grey[400],
-                            ),
-                          )
+                    OptionSetting(
+                        icon: Icons.play_circle_filled_outlined,
+                        settingName:
+                            'Choose your preferred web launcher for detected audio '
+                            'links:',
+                        spaceHead: false,
+                        options: [
+                          _makeAudioLaunchOptionSettingOption(context,
+                              value: AudioLaunchOptions.EavesDrop,
+                              subtitle: "Use the in-app audio player."),
+                          _makeAudioLaunchOptionSettingOption(context,
+                              value: AudioLaunchOptions.ChromeCustomTabs,
+                              subtitle:
+                                  "Allows you to play audio while your phone is "
+                                  "locked but, since it's Chrome, your activity "
+                                  "will be saved in your Chrome history."),
+                          _makeAudioLaunchOptionSettingOption(context,
+                              value: AudioLaunchOptions.WebView,
+                              subtitle:
+                                  "Your activity will not be saved in your "
+                                  "Chrome history but audio played while your "
+                                  "phone is locked will be choppy and laggy (not "
+                                  "a very pleasant experience).")
                         ],
-                      ),
-                    ),
+                        explanation: SettingExplanation(
+                          title: 'What is this?',
+                          explanation:
+                              "When you click on the large play button after opening a post, this setting tells the app which browser to open the audio link with.\n\n"
+                              "**Chrome Custom Tabs** is the default option. It's downside is that your browsing history in it is automatically saved to your Chrome history.\n\n"
+                              "**WebView** is the other option. It won't save your history to your chrome history but if you lock your phone while listening to the audio it will be choppy (this is because WebView uses an older method to handle background audio tasks. If you're using an older version of Android, it may not be choppy and actually be usable).\n"
+                              "This is the reason the WakeLock button exists on there. I know it's a very invasive solution but it's genuinely the only solution I've managed to find and implement in time.\n\n"
+                              "Unfortunately, these are the only ways I managed to find to launch web content.\n\n"
+                              "In the future, I'd like to have a custom made player for posts built into the app. This would hopefully solve most of these issues.\n\n"
+                              "Also, if you know of a better way we can do this where both downsides are nonexistent, please contribute to this project on GitHub!",
+                        )),
                     // Action Button Size Setting
-                    _Setting(
+                    OptionSetting(
                         icon: Icons.aspect_ratio_outlined,
                         settingName: "Choose your action buttons' size:",
                         options: [
@@ -197,7 +188,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ]),
                     // Library Cross Axis Extent Setting
-                    _Setting(
+                    OptionSetting(
                         icon: Icons.grid_view_outlined,
                         settingName: "Choose your library's posts size:",
                         options: [
@@ -207,7 +198,7 @@ class _SettingsState extends State<Settings> {
                               title: 'Small', value: true),
                         ]),
                     // Placeholders Options Setting.
-                    _Setting(
+                    OptionSetting(
                         icon: Icons.image_outlined,
                         settingName: "Choose your preview placeholders:",
                         options: [
@@ -225,7 +216,8 @@ class _SettingsState extends State<Settings> {
                               subtitle:
                                   'The GoneWildAudio subreddit image. Will be '
                                   'the same for all previews.')
-                        ])
+                        ]),
+                    WarningTagList(tagList: _warningTagList),
                   ],
                 ),
               ));
@@ -234,83 +226,4 @@ class _SettingsState extends State<Settings> {
           }),
     );
   }
-}
-
-class _Setting extends StatelessWidget {
-  const _Setting({
-    Key key,
-    @required this.icon,
-    @required this.settingName,
-    this.spacing = 15.0,
-    @required this.options,
-    this.explanation,
-    this.spaceHead = true,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String settingName;
-  final double spacing;
-  final List<_SettingOption> options;
-  final Widget explanation;
-  final bool spaceHead;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: spaceHead ? spacing : 0.0,
-        ),
-        ListTile(
-          leading: Icon(
-            icon,
-            color: Colors.white,
-            size: 35.0,
-          ),
-          title: Text(
-            settingName,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0),
-          ),
-        ),
-        SizedBox(height: spacing),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: options,
-        ),
-        explanation ??
-            SizedBox(
-              height: spacing,
-            ),
-        Divider(
-          thickness: 1.0,
-          color: Colors.black26,
-        )
-      ],
-    );
-  }
-}
-
-class _SettingOption<T> extends RadioListTile<T> {
-  _SettingOption(BuildContext context,
-      {@required String title,
-      String subtitle,
-      @required T value,
-      @required T groupValue,
-      @required void Function(dynamic) onChanged})
-      : super(
-          activeColor: Theme.of(context).primaryColor,
-          value: value,
-          title: Text(
-            title,
-            style: TextStyle(color: Colors.white),
-          ),
-          subtitle: subtitle != null
-              ? Text(subtitle, style: TextStyle(color: Colors.grey[400]))
-              : null,
-          groupValue: groupValue,
-          onChanged: onChanged,
-        );
 }

@@ -30,7 +30,8 @@ class HiveBoxes {
         ),
       );
     } else {
-      if (settingsBox.getAt(0).firstTime) {
+      final AppSettings appSettings = settingsBox.get(0);
+      if (appSettings.firstTime) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -38,8 +39,11 @@ class HiveBoxes {
           ),
         );
       }
+      if (appSettings.warningTags == null) {
+        appSettings.warningTags = [];
+        await appSettings.save();
+      }
     }
-    settingsBox.close();
   }
 
   static Box<LibraryGwaSubmission> getLibraryBox() =>
@@ -113,19 +117,19 @@ class HiveBoxes {
 
   static Future<AppSettings> addAppSettings(
       {String credentials,
-      AudioLaunchOptions audioLaunchOptions =
-          AudioLaunchOptions.EavesDrop,
+      AudioLaunchOptions audioLaunchOptions = AudioLaunchOptions.EavesDrop,
       bool miniButtons = false,
       bool librarySmallSubmissions = false,
-      PlaceholdersOptions placeholdersOptions =
-          PlaceholdersOptions.Gradients}) async {
+      PlaceholdersOptions placeholdersOptions = PlaceholdersOptions.Gradients,
+      List<String> warningTags = const []}) async {
     final AppSettings settings = AppSettings(
         credentials: credentials,
         audioLaunchOptions: audioLaunchOptions,
         firstTime: false,
         miniButtons: miniButtons,
         librarySmallSubmissions: librarySmallSubmissions,
-        placeholdersOptions: placeholdersOptions);
+        placeholdersOptions: placeholdersOptions,
+        warningTags: warningTags);
     final box = await HiveBoxes.openAppSettingsBox();
     await box.add(settings);
     return Future.value(settings);
@@ -138,6 +142,7 @@ class HiveBoxes {
     bool miniButtons,
     bool librarySmallSubmissions,
     PlaceholdersOptions placeholdersOptions,
+    List<String> warningTags,
   }) async {
     final box = await HiveBoxes.openAppSettingsBox();
     if (box.isNotEmpty) {
@@ -159,6 +164,9 @@ class HiveBoxes {
       }
       if (placeholdersOptions != null) {
         settings.placeholdersOptions = placeholdersOptions;
+      }
+      if (warningTags != null) {
+        settings.warningTags = warningTags;
       }
       await settings.save();
     }

@@ -54,7 +54,7 @@ class PopupCardButton extends StatelessWidget {
       backgroundColor: this.backgroundColor,
       mini: this.mini,
       heroTag: this.heroTag,
-      widget: _PopupCard(
+      widget: DefaultPopupCard(
         heroTag: this.heroTag,
         child: this.child,
         color: this.cardColor,
@@ -67,14 +67,14 @@ class PopupCardButton extends StatelessWidget {
   }
 }
 
-class _PopupCard extends StatelessWidget {
+class DefaultPopupCard extends StatelessWidget {
   final String heroTag;
   final Widget child;
   final Color color;
   final Axis scrollDirection;
   final EdgeInsets padding;
 
-  const _PopupCard({
+  const DefaultPopupCard({
     Key key,
     @required this.child,
     @required this.heroTag,

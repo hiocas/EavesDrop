@@ -21,12 +21,14 @@ class SubmissionPageButtonsAndTags extends StatefulWidget {
     Key key,
     @required this.submission,
     @required this.redditSubmission,
+    @required this.tagList,
     this.mini = false,
   }) : super(key: key);
 
   final GwaSubmission submission;
   final Submission redditSubmission;
   final bool mini;
+  final TagList tagList;
 
   @override
   _SubmissionPageButtonsAndTagsState createState() =>
@@ -35,14 +37,6 @@ class SubmissionPageButtonsAndTags extends StatefulWidget {
 
 class _SubmissionPageButtonsAndTagsState
     extends State<SubmissionPageButtonsAndTags> {
-  TagList tagList;
-
-  @override
-  void initState() {
-    tagList = TagList(widget.submission.tags, sort: true);
-    super.initState();
-  }
-
   Widget _makeSupportButton(BuildContext context) {
     if (Provider.of<GlobalState>(context, listen: false).eligiblePrefs) {
       return SubmissionVoteButton(
@@ -120,10 +114,10 @@ class _SubmissionPageButtonsAndTagsState
                   mini: widget.mini,
                   heroTag: 'submission-tags-popup',
                   gwaSubmission: widget.submission,
-                  tagList: tagList,
+                  tagList: widget.tagList,
                   onSelected: (bool value, int index) {
                     setState(() {
-                      tagList.selectedTags[index] = value;
+                      widget.tagList.selectedTags[index] = value;
                     });
                   },
                   usePlaceholder: true,
@@ -132,7 +126,7 @@ class _SubmissionPageButtonsAndTagsState
             ),
           ),
           SubmissionPageTagsList(
-            tagList: tagList,
+            tagList: widget.tagList,
           )
         ],
       ),

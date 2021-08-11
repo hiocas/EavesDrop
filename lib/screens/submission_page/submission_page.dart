@@ -1,4 +1,5 @@
 import 'package:draw/draw.dart';
+import 'package:eavesdrop/models/tag_list.dart';
 import 'package:eavesdrop/screens/audio_player/expandable_audio_player.dart';
 import 'package:eavesdrop/states/gwa_player_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class SubmissionPageState extends State<SubmissionPage> {
       new GlobalKey<FloatingPlayButtonState>();
   bool miniButtons;
   bool _showFPB = true;
+  TagList tagList;
 
   @override
   void initState() {
@@ -51,8 +53,13 @@ class SubmissionPageState extends State<SubmissionPage> {
   Future<Submission> _initSubmissionPage() async {
     final appSettings = await HiveBoxes.getAppSettings();
     miniButtons = appSettings.miniButtons;
-    return Provider.of<GlobalState>(context, listen: false)
-        .populateSubmission(id: _fullname);
+    final Submission submission =
+        await Provider.of<GlobalState>(context, listen: false)
+            .populateSubmission(id: _fullname);
+    _submission = new GwaSubmission(submission);
+    final List<String> warningTags = appSettings.warningTags;
+    tagList = TagList(_submission.tags, warningTags: warningTags, sort: true);
+    return submission;
   }
 
   @override
@@ -71,17 +78,16 @@ class SubmissionPageState extends State<SubmissionPage> {
             ),
           );
         } else {
-          _submission = new GwaSubmission(snapshot.data);
           _showFPB = _submission.hasAudioUrl || _submission.tags.length > 0;
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,
             body: ExpandingAudioPlayer(
               audioListButtonSubmissionFullname: widget.submissionFullname,
               inCurrentSubmissionPage:
-              Provider.of<GwaPlayerState>(context, listen: false)
-                  .currentAudioSourceSubmissionFullname
-                  .replaceFirst('t3_', '') ==
-                  _fullname,
+                  Provider.of<GwaPlayerState>(context, listen: false)
+                          .currentAudioSourceSubmissionFullname
+                          .replaceFirst('t3_', '') ==
+                      _fullname,
               background: SafeArea(
                 child: Scaffold(
                   backgroundColor: Theme.of(context).backgroundColor,
@@ -101,6 +107,7 @@ class SubmissionPageState extends State<SubmissionPage> {
                         mini: miniButtons,
                         submission: _submission,
                         redditSubmission: snapshot.data,
+                        tagList: tagList,
                       ),
                       //MarkdownViewer
                       SliverPadding(
@@ -111,7 +118,8 @@ class SubmissionPageState extends State<SubmissionPage> {
                           onTap: () {
                             if (_showFPB &&
                                 _floatingPlayButtonKey.currentState.animates) {
-                              _floatingPlayButtonKey.currentState.animateButton();
+                              _floatingPlayButtonKey.currentState
+                                  .animateButton();
                             }
                           },
                           child: Material(
@@ -151,8 +159,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                           scrollController: _scrollController,
                         )
                       : null,
-                  floatingActionButtonLocation:
-                      _showFPB ? FloatingActionButtonLocation.centerFloat : null,
+                  floatingActionButtonLocation: _showFPB
+                      ? FloatingActionButtonLocation.centerFloat
+                      : null,
                 ),
               ),
             ),

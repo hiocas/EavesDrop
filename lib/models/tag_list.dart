@@ -3,15 +3,21 @@ import 'package:flutter/material.dart';
 
 class TagList {
   final List<bool> selectedTags = [];
+  final List<String> tagLabels = [];
   List<Tag> tags = [];
-  final List<String> warningTags = const ['daddy', 'incest', 'rape'];
+  List<String> warningTags;
 
   /// Constructs a [TagList] object.
   /// [tagLabels] are the tag labels from which the [Tag] list will be
   /// constructed.
   /// [sort] determines whether the list should be sorted (currently based on
   /// warning tags) or not.
-  TagList(List<String> tagLabels, {bool sort = false}) {
+  TagList(List<String> tagLabels,
+      {bool sort = false, List<String> warningTags = const []}) {
+    assert(tagLabels != null);
+
+    this.warningTags = warningTags;
+
     for (String label in tagLabels) {
       add(label);
     }
@@ -22,6 +28,7 @@ class TagList {
   }
 
   add(String label, {bool selected = false}) {
+    this.tagLabels.add(label);
     this.selectedTags.add(false);
 
     bool inWarning = false;
@@ -48,6 +55,12 @@ class TagList {
           this.add(label);
         }
       });
+
+  remove(int index) {
+    this.tagLabels.removeAt(index);
+    this.selectedTags.removeAt(index);
+    this.tags.removeAt(index);
+  }
 
   //Use the live templates "tagt" and tagt2.
   static List tagChipAvatar(String tag, bool inWarning) {
@@ -158,6 +171,20 @@ class Tag implements Comparable<Tag> {
     @required this.inWarning,
     this.isSpecial = false,
   });
+
+  Tag copyWith({
+    String label,
+    Widget avatar,
+    bool multipleChars,
+    bool inWarning,
+    bool isSpecial,
+  }) =>
+      Tag(
+          label: label ?? this.label,
+          avatar: avatar ?? this.avatar,
+          multipleChars: multipleChars ?? this.multipleChars,
+          inWarning: inWarning ?? this.inWarning,
+          isSpecial: isSpecial ?? this.isSpecial);
 
   @override
   int compareTo(Tag other) {

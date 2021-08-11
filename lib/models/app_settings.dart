@@ -27,6 +27,9 @@ class AppSettings extends HiveObject {
   @HiveField(5)
   PlaceholdersOptions placeholdersOptions;
 
+  @HiveField(7)
+  List<String> warningTags;
+
   AppSettings({
     this.credentials,
     this.audioLaunchOptions,
@@ -34,5 +37,6 @@ class AppSettings extends HiveObject {
     this.miniButtons,
     this.librarySmallSubmissions,
     this.placeholdersOptions,
+    this.warningTags,
   });
 }
