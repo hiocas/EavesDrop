@@ -112,32 +112,31 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     String query = 'title:';
     String specialQueries = '';
     bool onlySpecials = true;
-    for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
+    for (var i = 0; i < widget.tagList.tagLabels.length; i++) {
       if (widget.tagList.selectedTags[i]) {
         String _specialQuery =
-            GwaFunctions.findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
+            GwaFunctions.findSpecialTagNameQuery(widget.tagList.tagLabels[i]);
         if (_specialQuery.isEmpty) {
           onlySpecials = false;
-          query += '"${widget.gwaSubmission.tags[i]}" ';
+          query += '"${widget.tagList.tagLabels[i]}" ';
         } else {
           specialQueries = specialQueries + _specialQuery;
         }
       }
     }
-    if (onlySpecials)
-      return specialQueries;
+    if (onlySpecials) return specialQueries;
     query = specialQueries + query;
     return query;
   }
 
   String _makeForgivingTagQuery() {
     String query = '';
-    for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
+    for (var i = 0; i < widget.tagList.tagLabels.length; i++) {
       if (widget.tagList.selectedTags[i]) {
         String _specialQuery =
-            GwaFunctions.findSpecialTagNameQuery(widget.gwaSubmission.tags[i]);
+            GwaFunctions.findSpecialTagNameQuery(widget.tagList.tagLabels[i]);
         if (_specialQuery.isEmpty) {
-          query += '${widget.gwaSubmission.tags[i]} ';
+          query += '${widget.tagList.tagLabels[i]} ';
         } else {
           query += _specialQuery;
         }
@@ -226,8 +225,8 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
                     label: 'Clear Selected Tags',
                     icon: Icons.close,
                     onPressed: () {
-                      widget.tagList.selectedTags
-                          .fillRange(1, widget.tagList.selectedTags.length, false);
+                      widget.tagList.selectedTags.fillRange(
+                          1, widget.tagList.selectedTags.length, false);
                       //Just so we setState() in SubmissionPage.
                       widget.onSelected.call(false, 0);
                       setState(() {});

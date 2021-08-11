@@ -23,8 +23,13 @@ class TagList {
     }
     if (sort) {
       this.tags.sort((Tag a, Tag b) => a.compareTo(b));
+      //FIXME: This isn't very efficient.
+      this.tagLabels.clear();
+      for (Tag tag in this.tags) {
+        this.tagLabels.add(tag.label);
+        print(tags);
+      }
     }
-    print(GwaFunctions.isTagSpecial('f4m'));
   }
 
   add(String label, {bool selected = false}) {
