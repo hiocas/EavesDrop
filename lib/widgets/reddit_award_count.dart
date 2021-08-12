@@ -95,7 +95,9 @@ class _RedditAwardCountsState extends State<RedditAwardCounts> {
             index == length - 1) {
           return Text(
             '...',
-            style: TextStyle(fontSize: widget.size),
+            style: widget.counterTextStyle == null
+                ? TextStyle(fontSize: widget.size)
+                : widget.counterTextStyle.copyWith(fontSize: widget.size),
           );
         }
       }

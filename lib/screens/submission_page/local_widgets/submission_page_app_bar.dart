@@ -75,10 +75,19 @@ class SubmissionPageAppBar extends StatelessWidget {
                     children: [
                       Visibility(
                         visible: top > maxTitleAlignTop,
-                        child: RedditAwardCounts(
-                          awards: submission.allAwardings.awards,
-                          size: 10.0,
-                          maxAwards: 8,
+                        child: Material(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4.0, vertical: 2.0),
+                            child: RedditAwardCounts(
+                              awards: submission.allAwardings.awards,
+                              size: 10.0,
+                              maxAwards: 8,
+                              counterTextStyle: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
                       ConstrainedBox(
