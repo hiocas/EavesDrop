@@ -27,14 +27,15 @@ class TagList {
       this.tagLabels.clear();
       for (Tag tag in this.tags) {
         this.tagLabels.add(tag.label);
-        print(tags);
       }
     }
   }
 
-  add(String label, {bool selected = false}) {
-    this.tagLabels.add(label);
-    this.selectedTags.add(false);
+  add(String label, {bool selected = false, int index}) {
+    if (index == null) index = this.tagLabels.length;
+
+    this.tagLabels.insert(index, label);
+    this.selectedTags.insert(index, selected);
 
     bool inWarning = false;
     for (String warningTag in warningTags) {
@@ -46,12 +47,14 @@ class TagList {
 
     final List<dynamic> avatarCreator = tagChipAvatar(label, inWarning);
 
-    this.tags.add(Tag(
-        label: label,
-        avatar: avatarCreator[0],
-        multipleChars: avatarCreator[1] == 2,
-        inWarning: inWarning,
-        isSpecial: GwaFunctions.isTagSpecial(label)));
+    this.tags.insert(
+        index,
+        Tag(
+            label: label,
+            avatar: avatarCreator[0],
+            multipleChars: avatarCreator[1] == 2,
+            inWarning: inWarning,
+            isSpecial: GwaFunctions.isTagSpecial(label)));
   }
 
   addAll(List<String> labels, {bool Function(String) when}) =>

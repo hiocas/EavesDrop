@@ -59,7 +59,7 @@ class SubmissionPageState extends State<SubmissionPage> {
     _submission = new GwaSubmission(submission);
     final List<String> warningTags = appSettings.warningTags;
     tagList = TagList(_submission.tags, warningTags: warningTags, sort: true);
-    return submission;
+    return Future.value(submission);
   }
 
   @override

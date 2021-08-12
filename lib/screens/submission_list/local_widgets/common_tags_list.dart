@@ -80,7 +80,7 @@ class _CommonTagsListState extends State<CommonTagsList> {
       }
     }
 
-    this.addAll(_tags, when: (tag) => tag.isNotEmpty);
+    this.addAll(_tags, selected: true, when: (tag) => tag.isNotEmpty, index: 0);
 
     super.initState();
   }
@@ -131,9 +131,9 @@ class _CommonTagsListState extends State<CommonTagsList> {
     ));
   }
 
-  addTag(Tag tag) {
-    final int index = tagWidgets.length;
-    tagWidgets.add(StatefulGwaTag(
+  addTag(Tag tag, {int at}) {
+    final int index = at ?? tagWidgets.length;
+    tagWidgets.insert(index ,StatefulGwaTag(
         tag: tag,
         selected: tagList.selectedTags[index],
         onSelected: (value) {
@@ -142,11 +142,13 @@ class _CommonTagsListState extends State<CommonTagsList> {
         }));
   }
 
-  addAll(List<String> tags, {bool Function(String) when}) =>
+  addAll(List<String> tags,
+          {bool Function(String) when, bool selected = false, int index}) =>
       tags.forEach((tag) {
         if (when != null && when.call(tag)) {
-          this.tagList.add(tag);
-          this.addTag(this.tagList.tags.last);
+          this.tagList.add(tag, selected: selected, index: index);
+          print(this.tagList.tagLabels[index]);
+          this.addTag(this.tagList.tags[index], at: index);
         }
       });
 
