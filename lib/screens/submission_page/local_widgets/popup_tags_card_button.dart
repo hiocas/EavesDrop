@@ -80,6 +80,8 @@ class PopupStatefulTagsCard extends StatefulWidget {
 }
 
 class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
+  List<Widget> _chips = [];
+
   List<Widget> _getChipList() {
     List<Widget> chips = [];
     for (var i = 0; i < widget.gwaSubmission.tags.length; i++) {
@@ -94,7 +96,9 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
            * submission page widget is used here, it is updated a line above
            * this one so all we need to do is call setState since the list's
            * values have changed.*/
-          setState(() {});
+          setState(() {
+            _updateChip(i);
+          });
         },
       ));
     }
@@ -145,6 +149,30 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
     return query;
   }
 
+  _updateChip(int index) {
+    _chips[index] = GwaTag(
+        tag: widget.tagList.tags[index],
+        selected: widget.tagList.selectedTags[index],
+        onSelected: (bool value) {
+          /*Update the tags on the submission page, this is also where the
+           * selected bool list is so update it also.*/
+          widget.onSelected.call(value, index);
+          /*Update the tags on this card (the selected list which is in the
+           * submission page widget is used here, it is updated a line above
+           * this one so all we need to do is call setState since the list's
+           * values have changed.*/
+          setState(() {
+            _updateChip(index);
+          });
+        });
+  }
+
+  @override
+  void initState() {
+    _chips = _getChipList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // If there are no tags stored in the GwaSubmission...
@@ -183,7 +211,7 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
             sliver: SliverToBoxAdapter(
               child: Wrap(
                 spacing: 5.0,
-                children: _getChipList(),
+                children: _chips,
               ),
             ),
           ),
@@ -229,7 +257,9 @@ class PopupStatefulTagsCardState extends State<PopupStatefulTagsCard> {
                           1, widget.tagList.selectedTags.length, false);
                       //Just so we setState() in SubmissionPage.
                       widget.onSelected.call(false, 0);
-                      setState(() {});
+                      setState(() {
+                        _chips = _getChipList();
+                      });
                     },
                     snackBarText: 'Clear currently selected tags.',
                     enabled: _isOneSelected(),
