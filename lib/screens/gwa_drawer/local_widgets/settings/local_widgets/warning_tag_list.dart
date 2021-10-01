@@ -5,6 +5,7 @@ import 'package:eavesdrop/screens/submission_page/local_widgets/gwa_tag.dart';
 import 'package:eavesdrop/widgets/navigator_routes/hero_dialog_route.dart';
 import 'package:eavesdrop/widgets/popup_card_button.dart';
 
+import 'default_list_settings.dart';
 import 'default_settings.dart';
 
 class WarningTagList extends StatefulWidget {
@@ -13,13 +14,13 @@ class WarningTagList extends StatefulWidget {
     @required this.tagList,
     this.spacing = 15.0,
     this.explanation,
-    this.spaceHead = true,
+    this.spaceHead = 15.0,
   }) : super(key: key);
 
   final TagList tagList;
   final double spacing;
   final Widget explanation;
-  final bool spaceHead;
+  final double spaceHead;
 
   @override
   _WarningTagListState createState() => _WarningTagListState();
@@ -30,9 +31,12 @@ class _WarningTagListState extends State<WarningTagList> {
   Widget build(BuildContext context) {
     final bool _selected =
         widget.tagList.selectedTags.any((selected) => selected);
-    return ListSetting(
+    return GridSetting(
       icon: Icons.error_outline,
       settingName: 'Warning Tags',
+      noChildrenMessage: 'You have no Warning Tags saved.',
+      spacing: widget.spacing,
+      spaceHead: widget.spaceHead,
       length: widget.tagList.tags.length,
       explanation: SettingExplanation(
         title: 'What is this?',
@@ -52,8 +56,11 @@ class _WarningTagListState extends State<WarningTagList> {
           final result = await Navigator.push(
             context,
             HeroDialogRoute(
-              builder: (context) =>
-                  _WarningTagListDialog(tags: widget.tagList.tagLabels),
+              builder: (context) => TagListDialog(
+                title: 'Warning Tag Name:',
+                heroTag: 'warning-tag-list-hero-tag',
+                tags: widget.tagList.tagLabels,
+              ),
             ),
           );
           if (result != null && result.isNotEmpty) {
@@ -90,19 +97,23 @@ class _WarningTagListState extends State<WarningTagList> {
   }
 }
 
-class _WarningTagListDialog extends StatefulWidget {
-  const _WarningTagListDialog({
+class TagListDialog extends StatefulWidget {
+  const TagListDialog({
     Key key,
     @required this.tags,
+    @required this.title,
+    @required this.heroTag,
   }) : super(key: key);
 
   final List<String> tags;
+  final String title;
+  final String heroTag;
 
   @override
-  __WarningTagListDialogState createState() => __WarningTagListDialogState();
+  _TagListDialogState createState() => _TagListDialogState();
 }
 
-class __WarningTagListDialogState extends State<_WarningTagListDialog> {
+class _TagListDialogState extends State<TagListDialog> {
   TextEditingController textEditingController = new TextEditingController();
 
   add() {
@@ -127,13 +138,13 @@ class __WarningTagListDialogState extends State<_WarningTagListDialog> {
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Hero(
-          tag: 'warning-tag-list-hero-tag',
+          tag: widget.heroTag,
           child: DefaultPopupCard(
-            heroTag: 'warning-tag-list-hero-tag',
+            heroTag: widget.heroTag,
             child: Column(
               children: [
                 Text(
-                  'Warning Tag Name:',
+                  widget.title,
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

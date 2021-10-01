@@ -6,7 +6,7 @@ class Setting extends StatelessWidget {
   final String settingName;
   final double spacing;
   final Widget explanation;
-  final bool spaceHead;
+  final double spaceHead;
   final Widget content;
 
   const Setting({
@@ -14,43 +14,40 @@ class Setting extends StatelessWidget {
     @required this.icon,
     @required this.settingName,
     @required this.content,
-    this.spacing = 15.0,
+    this.spacing = 0.0,
     this.explanation,
-    this.spaceHead = true,
+    this.spaceHead = 15.0,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: spaceHead ? spacing : 0.0,
+    return Padding(
+      padding: EdgeInsets.only(top: spaceHead ?? 0.0),
+      child: ExpansionTile(
+        title: Text(
+          settingName,
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
         ),
-        ListTile(
-          leading: Icon(
-            icon,
-            color: Colors.white,
-            size: 35.0,
-          ),
-          title: Text(
-            settingName,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0),
-          ),
+        leading: Icon(
+          icon,
+          color: Colors.white,
+          size: 35.0,
         ),
-        SizedBox(height: spacing),
-        content,
-        explanation ??
-            SizedBox(
-              height: spacing,
-            ),
-        Divider(
-          thickness: 1.0,
-          color: Colors.black26,
-        )
-      ],
+        tilePadding: EdgeInsets.only(left: 16.0),
+        children: [
+          SizedBox(height: spacing),
+          content,
+          explanation ??
+              SizedBox(
+                height: spacing,
+              ),
+          Divider(
+            thickness: 1.0,
+            color: Colors.black26,
+          )
+        ],
+      ),
     );
   }
 }
@@ -60,10 +57,10 @@ class OptionSetting extends StatelessWidget {
     Key key,
     @required this.icon,
     @required this.settingName,
-    this.spacing = 15.0,
+    this.spacing,
     @required this.options,
     this.explanation,
-    this.spaceHead = true,
+    this.spaceHead = 15.0,
   }) : super(key: key);
 
   final IconData icon;
@@ -71,7 +68,7 @@ class OptionSetting extends StatelessWidget {
   final double spacing;
   final List<SettingOption> options;
   final Widget explanation;
-  final bool spaceHead;
+  final double spaceHead;
 
   @override
   Widget build(BuildContext context) {
@@ -109,90 +106,6 @@ class SettingOption<T> extends RadioListTile<T> {
           groupValue: groupValue,
           onChanged: onChanged,
         );
-}
-
-class ListSetting extends StatelessWidget {
-  const ListSetting({
-    Key key,
-    @required this.icon,
-    @required this.settingName,
-    @required this.length,
-    @required this.itemBuilder,
-    @required this.onFABPressed,
-    @required this.heroTag,
-    this.fabIcon = Icons.add,
-    this.fabColor,
-    this.spacing = 15.0,
-    this.explanation,
-    this.spaceHead = true,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String settingName;
-  final double spacing;
-  final Widget explanation;
-  final bool spaceHead;
-  final Widget Function(BuildContext context, int index) itemBuilder;
-  final void Function() onFABPressed;
-  final IconData fabIcon;
-  final Color fabColor;
-  final String heroTag;
-  final int length;
-
-  @override
-  Widget build(BuildContext context) {
-    return Setting(
-      icon: icon,
-      settingName: settingName,
-      spacing: spacing,
-      explanation: explanation,
-      spaceHead: spaceHead,
-      content: SizedBox(
-        height: 110,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: [
-            Material(
-              color: Colors.black26,
-              borderRadius: BorderRadius.circular(12.0),
-              child: length == 0
-                  ? Center(
-                      child: Expanded(
-                        child: Text(
-                          'You have no Warning Tags saved.',
-                          style: TextStyle(
-                              color: Colors.grey[400], fontSize: 14.0),
-                        ),
-                      ),
-                    )
-                  : GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisExtent: 120.0,
-                        mainAxisSpacing: 4.0,
-                      ),
-                      // shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: length,
-                      padding: const EdgeInsets.only(left: 16.0),
-                      itemBuilder: itemBuilder,
-                    ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                heroTag: heroTag,
-                backgroundColor:
-                    this.fabColor ?? Theme.of(context).primaryColor,
-                child: Icon(fabIcon),
-                onPressed: onFABPressed,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class SettingExplanation extends StatelessWidget {

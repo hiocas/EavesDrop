@@ -19,11 +19,12 @@ class Library extends StatefulWidget {
 class _LibraryState extends State<Library> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _smallSubmissions;
+  List<String> _listTags;
 
   /// Returns a list of [Tab] widgets from [HiveBoxes.listTags].
   List<Widget> _makeListTabs() {
     List<Widget> tabs = [Tab(text: 'All')];
-    for (String list in HiveBoxes.listTags) {
+    for (String list in _listTags) {
       tabs.add(Tab(
         text: list,
       ));
@@ -35,7 +36,7 @@ class _LibraryState extends State<Library> {
   List<Widget> _makeListTabViews(
       List<LibraryGwaSubmission> librarySubmissions) {
     List<Widget> tabBarViews = [_makeListOf(librarySubmissions)];
-    for (String list in HiveBoxes.listTags) {
+    for (String list in _listTags) {
       tabBarViews.add(_makeListOf(_sortOnListTag(list, librarySubmissions)));
     }
     return tabBarViews;
@@ -91,8 +92,9 @@ class _LibraryState extends State<Library> {
   }
 
   Future<List<LibraryGwaSubmission>> _initLibrary() async {
-    final appSettings = await HiveBoxes.openAppSettingsBox();
-    _smallSubmissions = appSettings.getAt(0).librarySmallSubmissions;
+    final appSettings = await HiveBoxes.getAppSettings();
+    _smallSubmissions = appSettings.librarySmallSubmissions;
+    _listTags = appSettings.libraryListsTags;
     return HiveBoxes.getLibraryGwaSubmissionList();
   }
 
@@ -117,7 +119,7 @@ class _LibraryState extends State<Library> {
           if (futureBox.hasData) {
             return DefaultTabController(
               initialIndex: 0,
-              length: HiveBoxes.listTags.length + 1,
+              length: _listTags.length + 1,
               child: Scaffold(
                 key: _scaffoldKey,
                 onDrawerChanged: (open) {
@@ -206,7 +208,7 @@ class _LibraryState extends State<Library> {
                     tabs: _makeListTabs(),
                     indicatorColor: Theme.of(context).accentColor,
                     indicatorSize: TabBarIndicatorSize.label,
-                    isScrollable: HiveBoxes.listTags.length > 4,
+                    isScrollable: _listTags.length > 4,
                   ),
                 ),
                 drawer: GwaDrawer(),

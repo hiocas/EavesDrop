@@ -1,5 +1,7 @@
+import 'package:eavesdrop/models/library_gwa_submission.dart';
 import 'package:eavesdrop/models/tag_list.dart';
 import 'package:eavesdrop/screens/flat_home/new_home.dart';
+import 'package:eavesdrop/screens/gwa_drawer/local_widgets/settings/local_widgets/library_list_tags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eavesdrop/models/app_settings.dart';
@@ -29,6 +31,8 @@ class _SettingsState extends State<Settings> {
   bool _librarySmallSubmissions;
   Box<AppSettings> _box;
   TagList _warningTagList;
+  List<String> _libraryListTags;
+  List<int> _libraryListTagsCount;
 
   @override
   void dispose() {
@@ -105,6 +109,20 @@ class _SettingsState extends State<Settings> {
     });
   }
 
+  Future<AppSettings> initSettings() async {
+    final List<LibraryGwaSubmission> _saved =
+        await HiveBoxes.getLibraryGwaSubmissionList();
+    final _appSettings = await HiveBoxes.getAppSettings();
+    _libraryListTags = _appSettings.libraryListsTags;
+    _libraryListTagsCount = List.filled(_libraryListTags.length, 0);
+    for (LibraryGwaSubmission submission in _saved) {
+      for (String list in submission.lists) {
+        _libraryListTagsCount[_libraryListTags.indexOf(list)]++;
+      }
+    }
+    return _appSettings;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +132,7 @@ class _SettingsState extends State<Settings> {
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: FutureBuilder<AppSettings>(
-          future: HiveBoxes.getAppSettings(),
+          future: initSettings(),
           builder: (context, futureBox) {
             if (futureBox.hasData) {
               AppSettings _appSettings = futureBox.data;
@@ -133,9 +151,8 @@ class _SettingsState extends State<Settings> {
                     OptionSetting(
                         icon: Icons.play_circle_filled_outlined,
                         settingName:
-                            'Choose your preferred web launcher for detected audio '
-                            'links:',
-                        spaceHead: false,
+                            'Choose your preferred audio playing method:',
+                        spaceHead: 0.0,
                         options: [
                           _makeAudioLaunchOptionSettingOption(context,
                               value: AudioLaunchOptions.EavesDrop,
@@ -169,6 +186,7 @@ class _SettingsState extends State<Settings> {
                     OptionSetting(
                         icon: Icons.aspect_ratio_outlined,
                         settingName: "Choose your action buttons' size:",
+                        spacing: 15.0,
                         options: [
                           _makeMiniButtonsSettingOption(
                             context,
@@ -201,6 +219,7 @@ class _SettingsState extends State<Settings> {
                     OptionSetting(
                         icon: Icons.image_outlined,
                         settingName: "Choose your preview placeholders:",
+                        spacing: 15.0,
                         options: [
                           _makePlaceholdersOptionsSettingOption(context,
                               value: PlaceholdersOptions.Gradients,
@@ -217,7 +236,11 @@ class _SettingsState extends State<Settings> {
                                   'The GoneWildAudio subreddit image. Will be '
                                   'the same for all previews.')
                         ]),
-                    WarningTagList(tagList: _warningTagList),
+                    WarningTagList(tagList: _warningTagList,),
+                    LibraryListTags(
+                      libraryListTags: _libraryListTags,
+                      libraryListTagsCount: _libraryListTagsCount,
+                    ),
                   ],
                 ),
               ));

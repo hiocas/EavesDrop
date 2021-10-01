@@ -54,6 +54,8 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
 
   Box<LibraryGwaSubmission> libraryBox;
 
+  List<String> _listTags;
+
   /// Checks if the submission is in the user's library.
   bool _checkInLibrary(List<LibraryGwaSubmission> librarySubmissions) {
     if (librarySubmissions == null || librarySubmissions.isEmpty) return false;
@@ -72,15 +74,21 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
     super.dispose();
   }
 
+
+  Future<Box<LibraryGwaSubmission>> _initAddButton() async {
+    _listTags = await HiveBoxes.listTags;
+    return HiveBoxes.openLibraryBox();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Box<LibraryGwaSubmission>>(
-      future: HiveBoxes.openLibraryBox(),
+      future: _initAddButton(),
       builder: (context, futureBox) {
         if (futureBox.hasData) {
           libraryBox = futureBox.data;
           final List<LibraryGwaSubmission> librarySubmissions =
-              libraryBox.values.toList().cast<LibraryGwaSubmission>();
+          libraryBox.values.toList().cast<LibraryGwaSubmission>();
           _inLibrary = _checkInLibrary(librarySubmissions);
           return CustomPopupWidgetButton(
             mini: widget.mini,
@@ -97,6 +105,7 @@ class _PopupAddCardButtonState extends State<PopupAddCardButton> {
               inLibrary: _inLibrary,
               libraryGwaSubmission: libraryGwaSubmission,
               gwaSubmission: widget.gwaSubmission,
+              listTags: _listTags,
             ),
             usePlaceholder: this.widget.usePlaceholder,
             placeholder: this.widget.placeholder,
@@ -122,11 +131,14 @@ class PopupStatefulAddCard extends StatefulWidget {
   /// the [_PopupAddCardButtonState].
   final LibraryGwaSubmission libraryGwaSubmission;
 
+  final List<String> listTags;
+
   const PopupStatefulAddCard({
     Key key,
     @required this.gwaSubmission,
     @required this.inLibrary,
     @required this.libraryGwaSubmission,
+    @required this.listTags,
   }) : super(key: key);
 
   @override
@@ -160,7 +172,7 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
       _inLists[index] = !_inLists[index];
       List<String> lists = [];
       for (var i = 0; i < _inLists.length; i++) {
-        if (_inLists[i]) lists.add(HiveBoxes.listTags[i]);
+        if (_inLists[i]) lists.add(widget.listTags[i]);
       }
       _libraryGwaSubmission.lists = lists;
       _libraryGwaSubmission.save();
@@ -196,7 +208,7 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
   /// [PopupAddCardButton].
   @override
   void initState() {
-    _inLists = List.generate(HiveBoxes.listTags.length, (index) => false);
+    _inLists = List.generate(widget.listTags.length, (index) => false);
     _libraryGwaSubmission = widget.libraryGwaSubmission;
     _inLibrary = widget.inLibrary;
     super.initState();
@@ -208,9 +220,9 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
     _libraryGwaSubmission isn't null and _inLibrary is true) we set up the
     _inLists boolean list based on the list the submission is in. */
     if (_libraryGwaSubmission != null && _inLibrary) {
-      for (var i = 0; i < HiveBoxes.listTags.length; i++) {
+      for (var i = 0; i < widget.listTags.length; i++) {
         for (String list in _libraryGwaSubmission.lists) {
-          if (list == HiveBoxes.listTags[i]) {
+          if (list == widget.listTags[i]) {
             _inLists[i] = true;
             break;
           }
@@ -218,22 +230,24 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
       }
     }
     return Material(
-      color: Theme.of(context).backgroundColor,
+      color: Theme
+          .of(context)
+          .backgroundColor,
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: CustomScrollView(
-          semanticChildCount: HiveBoxes.listTags.length,
+          semanticChildCount: widget.listTags.length,
           shrinkWrap: true,
           slivers: [
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                   if (index.isEven) {
                     final int itemIndex = index ~/ 2;
                     return CheckboxListTile(
-                      title: Text(HiveBoxes.listTags[itemIndex],
+                      title: Text(widget.listTags[itemIndex],
                           style: TextStyle(
                             color: _inLibrary ? Colors.white : Colors.grey[800],
                           )),
@@ -253,12 +267,12 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
                   }
                   return null;
                 },
-                childCount: math.max(0, HiveBoxes.listTags.length * 2 - 1),
+                childCount: math.max(0, widget.listTags.length * 2 - 1),
               ),
             ),
             SliverPadding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 55.0, vertical: 8.0),
+              const EdgeInsets.symmetric(horizontal: 55.0, vertical: 8.0),
               sliver: SliverToBoxAdapter(
                 /* FIXME: This makes sure the button won't have "infinite"
                     width, but it seems really hacky. */
@@ -273,7 +287,9 @@ class PopupStatefulAddCardState extends State<PopupStatefulAddCard> {
                         _inLibrary ? 'Remove from Library' : 'Add to Library',
                       ),
                       style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).primaryColor,
+                          primary: Theme
+                              .of(context)
+                              .primaryColor,
                           elevation: 8.0),
                       onPressed: () async {
                         if (_inLibrary) {

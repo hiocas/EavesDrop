@@ -24,13 +24,14 @@ class AppSettingsAdapter extends TypeAdapter<AppSettings> {
       librarySmallSubmissions: fields[4] as bool,
       placeholdersOptions: fields[5] as PlaceholdersOptions,
       warningTags: (fields[7] as List)?.cast<String>(),
+      libraryListsTags: (fields[8] as List)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, AppSettings obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.credentials)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class AppSettingsAdapter extends TypeAdapter<AppSettings> {
       ..writeByte(5)
       ..write(obj.placeholdersOptions)
       ..writeByte(7)
-      ..write(obj.warningTags);
+      ..write(obj.warningTags)
+      ..writeByte(8)
+      ..write(obj.libraryListsTags);
   }
 
   @override

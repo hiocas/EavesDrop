@@ -7,7 +7,16 @@ import 'package:eavesdrop/models/app_settings.dart';
 import 'package:flutter/material.dart';
 
 class HiveBoxes {
-  static List<String> listTags = ['Favorites', 'Planned', 'Session'];
+  static final List<String> defaultLibraryListTags = [
+    'Favorites',
+    'Planned',
+    'Session'
+  ];
+
+  static Future<List<String>> get listTags async {
+    final AppSettings appSettings = await HiveBoxes.getAppSettings();
+    return appSettings.libraryListsTags;
+  }
 
   static void initHive() {
     Hive.registerAdapter(LibraryGwaSubmissionAdapter());
@@ -39,8 +48,15 @@ class HiveBoxes {
           ),
         );
       }
+      // Added in 0.7.
       if (appSettings.warningTags == null) {
         appSettings.warningTags = [];
+        await appSettings.save();
+      }
+
+      //Added in 0.7.
+      if (appSettings.libraryListsTags == null) {
+        appSettings.libraryListsTags = defaultLibraryListTags;
         await appSettings.save();
       }
     }
@@ -99,10 +115,10 @@ class HiveBoxes {
   }
 
   static editLibrarySubmission(LibraryGwaSubmission submission,
-      [String title,
+      {String title,
       String fullname,
       String thumbnailUrl,
-      List<String> lists]) {
+      List<String> lists}) {
     final box = HiveBoxes.getLibraryBox();
     if (!box.isOpen) {
       HiveBoxes.openLibraryBox();
@@ -115,13 +131,15 @@ class HiveBoxes {
     submission.save();
   }
 
-  static Future<AppSettings> addAppSettings(
-      {String credentials,
-      AudioLaunchOptions audioLaunchOptions = AudioLaunchOptions.EavesDrop,
-      bool miniButtons = false,
-      bool librarySmallSubmissions = false,
-      PlaceholdersOptions placeholdersOptions = PlaceholdersOptions.Gradients,
-      List<String> warningTags = const []}) async {
+  static Future<AppSettings> addAppSettings({
+    String credentials,
+    AudioLaunchOptions audioLaunchOptions = AudioLaunchOptions.EavesDrop,
+    bool miniButtons = false,
+    bool librarySmallSubmissions = false,
+    PlaceholdersOptions placeholdersOptions = PlaceholdersOptions.Gradients,
+    List<String> warningTags = const [],
+    List<String> libraryListTags,
+  }) async {
     final AppSettings settings = AppSettings(
         credentials: credentials,
         audioLaunchOptions: audioLaunchOptions,
@@ -129,7 +147,8 @@ class HiveBoxes {
         miniButtons: miniButtons,
         librarySmallSubmissions: librarySmallSubmissions,
         placeholdersOptions: placeholdersOptions,
-        warningTags: warningTags);
+        warningTags: warningTags,
+        libraryListsTags: libraryListTags ?? defaultLibraryListTags);
     final box = await HiveBoxes.openAppSettingsBox();
     await box.add(settings);
     return Future.value(settings);
@@ -143,6 +162,7 @@ class HiveBoxes {
     bool librarySmallSubmissions,
     PlaceholdersOptions placeholdersOptions,
     List<String> warningTags,
+    List<String> libraryListTags,
   }) async {
     final box = await HiveBoxes.openAppSettingsBox();
     if (box.isNotEmpty) {
@@ -167,6 +187,9 @@ class HiveBoxes {
       }
       if (warningTags != null) {
         settings.warningTags = warningTags;
+      }
+      if (libraryListTags != null) {
+        settings.libraryListsTags = libraryListTags;
       }
       await settings.save();
     }
