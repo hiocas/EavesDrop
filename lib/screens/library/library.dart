@@ -206,7 +206,7 @@ class _LibraryState extends State<Library> {
                   ],
                   bottom: TabBar(
                     tabs: _makeListTabs(),
-                    indicatorColor: Theme.of(context).accentColor,
+                    indicatorColor: Theme.of(context).colorScheme.secondary,
                     indicatorSize: TabBarIndicatorSize.label,
                     isScrollable: _listTags.length > 4,
                   ),

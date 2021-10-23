@@ -247,7 +247,7 @@ class _SubmissionListAppBarState extends State<SubmissionListAppBar> {
                     hintStyle: const TextStyle(color: Colors.white),
                     focusedBorder: UnderlineInputBorder(
                         borderSide:
-                            BorderSide(color: Theme.of(context).accentColor)),
+                            BorderSide(color: Theme.of(context).colorScheme.secondary)),
                     enabledBorder: UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Theme.of(context).primaryColor)),

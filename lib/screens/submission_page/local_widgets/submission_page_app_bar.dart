@@ -27,6 +27,7 @@ class SubmissionPageAppBar extends StatelessWidget {
     return SliverAppBar(
       // TODO: Hide this app bar when tapping to hide the FloatingPlayButton
       pinned: true,
+      backgroundColor: Theme.of(context).primaryColor,
       elevation: 15.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

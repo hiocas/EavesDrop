@@ -32,7 +32,7 @@ class GwaTag extends StatelessWidget {
         backgroundColor: tag.inWarning
             ? Theme.of(context).errorColor
             : Theme.of(context).primaryColor,
-        selectedColor: Theme.of(context).accentColor,
+        selectedColor: Theme.of(context).colorScheme.secondary,
         side: BorderSide(width: 0.0),
         avatar: tag.avatar,
         onSelected: (bool value) {

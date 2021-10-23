@@ -245,9 +245,8 @@ class _LoginState extends State<Login> {
                       widget.redditClientService.rememberClient = value;
                     });
                   }),
-              data: ThemeData(
-                  accentColor: Theme.of(context).accentColor,
-                  unselectedWidgetColor: Colors.white),
+              data: Theme.of(context)
+                  .copyWith(unselectedWidgetColor: Colors.white),
             ),
           ],
         ),

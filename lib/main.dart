@@ -69,6 +69,35 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData darkTheme = ThemeData(
+        primaryColor: const Color.fromARGB(255, 119, 23, 45),
+        /*
+        TODO: Configure this properly, and let the system handle color
+              choosing instead of manually doing so every time.
+        */
+        // colorScheme: ColorScheme(
+        //   brightness: Brightness.dark,
+        //   primary: const Color.fromARGB(255, 119, 23, 45),
+        //   onPrimary: Colors.white,
+        //   secondary: const Color.fromARGB(255, 62, 26, 92),
+        //   onSecondary: Colors.white,
+        //   background: const Color.fromARGB(255, 28, 18, 28),
+        //   onBackground: Colors.white,
+        //   surface: const Color.fromARGB(255, 7, 13, 43),
+        //   onSurface: Colors.white,
+        //   primaryVariant: const Color.fromARGB(255, 87, 17, 33),
+        //   secondaryVariant: const Color.fromARGB(255, 45, 19, 67),
+        //   error: const Color.fromARGB(255, 110, 70, 110),
+        //   onError: Colors.white,
+        // ),
+        accentColor: const Color.fromARGB(255, 62, 26, 92),
+        backgroundColor: const Color.fromARGB(255, 28, 18, 28),
+        cardColor: const Color.fromARGB(255, 7, 13, 43),
+        errorColor: const Color.fromARGB(255, 110, 70, 110),
+        scrollbarTheme: ScrollbarThemeData(
+          thumbColor: MaterialStateProperty.all(
+              const Color.fromARGB(255, 119, 23, 45).withOpacity(0.7)),
+        ));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<GlobalState>.value(value: widget.globalState),
@@ -82,23 +111,14 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           title: 'GoneWildAudio App',
           themeMode: ThemeMode.dark,
-          theme: ThemeData(
-              primaryColor: const Color.fromARGB(255, 119, 23, 45),
-              accentColor: const Color.fromARGB(255, 62, 26, 92),
-              backgroundColor: Colors.grey[200],
-              cardColor: const Color.fromARGB(255, 7, 13, 43),
-              textTheme:
-                  const TextTheme(bodyText2: TextStyle(color: Colors.black))),
-          darkTheme: ThemeData(
-              primaryColor: const Color.fromARGB(255, 119, 23, 45),
-              accentColor: const Color.fromARGB(255, 62, 26, 92),
-              backgroundColor: const Color.fromARGB(255, 28, 18, 28),
-              cardColor: const Color.fromARGB(255, 7, 13, 43),
-              errorColor: const Color.fromARGB(255, 110, 70, 110),
-              scrollbarTheme: ScrollbarThemeData(
-                thumbColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 119, 23, 45).withOpacity(0.7)),
-              )),
+          // This had to be done after upgrading flutter as accent color
+          // has been deprecated.
+          theme: darkTheme.copyWith(
+              colorScheme: darkTheme.colorScheme
+                  .copyWith(secondary: const Color.fromARGB(255, 62, 26, 92))),
+          darkTheme: darkTheme.copyWith(
+              colorScheme: darkTheme.colorScheme
+                  .copyWith(secondary: const Color.fromARGB(255, 62, 26, 92))),
           home: HomeScaffold(),
           routes: {
             ExtractArgumentsSubmissionList.routeName: (context) =>

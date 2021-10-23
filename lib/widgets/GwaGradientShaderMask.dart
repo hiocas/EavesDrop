@@ -9,7 +9,7 @@ class GwaGradientShaderMask extends ShaderMask {
             return LinearGradient(
               colors: [
                 Theme.of(context).primaryColor,
-                Theme.of(context).accentColor,
+                Theme.of(context).colorScheme.secondary,
               ],
             ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height));
           },

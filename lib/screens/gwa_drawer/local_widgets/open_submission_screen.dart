@@ -98,7 +98,8 @@ class _OpenSubmissionSection extends StatelessWidget {
           style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).accentColor)),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.secondary)),
             enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Theme.of(context).primaryColor)),
           ),
@@ -106,20 +107,21 @@ class _OpenSubmissionSection extends StatelessWidget {
             data = newData;
           },
         ),
-        SizedBox(height: 15.0,),
+        SizedBox(
+          height: 15.0,
+        ),
         ElevatedButton.icon(
           icon: Icon(Icons.open_in_new),
           label: Text(title),
           style: ButtonStyle(
               elevation: MaterialStateProperty.all(15.0),
               backgroundColor:
-              MaterialStateProperty.all(Theme.of(context).primaryColor)),
+                  MaterialStateProperty.all(Theme.of(context).primaryColor)),
           onPressed: () async {
             if (data != null && data.isNotEmpty) {
               var fullname = await getFullname.call(data);
               if (fullname.isNotEmpty) {
-                pushSubmissionPageWithReturnData(
-                    context, fullname);
+                pushSubmissionPageWithReturnData(context, fullname);
               }
             } else {
               ScaffoldMessenger.of(context)

@@ -117,7 +117,7 @@ class __HomeSectionState extends State<HomeSection>
                           radius: 2.5,
                           colors: [
                             Theme.of(context).primaryColor,
-                            Theme.of(context).accentColor,
+                            Theme.of(context).colorScheme.secondary,
                           ],
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(24.0)),

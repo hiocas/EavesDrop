@@ -49,7 +49,7 @@ class _WarningTagListState extends State<WarningTagList> {
       heroTag: 'warning-tag-list-hero-tag',
       fabIcon: _selected ? Icons.delete_outline : Icons.add,
       fabColor: _selected
-          ? Theme.of(context).accentColor
+          ? Theme.of(context).colorScheme.secondary
           : Theme.of(context).primaryColor,
       onFABPressed: () async {
         if (!_selected) {

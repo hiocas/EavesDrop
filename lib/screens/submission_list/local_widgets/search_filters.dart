@@ -144,7 +144,9 @@ class _SearchFiltersCardState extends State<SearchFiltersCard> {
                               hintStyle: TextStyle(color: Colors.white),
                               focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Theme.of(context).accentColor)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Theme.of(context).primaryColor)),
@@ -162,7 +164,8 @@ class _SearchFiltersCardState extends State<SearchFiltersCard> {
                             padding: const EdgeInsets.only(right: 6.0),
                             child: ChoiceChip(
                               backgroundColor: Theme.of(context).primaryColor,
-                              selectedColor: Theme.of(context).accentColor,
+                              selectedColor:
+                                  Theme.of(context).colorScheme.secondary,
                               labelStyle: TextStyle(color: Colors.white),
                               side: BorderSide(width: 0.0),
                               label: Text(
@@ -192,7 +195,8 @@ class _SearchFiltersCardState extends State<SearchFiltersCard> {
                               padding: const EdgeInsets.only(right: 6.0),
                               child: ChoiceChip(
                                 backgroundColor: Theme.of(context).primaryColor,
-                                selectedColor: Theme.of(context).accentColor,
+                                selectedColor:
+                                    Theme.of(context).colorScheme.secondary,
                                 disabledColor:
                                     darken(Theme.of(context).primaryColor, 0.1),
                                 labelStyle: TextStyle(color: Colors.white),

@@ -301,8 +301,8 @@ class _TagElevatedButton extends StatelessWidget {
         ),
         style: ButtonStyle(
           elevation: MaterialStateProperty.all<double>(15.0),
-          backgroundColor:
-              MaterialStateProperty.all<Color>(Theme.of(context).accentColor),
+          backgroundColor: MaterialStateProperty.all<Color>(
+              Theme.of(context).colorScheme.secondary),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14.0))),

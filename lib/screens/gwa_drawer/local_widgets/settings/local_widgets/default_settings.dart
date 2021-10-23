@@ -24,6 +24,10 @@ class Setting extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: spaceHead ?? 0.0),
       child: ExpansionTile(
+        textColor: Colors.white,
+        iconColor: Colors.white,
+        collapsedTextColor: Colors.grey[400],
+        collapsedIconColor: Colors.grey[400],
         title: Text(
           settingName,
           style: TextStyle(
