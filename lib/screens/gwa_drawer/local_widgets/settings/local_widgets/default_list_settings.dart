@@ -10,11 +10,12 @@ class _DefaultListSetting extends StatelessWidget {
     @required this.settingName,
     @required this.length,
     @required this.itemBuilder,
-    @required this.onFABPressed,
+    @required this.onButtonPressed,
     @required this.heroTag,
     @required this.noChildrenMessage,
-    this.fabIcon = Icons.add,
-    this.fabColor,
+    this.buttonIcon = Icons.add,
+    this.buttonColor,
+    this.buttonText = 'Add',
     this.spacing = 15.0,
     this.explanation,
     this.spaceHead = 15.0,
@@ -28,9 +29,10 @@ class _DefaultListSetting extends StatelessWidget {
   final Widget explanation;
   final double spaceHead;
   final Widget Function(BuildContext context, int index) itemBuilder;
-  final void Function() onFABPressed;
-  final IconData fabIcon;
-  final Color fabColor;
+  final void Function() onButtonPressed;
+  final IconData buttonIcon;
+  final Color buttonColor;
+  final String buttonText;
   final String heroTag;
   final int length;
   final double height;
@@ -44,38 +46,51 @@ class _DefaultListSetting extends StatelessWidget {
       spacing: spacing,
       explanation: explanation,
       spaceHead: spaceHead,
-      content: SizedBox(
-        height: height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: [
-            Material(
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: height,
+            decoration: BoxDecoration(
               color: Colors.black26,
               borderRadius: BorderRadius.circular(12.0),
-              child: length == 0
-                  ? Center(
-                      child: Expanded(
-                        child: Text(
-                          noChildrenMessage,
-                          style: TextStyle(
-                              color: Colors.grey[400], fontSize: 14.0),
-                        ),
-                      ),
-                    )
-                  : list,
             ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                heroTag: heroTag,
-                backgroundColor:
-                    this.fabColor ?? Theme.of(context).primaryColor,
-                child: Icon(fabIcon),
-                onPressed: onFABPressed,
+            child: length == 0
+                ? Center(
+                    child: Expanded(
+                      child: Text(
+                        noChildrenMessage,
+                        style:
+                            TextStyle(color: Colors.grey[400], fontSize: 14.0),
+                      ),
+                    ),
+                  )
+                : list,
+          ),
+          Hero(
+            tag: heroTag,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  this.buttonColor ?? Theme.of(context).primaryColor,
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0)),
+                ),
               ),
-            )
-          ],
-        ),
+              onPressed: onButtonPressed,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(buttonText),
+                  const SizedBox(width: 8),
+                  Icon(buttonIcon),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -88,11 +103,12 @@ class GridSetting extends StatelessWidget {
     @required this.settingName,
     @required this.length,
     @required this.itemBuilder,
-    @required this.onFABPressed,
+    @required this.onButtonPressed,
     @required this.heroTag,
     @required this.noChildrenMessage,
-    this.fabIcon = Icons.add,
-    this.fabColor,
+    this.buttonIcon = Icons.add,
+    this.buttonText = 'Add',
+    this.buttonColor,
     this.spacing = 0.0,
     this.explanation,
     this.spaceHead = 15.0,
@@ -105,9 +121,10 @@ class GridSetting extends StatelessWidget {
   final Widget explanation;
   final double spaceHead;
   final Widget Function(BuildContext context, int index) itemBuilder;
-  final void Function() onFABPressed;
-  final IconData fabIcon;
-  final Color fabColor;
+  final void Function() onButtonPressed;
+  final IconData buttonIcon;
+  final String buttonText;
+  final Color buttonColor;
   final String heroTag;
   final int length;
   final double height;
@@ -133,9 +150,10 @@ class GridSetting extends StatelessWidget {
       explanation: explanation,
       spaceHead: spaceHead,
       itemBuilder: itemBuilder,
-      onFABPressed: onFABPressed,
-      fabIcon: fabIcon,
-      fabColor: fabColor,
+      onButtonPressed: onButtonPressed,
+      buttonIcon: buttonIcon,
+      buttonColor: buttonColor,
+      buttonText: buttonText,
       heroTag: heroTag,
       length: length,
       height: height,
@@ -151,11 +169,12 @@ class ListSetting extends StatelessWidget {
     @required this.settingName,
     @required this.length,
     @required this.itemBuilder,
-    @required this.onFABPressed,
+    @required this.onButtonPressed,
     @required this.heroTag,
     @required this.noChildrenMessage,
-    this.fabIcon = Icons.add,
-    this.fabColor,
+    this.buttonIcon = Icons.add,
+    this.buttonText = 'Add',
+    this.buttonColor,
     this.spacing = 0.0,
     this.explanation,
     this.spaceHead = 15.0,
@@ -168,9 +187,10 @@ class ListSetting extends StatelessWidget {
   final Widget explanation;
   final double spaceHead;
   final Widget Function(BuildContext context, int index) itemBuilder;
-  final void Function() onFABPressed;
-  final IconData fabIcon;
-  final Color fabColor;
+  final void Function() onButtonPressed;
+  final IconData buttonIcon;
+  final Color buttonColor;
+  final String buttonText;
   final String heroTag;
   final int length;
   final double height;
@@ -190,9 +210,10 @@ class ListSetting extends StatelessWidget {
       explanation: explanation,
       spaceHead: spaceHead,
       itemBuilder: itemBuilder,
-      onFABPressed: onFABPressed,
-      fabIcon: fabIcon,
-      fabColor: fabColor,
+      onButtonPressed: onButtonPressed,
+      buttonIcon: buttonIcon,
+      buttonText: buttonText,
+      buttonColor: buttonColor,
       heroTag: heroTag,
       length: length,
       height: height,

@@ -72,7 +72,7 @@ class _LibraryListTagsState extends State<LibraryListTags> {
           },
         ),
       ),
-      onFABPressed: () async {
+      onButtonPressed: () async {
         // if (!_selected) {
         final result = await Navigator.push(
           context,

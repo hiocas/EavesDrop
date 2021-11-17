@@ -47,11 +47,12 @@ class _WarningTagListState extends State<WarningTagList> {
             "you know that the post contains them right away.",
       ),
       heroTag: 'warning-tag-list-hero-tag',
-      fabIcon: _selected ? Icons.delete_outline : Icons.add,
-      fabColor: _selected
+      buttonIcon: _selected ? Icons.delete_outline : Icons.add,
+      buttonColor: _selected
           ? Theme.of(context).colorScheme.secondary
           : Theme.of(context).primaryColor,
-      onFABPressed: () async {
+      buttonText: _selected ? 'Delete' : 'Add',
+      onButtonPressed: () async {
         if (!_selected) {
           final result = await Navigator.push(
             context,
